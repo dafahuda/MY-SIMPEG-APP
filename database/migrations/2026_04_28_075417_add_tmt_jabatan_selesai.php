@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('tb_jabatan', function (Blueprint $table) {
+            $table->date('tmt_jabatan_selesai')->nullable()->after('tmt_jabatan_mulai');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('tb_jabatan', function (Blueprint $table) {
+            $table->dropColumn('tmt_jabatan_selesai');
+        });
+    }
+};

@@ -76,5 +76,27 @@ class Pegawai extends Model
         return $this->hasOne(Jabatan::class, 'pegawai_id')->latest('tmt_jabatan_mulai');
     }
 
+    public function diklat()
+    {
+        return $this->hasMany(Diklat::class, 'pegawai_id');
+    }
+
+    public function rencanaDiklat()
+    {
+        return $this->hasMany(RencanaDiklat::class, 'pegawai_id');
+    }
+
+    public function pengajuanDiklat()
+    {
+        return $this->hasManyThrough(
+            PengajuanDiklat::class,
+            RencanaDiklat::class,
+            'pegawai_id',
+            'rencana_diklat_id',
+            'id',
+            'id'
+        );
+    }
+
     use HasFactory;
 }

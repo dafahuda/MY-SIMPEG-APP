@@ -38,6 +38,10 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfilePegawaiController;
 use App\Http\Controllers\BackupDatabaseController;
 use App\Http\Controllers\KGBController;
+use App\Http\Controllers\RencanaDiklatController;
+use App\Http\Controllers\DiklatSayaController;
+use App\Http\Controllers\DiklatVerifikasiController;
+use App\Http\Controllers\DiklatGapReportController;
 
 
 /*
@@ -61,13 +65,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Profile Pegawai (role: pegawai)
-    Route::get('/profile_saya', [ProfilePegawaiController::class, 'index'])->name('profile.pegawai');
-    Route::get('/profile_saya/edit', [ProfilePegawaiController::class, 'edit'])->name('profile.pegawai.edit');
-    Route::put('/profile_saya/update', [ProfilePegawaiController::class, 'update'])->name('profile.pegawai.update');
-    Route::post('/profile_saya/upload_foto', [ProfilePegawaiController::class, 'uploadFoto'])->name('profile.pegawai.upload_foto');
-    Route::get('/profile_saya/print', [ProfilePegawaiController::class, 'print'])->name('profile.pegawai.print');
+    Route::prefix('/profile_saya')->group(function() {
+        Route::get('/', [ProfilePegawaiController::class, 'index'])->name('profile.pegawai');
+        Route::get('/editProfilePegawai', [ProfilePegawaiController::class, 'edit'])->name('profile.pegawai.edit');
+        Route::get('/printBiodataPegawai', [ProfilePegawaiController::class, 'print'])->name('profile.pegawai.print');
+        Route::put('/updateProfilePegawai/{pegawai}', [ProfilePegawaiController::class, 'update'])->name('profile.pegawai.update');
+    });
 
     Route::prefix('data_pegawai')->group(function() {
+        Route::get('/', [PegawaiController::class, 'index']);
         Route::get('/pegawai', [PegawaiController::class, 'index']);
         Route::get('/view_form_tambah_data_pegawai', [PegawaiController::class, 'create']);
         Route::post('/tambah_data_pegawai', [PegawaiController::class, 'store']);
@@ -75,6 +81,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::put('/ubah_data_pegawai/{pegawai}', [PegawaiController::class, 'update']);
         Route::delete('/delete_data_pegawai/{pegawai}', [PegawaiController::class, 'destroy']);
         Route::post('/cariPegawai', [PegawaiController::class, 'cariPegawai']);
+    });
+
+    // Diklat Saya (role: pegawai)
+    Route::prefix('pegawai/diklat_saya')->name('diklat_saya.')->group(function () {
+        Route::get('/', [DiklatSayaController::class, 'index'])->name('index');
+        Route::get('/{pengajuanDiklat}', [DiklatSayaController::class, 'show'])->name('show');
+        Route::post('/{rencanaDiklat}', [DiklatSayaController::class, 'store'])->name('store');
+        Route::put('/{pengajuanDiklat}', [DiklatSayaController::class, 'update'])->name('update');
     });
 
     Route::prefix('manajemen_setup')->group(function() {
@@ -110,7 +124,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/view_form_edit_user_admin/{user}', [UserAdminController::class, 'edit']);
             Route::put('/edit_data_user_admin/{user}', [UserAdminController::class, 'update']);
             Route::delete('/delete_user_admin/{user}', [UserAdminController::class, 'destroy']);
-            Route::post('/data_user_admin/cariUserAdmin', [UserAdminController::class, 'cariUserAdmin']);
+            Route::get('/data_user_admin/cariUserAdmin', [UserAdminController::class, 'cariUserAdmin']);
         });
 
         // URL buat data user pegawai
@@ -120,7 +134,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::post('/tambah_user_pegawai', [UserPegawaiController::class, 'store']);
         Route::put('/edit_data_user_pegawai/{user}', [UserPegawaiController::class, 'update']);
         Route::delete('/delete_user_pegawai/{user}', [UserPegawaiController::class, 'destroy']);
-        Route::post('/data_user_pegawai/cariUserPegawai', [UserPegawaiController::class, 'cariUserPegawai']);
+        Route::match(['get', 'post'], '/data_user_pegawai/cariUserPegawai', [UserPegawaiController::class, 'cariUserPegawai']);
     });
 
     Route::prefix('riwayat_keluarga')->group(function() {
@@ -243,6 +257,35 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::delete('/diklat/delete_data_diklat/{diklat}', [DiklatController::class, 'destroy']);
         Route::get('/diklat/download_sertifikat_diklat/{diklat}', [DiklatController::class, 'downloadSertifikatDiklat']);
         Route::post('/diklat/cariDiklat', [DiklatController::class, 'cariDiklat']);
+
+        // URL Kepegawaian Rencana Diklat
+        Route::prefix('rencana_diklat')->name('rencana_diklat.')->group(function () {
+            Route::get('/', [RencanaDiklatController::class, 'index'])->name('index');
+            Route::get('/create', [RencanaDiklatController::class, 'create'])->name('create');
+            Route::post('/', [RencanaDiklatController::class, 'store'])->name('store');
+            Route::post('/search', [RencanaDiklatController::class, 'search'])->name('search');
+            Route::get('/{rencanaDiklat}/edit', [RencanaDiklatController::class, 'edit'])->name('edit');
+            Route::put('/{rencanaDiklat}', [RencanaDiklatController::class, 'update'])->name('update');
+            Route::delete('/{rencanaDiklat}', [RencanaDiklatController::class, 'destroy'])->name('destroy');
+        });
+
+        // URL Kepegawaian Verifikasi Diklat
+        Route::prefix('diklat_verifikasi')->name('diklat_verifikasi.')->group(function () {
+            Route::get('/', [DiklatVerifikasiController::class, 'index'])->name('index');
+            Route::get('/{pengajuanDiklat}', [DiklatVerifikasiController::class, 'show'])->name('show');
+            Route::post('/{pengajuanDiklat}/approve', [DiklatVerifikasiController::class, 'approve'])->name('approve');
+            Route::post('/{pengajuanDiklat}/reject', [DiklatVerifikasiController::class, 'reject'])->name('reject');
+        });
+
+        // URL Laporan Gap Diklat
+        Route::prefix('report/diklat_gap')->name('report.diklat_gap.')->group(function () {
+            Route::get('/', [DiklatGapReportController::class, 'index'])->name('index');
+            Route::get('/unit', [DiklatGapReportController::class, 'unitAggregate'])->name('unit');
+            Route::get('/unit/print', [DiklatGapReportController::class, 'printUnitAggregate'])->name('unit.print');
+            Route::get('/unit/export', [DiklatGapReportController::class, 'exportUnitAggregate'])->name('unit.export');
+        });
+        // Backward-compat alias: tests use route('report.diklat_gap') without suffix.
+        Route::get('/report/diklat_gap', [DiklatGapReportController::class, 'index'])->name('report.diklat_gap');
 
         // URL Kepegawaian penghargaan
         Route::get('/penghargaan', [PenghargaanController::class, 'index']);
@@ -384,7 +427,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/pensiun', [ReportController::class, 'reportPensiun'])->name('report.pensiun');
     });
 
-    Route::get('/backup_data', [BackupDatabaseController::class, 'BackupDatabasePages']);
-    Route::get('/backup_data/download', [BackupDatabaseController::class, 'download'])->name('backup_data.download');
-
+    Route::middleware('can:superadmin')->group(function () {
+        Route::get('/backup_data', [BackupDatabaseController::class, 'BackupDatabasePages']);
+        Route::get('/backup_data/download', [BackupDatabaseController::class, 'download'])->name('backup_data.download');
+    });
 });

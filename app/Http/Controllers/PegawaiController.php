@@ -20,18 +20,13 @@ class PegawaiController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $this->authorizeOperationalAccess($user);
 
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::with('unit_kerja')
-                ->where('unit_kerja_id', $user->unit_kerja_id)
-                ->paginate(5);
-        } else {
-            // super admin / lainnya bisa lihat semua
-            $pegawai = Pegawai::with('unit_kerja')->paginate(5);
-        }
+        $pegawai = $this->scopedPegawaiQuery($user)->paginate(5);
 
         return view("pages.dashboard.data_pegawai.indexPegawai", [
-            "pegawai" => $pegawai
+            "pegawai" => $pegawai,
+            'cariPegawai' => null,
         ]);
     }
 
@@ -40,6 +35,9 @@ class PegawaiController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+        $this->authorizeOperationalAccess($user);
+
         $unitKerja   = UnitKerja::all();
         $userPegawai = User::where('role', 'pegawai')
             ->whereNotIn('id', \App\Models\Pegawai::whereNotNull('user_id')->pluck('user_id'))
@@ -57,6 +55,9 @@ class PegawaiController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+        $this->authorizeOperationalAccess($user);
+
         $validateData = $request->validate([
             'user_id' => 'required|exists:users,id',
             'nip' => 'required|string',
@@ -87,6 +88,10 @@ class PegawaiController extends Controller
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'nilai_tpp' => 'required',
         ]);
+
+        if ($user->role === 'admin' && (int) $validateData['unit_kerja_id'] !== (int) $user->unit_kerja_id) {
+            abort(403);
+        }
 
         try {
             DB::beginTransaction();
@@ -121,6 +126,8 @@ class PegawaiController extends Controller
      */
     public function show(Pegawai $pegawai)
     {
+        $this->authorizePegawaiAccess($pegawai);
+
         return view("pages.dashboard.data_pegawai.detailPegawai", [
             'pegawai' => $pegawai
         ]);
@@ -131,6 +138,8 @@ class PegawaiController extends Controller
      */
     public function edit(Pegawai $pegawai)
     {
+        $this->authorizePegawaiAccess($pegawai);
+
         $unitKerja   = UnitKerja::all();
         $userPegawai = User::where('role', 'pegawai')
             ->where(function ($q) use ($pegawai) {
@@ -153,6 +162,9 @@ class PegawaiController extends Controller
      */
     public function update(Request $request, Pegawai $pegawai)
     {
+        $user = Auth::user();
+        $this->authorizePegawaiAccess($pegawai, $user);
+
         $validateData = $request->validate([
             'nip' => 'required|string',
             'nama' => 'required|string',
@@ -182,6 +194,10 @@ class PegawaiController extends Controller
             'foto' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'nilai_tpp' => 'required'
         ]);
+
+        if ($user->role === 'admin' && (int) $validateData['unit_kerja_id'] !== (int) $user->unit_kerja_id) {
+            abort(403);
+        }
 
         try {
             DB::beginTransaction();
@@ -220,6 +236,8 @@ class PegawaiController extends Controller
      */
     public function destroy(Pegawai $pegawai)
     {
+        $this->authorizePegawaiAccess($pegawai);
+
         $pegawai->delete();
 
         return redirect('/data_pegawai/pegawai')->with('success', 'Berhasil menghapus data!');
@@ -228,19 +246,52 @@ class PegawaiController extends Controller
     public function cariPegawai(Request $request)
     {
         $user = Auth::user();
-        $cariPegawai = $request->input('cariPegawai');
+        $this->authorizeOperationalAccess($user);
 
-        $query = Pegawai::with('unit_kerja')
-                    ->where('nama', 'like', '%' . $cariPegawai . '%');
+        $cariPegawai = trim((string) $request->input('cariPegawai'));
+
+        $pegawai = $this->scopedPegawaiQuery($user)
+                    ->when($cariPegawai !== '', function ($query) use ($cariPegawai) {
+                        $query->where(function ($query) use ($cariPegawai) {
+                            $query->where('nama', 'like', '%' . $cariPegawai . '%')
+                                ->orWhere('nip', 'like', '%' . $cariPegawai . '%')
+                                ->orWhere('gol_awal', 'like', '%' . $cariPegawai . '%')
+                                ->orWhereHas('unit_kerja', function ($query) use ($cariPegawai) {
+                                    $query->where('nama_unit', 'like', '%' . $cariPegawai . '%');
+                                });
+                        });
+                    })
+                    ->paginate(5);
+
+        return view("pages.dashboard.data_pegawai.indexPegawai", [
+            'pegawai' => $pegawai,
+            'cariPegawai' => $cariPegawai,
+        ]);
+    }
+
+    private function scopedPegawaiQuery(User $user)
+    {
+        $query = Pegawai::with('unit_kerja');
 
         if ($user->role === 'admin') {
             $query->where('unit_kerja_id', $user->unit_kerja_id);
         }
 
-        $pegawai = $query->paginate(5);
+        return $query;
+    }
 
-        return view("pages.dashboard.data_pegawai.indexPegawai", [
-            'pegawai' => $pegawai
-        ]);
+    private function authorizeOperationalAccess(?User $user): void
+    {
+        abort_unless($user && in_array($user->role, ['superadmin', 'admin'], true), 403);
+    }
+
+    private function authorizePegawaiAccess(Pegawai $pegawai, ?User $user = null): void
+    {
+        $user ??= Auth::user();
+        $this->authorizeOperationalAccess($user);
+
+        if ($user->role === 'admin') {
+            abort_unless((int) $pegawai->unit_kerja_id === (int) $user->unit_kerja_id, 403);
+        }
     }
 }

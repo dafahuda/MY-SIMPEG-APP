@@ -8,18 +8,37 @@ use App\Models\UnitKerja;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class UserAdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = User::where('role', 'admin')->with("unit_kerja")->get();
+        $this->authorizeSuperadmin();
+
+        $validated = $request->validate([
+            'cariUserAdmin' => 'nullable|string|max:100',
+        ]);
+
+        $cariUserAdmin = trim($validated['cariUserAdmin'] ?? '');
+        $query = User::where('role', 'admin')->with('unit_kerja');
+
+        if ($cariUserAdmin !== '') {
+            $query->where(function ($q) use ($cariUserAdmin) {
+                $q->where('username', 'like', '%' . $cariUserAdmin . '%')
+                    ->orWhere('name', 'like', '%' . $cariUserAdmin . '%')
+                    ->orWhere('email', 'like', '%' . $cariUserAdmin . '%');
+            });
+        }
+
+        $user = $query->orderBy('name')->paginate(10)->withQueryString();
 
         return view('pages.dashboard.manajemen_setup.userAdmin.data_user_admin', [
-            'user' => $user
+            'user' => $user,
+            'cariUserAdmin' => $cariUserAdmin,
         ]);
     }
 
@@ -28,6 +47,8 @@ class UserAdminController extends Controller
      */
     public function create()
     {
+        $this->authorizeSuperadmin();
+
         $unitKerja = UnitKerja::all();
         return view('pages.dashboard.manajemen_setup.userAdmin.tambah_user_admin', [
             'unitKerja' => $unitKerja
@@ -39,6 +60,8 @@ class UserAdminController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorizeSuperadmin();
+
         $validateData = $request->validate([
             'username' => 'required|string',
             'name' => 'required|string',
@@ -57,7 +80,7 @@ class UserAdminController extends Controller
 
             DB::commit();
 
-            return redirect('/manajemen_setup/data_user_admin')->with('success', 'Berhasil menabahkan data user admin!');
+            return redirect('/manajemen_setup/data_user_admin')->with('success', 'Berhasil menambahkan data user admin!');
 
         } catch(Exception $e) {
             DB::rollBack();
@@ -75,6 +98,9 @@ class UserAdminController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorizeSuperadmin();
+        abort_unless($user->role === 'admin', 403);
+
         $unitKerja = UnitKerja::all();
         return view("pages.dashboard.manajemen_setup.userAdmin.edit_user_admin", [
             'user' => $user,
@@ -87,6 +113,9 @@ class UserAdminController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorizeSuperadmin();
+        abort_unless($user->role === 'admin', 403);
+
         $validateData = $request->validate([
             'username' => 'required|string',
             'name' => 'required|string',
@@ -119,6 +148,9 @@ class UserAdminController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorizeSuperadmin();
+        abort_unless($user->role === 'admin', 403);
+
         try {
             $user->delete();
 
@@ -132,17 +164,11 @@ class UserAdminController extends Controller
 
     public function cariUserAdmin(Request $request)
     {
-        $cariUserAdmin = $request->input('cariUserAdmin');
-        $user = User::where('role', 'admin')
-                   ->where(function($q) use ($cariUserAdmin) {
-                       $q->where('username', 'like', '%' . $cariUserAdmin . '%')
-                         ->orWhere('name', 'like', '%' . $cariUserAdmin . '%');
-                   })
-                   ->with('unit_kerja')
-                   ->paginate(5);
+        return $this->index($request);
+    }
 
-        return view("pages.dashboard.manajemen_setup.userAdmin.data_user_admin", [
-            'user' => $user
-        ]);
+    private function authorizeSuperadmin(): void
+    {
+        abort_unless(Auth::user()?->role === 'superadmin', 403);
     }
 }

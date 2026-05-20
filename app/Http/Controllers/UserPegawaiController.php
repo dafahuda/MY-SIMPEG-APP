@@ -7,41 +7,69 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Models\UnitKerja;
 
 class UserPegawaiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $user = User::where("role", "pegawai")->get();
+        $actor = Auth::user();
+        $this->authorizeUserPegawaiAccess($actor);
+
+        $filters = $request->validate([
+            'cariUserPegawai' => 'nullable|string|max:100',
+        ]);
+
+        $search = trim((string) ($filters['cariUserPegawai'] ?? ''));
+        $query = $this->scopedPegawaiUserQuery($actor)->with('unit_kerja')->orderBy('name');
+
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('username', 'like', '%' . $search . '%')
+                    ->orWhere('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        }
+
+        $user = $query->paginate(10)->withQueryString();
+        $totalPegawaiUsers = $this->scopedPegawaiUserQuery($actor)->count();
 
         return view("pages.dashboard.manajemen_setup.userPegawai.data_user_pegawai", [
-            "user" => $user
+            "user" => $user,
+            'search' => $search,
+            'totalPegawaiUsers' => $totalPegawaiUsers,
+            'scopeLabel' => $this->scopeLabel($actor),
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view("pages.dashboard.manajemen_setup.userPegawai.tambah_user_pegawai");
+        $actor = Auth::user();
+        $this->authorizeUserPegawaiAccess($actor);
+
+        return view("pages.dashboard.manajemen_setup.userPegawai.tambah_user_pegawai", [
+            'unitKerja' => $this->unitKerjaOptions($actor),
+            'scopeLabel' => $this->scopeLabel($actor),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        $actor = Auth::user();
+        $this->authorizeUserPegawaiAccess($actor);
+
         $validateData = $request->validate([
-            'username' => 'required|string',
-            'name' => 'required|string',
-            'email' => 'required|string|email|unique:users,email',
+            'username' => 'required|string|max:255|unique:users,username',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
+            'unit_kerja_id' => 'required|exists:tb_unit_kerja,id',
         ]);
+
+        if ($actor->role === 'admin' && (int) $validateData['unit_kerja_id'] !== (int) $actor->unit_kerja_id) {
+            abort(403);
+        }
 
         try {
             DB::beginTransaction();
@@ -53,40 +81,46 @@ class UserPegawaiController extends Controller
 
             DB::commit();
 
-            return redirect('/manajemen_setup/data_user_pegawai')->with('success', 'Berhasil menambahkan akun!');
+            return redirect('/manajemen_setup/data_user_pegawai')->with('success', 'Akun pegawai berhasil ditambahkan.');
 
         } catch(Exception $e) {
             DB::rollBack();
 
             Log::error("Gagal membuat akun : " . $e->getMessage());
 
-            return back()->withInput()->with('error', 'Error, terjadi kesalahan pada sistem!');
+            return back()->withInput()->with('error', 'Akun pegawai gagal disimpan karena terjadi kesalahan sistem.');
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(User $user)
     {
-        $unitKerja = UnitKerja::all();
+        $actor = Auth::user();
+        $this->authorizeTargetUserPegawaiAccess($user, $actor);
+
         return view("pages.dashboard.manajemen_setup.userPegawai.edit_user_pegawai", [
-            'unitKerja' => $unitKerja,
-            'user' => $user
+            'unitKerja' => $this->unitKerjaOptions($actor),
+            'user' => $user,
+            'scopeLabel' => $this->scopeLabel($actor),
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, User $user)
     {
+        $actor = Auth::user();
+        $this->authorizeTargetUserPegawaiAccess($user, $actor);
+
         $validateData = $request->validate([
-            'username' => 'required|string',
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'unit_kerja_id' => 'required|exists:tb_unit_kerja,id'
         ]);
+
+        if ($actor->role === 'admin' && (int) $validateData['unit_kerja_id'] !== (int) $actor->unit_kerja_id) {
+            abort(403);
+        }
+
+        $validateData['role'] = 'pegawai';
 
         try {
             DB::beginTransaction();
@@ -95,46 +129,81 @@ class UserPegawaiController extends Controller
 
             DB::commit();
 
-            return redirect('/manajemen_setup/data_user_pegawai')->with('success', 'Berhasil mengubah data atau akun!');
+            return redirect('/manajemen_setup/data_user_pegawai')->with('success', 'Akun pegawai berhasil diubah.');
         } catch(Exception $e) {
             DB::rollBack();
 
-            Log::error('Gagal mengubah data user pegawai!');
+            Log::error('Gagal mengubah data user pegawai! ' . $e->getMessage());
 
-            return back()->withInput()->with('error', 'Error, terjadi kesalahan pada sistem!');
+            return back()->withInput()->with('error', 'Akun pegawai gagal diubah karena terjadi kesalahan sistem.');
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user)
     {
+        $this->authorizeTargetUserPegawaiAccess($user);
+
         try {
             $user->delete();
 
-            return redirect('/manajemen_setup/data_user_pegawai')->with('success', 'Berhasil menghapus data!');
+            return redirect('/manajemen_setup/data_user_pegawai')->with('success', 'Akun pegawai berhasil dihapus.');
         } catch(Exception $e) {
-            DB::rollBack();
-
             Log::error('Gagal menghapus data : ' . $e->getMessage());
 
-            return back()->withInput()->with('error', 'Error, terjadi kesalahan pada sistem!');
+            return back()->withInput()->with('error', 'Akun pegawai gagal dihapus karena terjadi kesalahan sistem.');
         }
     }
 
     public function cariUserPegawai(Request $request)
     {
-        $cariUserPegawai = $request->input('cariUserPegawai');
-        $user = User::where('role', 'pegawai')
-                   ->where(function($q) use ($cariUserPegawai) {
-                       $q->where('username', 'like', '%' . $cariUserPegawai . '%')
-                         ->orWhere('name', 'like', '%' . $cariUserPegawai . '%');
-                   })
-                   ->paginate(5);
+        return $this->index($request);
+    }
 
-        return view("pages.dashboard.manajemen_setup.userPegawai.data_user_pegawai", [
-            'user' => $user
-        ]);
+    private function scopedPegawaiUserQuery(User $actor)
+    {
+        $query = User::where('role', 'pegawai');
+
+        if ($actor->role === 'admin') {
+            $query->where('unit_kerja_id', $actor->unit_kerja_id);
+        }
+
+        return $query;
+    }
+
+    private function unitKerjaOptions(User $actor)
+    {
+        $query = UnitKerja::query()->orderBy('nama_unit');
+
+        if ($actor->role === 'admin') {
+            $query->where('id', $actor->unit_kerja_id);
+        }
+
+        return $query->get();
+    }
+
+    private function scopeLabel(User $actor): string
+    {
+        if ($actor->role === 'admin') {
+            return 'Scope admin: hanya akun pegawai unit ' . ($actor->unit_kerja?->nama_unit ?? 'unit Anda');
+        }
+
+        return 'Scope superadmin: semua akun pegawai';
+    }
+
+    private function authorizeUserPegawaiAccess(?User $actor): void
+    {
+        abort_unless($actor && in_array($actor->role, ['superadmin', 'admin'], true), 403);
+    }
+
+    private function authorizeTargetUserPegawaiAccess(User $user, ?User $actor = null): void
+    {
+        $actor ??= Auth::user();
+        $this->authorizeUserPegawaiAccess($actor);
+
+        abort_unless($user->role === 'pegawai', 403);
+
+        if ($actor->role === 'admin') {
+            abort_unless((int) $user->unit_kerja_id === (int) $actor->unit_kerja_id, 403);
+        }
     }
 }

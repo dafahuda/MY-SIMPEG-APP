@@ -12,22 +12,62 @@ use App\Models\RiwayatPendidikanLanjut;
 
 class ReportController extends Controller
 {
+    private function isAdminScoped(Request $request): bool
+    {
+        return $request->user()?->role === 'admin';
+    }
+
+    private function scopedUnitKerjaList(Request $request)
+    {
+        $query = UnitKerja::orderBy('nama_unit');
+
+        if ($this->isAdminScoped($request)) {
+            $query->where('id', $request->user()->unit_kerja_id);
+        }
+
+        return $query->get();
+    }
+
+    private function selectedUnitKerjaId(Request $request): ?int
+    {
+        if ($this->isAdminScoped($request)) {
+            return $request->user()->unit_kerja_id;
+        }
+
+        return $request->filled('unit_kerja_id') ? (int) $request->unit_kerja_id : null;
+    }
+
+    private function authorizePrintableUnit(Request $request): UnitKerja
+    {
+        $unitKerjaId = $this->selectedUnitKerjaId($request);
+
+        abort_if(!$unitKerjaId, 404);
+
+        $unitKerja = UnitKerja::find($unitKerjaId);
+
+        abort_if(!$unitKerja, 404);
+
+        return $unitKerja;
+    }
+
     public function reportNominatif(Request $request)
     {
-        $unitKerjaList = UnitKerja::orderBy('nama_unit')->get();
+        $unitKerjaList = $this->scopedUnitKerjaList($request);
         $instansi      = InstansiLembaga::first();
 
         $unitKerja  = null;
         $pegawaiList = collect();
 
-        if ($request->filled('unit_kerja_id')) {
-            $unitKerja = UnitKerja::find($request->unit_kerja_id);
+        $unitKerjaId = $this->selectedUnitKerjaId($request);
+
+        if ($unitKerjaId) {
+            $unitKerja = UnitKerja::find($unitKerjaId);
 
             $pegawaiList = Pegawai::with([
                     'jabatan_aktif.master_jabatan',
                     'jabatan_aktif.master_eselon',
                 ])
-                ->where('unit_kerja_id', $request->unit_kerja_id)
+                ->where('unit_kerja_id', $unitKerjaId)
                 ->orderBy('nama')
                 ->get()
                 ->map(function ($pegawai) {
@@ -78,11 +118,7 @@ class ReportController extends Controller
     public function printNominatif(Request $request)
     {
         $instansi  = InstansiLembaga::first();
-        $unitKerja = UnitKerja::find($request->unit_kerja_id);
-
-        if (!$unitKerja) {
-            return redirect()->route('report.nominatif')->with('error', 'Unit kerja tidak ditemukan.');
-        }
+        $unitKerja = $this->authorizePrintableUnit($request);
 
         $jenjangOrder = ['SD','SMP','SMA','SMK','D1','D2','D3','D4','S1','S2','S3'];
 
@@ -90,7 +126,7 @@ class ReportController extends Controller
                 'jabatan_aktif.master_jabatan',
                 'jabatan_aktif.master_eselon',
             ])
-            ->where('unit_kerja_id', $request->unit_kerja_id)
+            ->where('unit_kerja_id', $unitKerja->id)
             ->orderBy('nama')
             ->get()
             ->map(function ($pegawai) use ($jenjangOrder) {
@@ -128,16 +164,17 @@ class ReportController extends Controller
 
     public function reportDUK(Request $request)
     {
-        $unitKerjaList = UnitKerja::orderBy('nama_unit')->get();
+        $unitKerjaList = $this->scopedUnitKerjaList($request);
         $instansi      = InstansiLembaga::first();
 
         $unitKerja   = null;
         $pegawaiList = collect();
+        $unitKerjaId = $this->selectedUnitKerjaId($request);
 
-        if ($request->filled('unit_kerja_id')) {
-            $unitKerja = UnitKerja::find($request->unit_kerja_id);
+        if ($unitKerjaId) {
+            $unitKerja = UnitKerja::find($unitKerjaId);
 
-            $pegawaiList = $this->buildDukData($request->unit_kerja_id);
+            $pegawaiList = $this->buildDukData($unitKerjaId);
         }
 
         return view('pages.dashboard.report.duk', [
@@ -152,13 +189,9 @@ class ReportController extends Controller
     public function printDUK(Request $request)
     {
         $instansi  = InstansiLembaga::first();
-        $unitKerja = UnitKerja::find($request->unit_kerja_id);
+        $unitKerja = $this->authorizePrintableUnit($request);
 
-        if (!$unitKerja) {
-            return redirect()->route('report.duk')->with('error', 'Unit kerja tidak ditemukan.');
-        }
-
-        $pegawaiList = $this->buildDukData($request->unit_kerja_id);
+        $pegawaiList = $this->buildDukData($unitKerja->id);
 
         return view('pages.dashboard.report.duk_print', [
             'unitKerja'   => $unitKerja,
@@ -226,15 +259,16 @@ class ReportController extends Controller
 
     public function reportKeadaanPegawai(Request $request)
     {
-        $unitKerjaList = UnitKerja::orderBy('nama_unit')->get();
+        $unitKerjaList = $this->scopedUnitKerjaList($request);
         $instansi      = InstansiLembaga::first();
 
-        $unitKerja = null;
-        $stats     = null;
+        $unitKerja   = null;
+        $stats       = null;
+        $unitKerjaId = $this->selectedUnitKerjaId($request);
 
-        if ($request->filled('unit_kerja_id')) {
-            $unitKerja = UnitKerja::find($request->unit_kerja_id);
-            $stats     = $this->buildKeadaanData($request->unit_kerja_id);
+        if ($unitKerjaId) {
+            $unitKerja = UnitKerja::find($unitKerjaId);
+            $stats     = $this->buildKeadaanData($unitKerjaId);
         }
 
         return view('pages.dashboard.report.keadaan_pegawai', [
@@ -250,13 +284,9 @@ class ReportController extends Controller
     public function printKeadaanPegawai(Request $request)
     {
         $instansi  = InstansiLembaga::first();
-        $unitKerja = UnitKerja::find($request->unit_kerja_id);
+        $unitKerja = $this->authorizePrintableUnit($request);
 
-        if (!$unitKerja) {
-            return redirect()->route('report.keadaan_pegawai')->with('error', 'Unit kerja tidak ditemukan.');
-        }
-
-        $stats = $this->buildKeadaanData($request->unit_kerja_id);
+        $stats = $this->buildKeadaanData($unitKerja->id);
 
         return view('pages.dashboard.report.keadaan_pegawai_print', [
             'unitKerja' => $unitKerja,
@@ -411,21 +441,22 @@ class ReportController extends Controller
 
     public function reportBezetting(Request $request)
     {
-        $unitKerjaList = UnitKerja::orderBy('nama_unit')->get();
+        $unitKerjaList = $this->scopedUnitKerjaList($request);
         $instansi      = InstansiLembaga::first();
 
         $unitKerja   = null;
         $pegawaiList = collect();
+        $unitKerjaId = $this->selectedUnitKerjaId($request);
 
-        if ($request->filled('unit_kerja_id')) {
-            $unitKerja = UnitKerja::find($request->unit_kerja_id);
+        if ($unitKerjaId) {
+            $unitKerja = UnitKerja::find($unitKerjaId);
 
             $jenjangOrder = ['SD','SMP','SMA','SMK','D1','D2','D3','D4','S1','S2','S3'];
 
             $pegawaiList = Pegawai::with([
                     'jabatan_aktif.master_jabatan',
                 ])
-                ->where('unit_kerja_id', $request->unit_kerja_id)
+                ->where('unit_kerja_id', $unitKerja->id)
                 ->orderBy('nama')
                 ->get()
                 ->map(function ($pegawai) use ($jenjangOrder) {
@@ -476,16 +507,12 @@ class ReportController extends Controller
     public function printBezetting(Request $request)
     {
         $instansi  = InstansiLembaga::first();
-        $unitKerja = UnitKerja::find($request->unit_kerja_id);
-
-        if (!$unitKerja) {
-            return redirect()->route('report.bezetting')->with('error', 'Unit kerja tidak ditemukan.');
-        }
+        $unitKerja = $this->authorizePrintableUnit($request);
 
         $jenjangOrder = ['SD','SMP','SMA','SMK','D1','D2','D3','D4','S1','S2','S3'];
 
         $pegawaiList = Pegawai::with(['jabatan_aktif.master_jabatan'])
-            ->where('unit_kerja_id', $request->unit_kerja_id)
+            ->where('unit_kerja_id', $unitKerja->id)
             ->orderBy('nama')
             ->get()
             ->map(function ($pegawai) use ($jenjangOrder) {
@@ -564,9 +591,15 @@ class ReportController extends Controller
                     $tahunLahirMax = $tahunSekarang - $batasUsiaPensiun;
             }
 
-            $pegawaiList = Pegawai::with(['jabatan_aktif.master_jabatan', 'unit_kerja'])
+            $pegawaiQuery = Pegawai::with(['jabatan_aktif.master_jabatan', 'unit_kerja'])
                 ->whereYear('tgl_lahir', '>=', $tahunLahirMin)
-                ->whereYear('tgl_lahir', '<=', $tahunLahirMax)
+                ->whereYear('tgl_lahir', '<=', $tahunLahirMax);
+
+            if ($this->isAdminScoped($request)) {
+                $pegawaiQuery->where('unit_kerja_id', $request->user()->unit_kerja_id);
+            }
+
+            $pegawaiList = $pegawaiQuery
                 ->orderBy('tgl_lahir')
                 ->get()
                 ->map(function ($pegawai) use ($batasUsiaPensiun) {

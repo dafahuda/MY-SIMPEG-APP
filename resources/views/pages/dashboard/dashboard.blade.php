@@ -1,6 +1,19 @@
 <x-app-layout>
 <div class='px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto'>
 
+    {{-- Page Header --}}
+    <div class='sm:flex sm:justify-between sm:items-start mb-8 gap-4'>
+        <div class='mb-4 sm:mb-0'>
+            <nav class='text-sm text-gray-500 dark:text-gray-400 mb-1'>
+                <span>SIMPEG ASN</span>
+                <span class='mx-1'>/</span>
+                <span>Dashboard</span>
+            </nav>
+            <h1 class='text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold'>Dashboard Kepegawaian</h1>
+            <p class='mt-2 text-sm text-gray-500 dark:text-gray-400'>Ringkasan data ASN, unit kerja, dan agenda kepegawaian resmi.</p>
+        </div>
+    </div>
+
     {{-- Alert Welcome --}}
     <div class='mb-6 flex items-center gap-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg px-4 py-3 text-sm text-green-800 dark:text-green-300' x-data='{ show: true }' x-show='show'>
         <svg class='shrink-0 w-4 h-4 text-green-500' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clip-rule='evenodd'/></svg>
@@ -139,6 +152,39 @@
             </div>
         </div>
 
+    </div>
+
+    {{-- Analitik Diklat --}}
+    <div class='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mb-6'>
+        <div class='flex items-center gap-2 px-5 py-4 border-b border-gray-200 dark:border-gray-700'>
+            <svg class='w-4 h-4 text-indigo-500' fill='currentColor' viewBox='0 0 20 20'><path d='M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z'/></svg>
+            <span class='font-semibold text-gray-700 dark:text-gray-200 text-sm'>Analitik Diklat Tahun {{ $diklatAnalytics['year'] }}</span>
+        </div>
+        <div class='p-5'>
+            <p class='text-sm text-gray-600 dark:text-gray-400 mb-4'>Ringkasan plan vs realisasi untuk {{ $diklatAnalytics['unit_name'] }}.</p>
+            <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4'>
+                <div class='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4'>
+                    <p class='text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide mb-1'>Direncanakan</p>
+                    <p class='text-2xl font-bold text-blue-700 dark:text-blue-300' data-testid='dashboard-diklat-planned' data-value='{{ $diklatAnalytics['planned_count'] }}'>{{ $diklatAnalytics['planned_count'] }}</p>
+                </div>
+                <div class='bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-4'>
+                    <p class='text-xs font-semibold text-green-600 dark:text-green-400 uppercase tracking-wide mb-1'>Terealisasi</p>
+                    <p class='text-2xl font-bold text-green-700 dark:text-green-300' data-testid='dashboard-diklat-realized' data-value='{{ $diklatAnalytics['realized_linked_count'] }}'>{{ $diklatAnalytics['realized_linked_count'] }}</p>
+                </div>
+                <div class='bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-4'>
+                    <p class='text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wide mb-1'>Belum Terealisasi</p>
+                    <p class='text-2xl font-bold text-amber-700 dark:text-amber-300' data-testid='dashboard-diklat-not-realized' data-value='{{ $diklatAnalytics['not_realized_count'] }}'>{{ $diklatAnalytics['not_realized_count'] }}</p>
+                </div>
+                <div class='bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-lg p-4'>
+                    <p class='text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide mb-1'>Di Luar Rencana</p>
+                    <p class='text-2xl font-bold text-purple-700 dark:text-purple-300' data-testid='dashboard-diklat-out-of-plan' data-value='{{ $diklatAnalytics['out_of_plan_count'] }}'>{{ $diklatAnalytics['out_of_plan_count'] }}</p>
+                </div>
+            </div>
+            <div data-testid='dashboard-diklat-status-chart' class='flex items-start gap-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30 px-4 py-3 text-sm text-gray-500 dark:text-gray-400'>
+                <svg class='mt-0.5 w-4 h-4 shrink-0 text-gray-400 dark:text-gray-500' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z' clip-rule='evenodd'/></svg>
+                <span>Visualisasi grafik status diklat belum tersedia. Gunakan <a href="{{ route('report.diklat_gap') }}" class='underline hover:text-indigo-600 dark:hover:text-indigo-400'>Laporan Gap Diklat</a> untuk analisis lengkap.</span>
+            </div>
+        </div>
     </div>
 
     {{-- Chart Golongan & Eselon --}}

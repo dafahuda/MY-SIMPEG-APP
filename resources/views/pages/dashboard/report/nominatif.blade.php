@@ -5,7 +5,7 @@
         <div class="sm:flex sm:justify-between sm:items-center mb-6">
             <div class="mb-4 sm:mb-0">
                 <nav class="text-sm text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
-                    <span class="font-semibold text-gray-700 dark:text-gray-200">Report</span>
+                    <span class="font-semibold text-gray-700 dark:text-gray-200">Laporan</span>
                     <span>/</span>
                     <span>Nominatif</span>
                     @if ($selectedUnitKerja)
@@ -14,7 +14,7 @@
                     @endif
                 </nav>
                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">
-                    Report <span class="text-base font-normal text-gray-500 dark:text-gray-400">Nominatif</span>
+                    Laporan <span class="text-base font-normal text-gray-500 dark:text-gray-400">Nominatif</span>
                 </h1>
             </div>
             @if ($selectedUnitKerja && $pegawaiList->isNotEmpty())
@@ -25,7 +25,7 @@
                         <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
                             <path d="M15 10h-2V2H3v8H1a1 1 0 00-1 1v3a1 1 0 001 1h14a1 1 0 001-1v-3a1 1 0 00-1-1zM4 3h8v7H4V3zm8 10H4v-2h8v2zm2 0h-1v-2H3v2H2v-2h1V9h10v2h1v2z"/>
                         </svg>
-                        <span class="ml-2">Print</span>
+                        <span class="ml-2">Cetak</span>
                     </a>
                 </div>
             @endif
@@ -40,11 +40,11 @@
                         Pilih OPD / SKPD / Unit Kerja
                     </label>
                     <select name="unit_kerja_id"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                        class="form-select w-full">
                         <option value="">-- Pilih Unit Kerja --</option>
                         @foreach ($unitKerjaList as $uk)
                             <option value="{{ $uk->id }}"
-                                {{ request('unit_kerja_id') == $uk->id ? 'selected' : '' }}>
+                                {{ $selectedUnitKerja?->id == $uk->id ? 'selected' : '' }}>
                                 {{ $uk->nama_unit }}
                             </option>
                         @endforeach
@@ -55,10 +55,19 @@
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
                         <path d="M15.7 14.3l-3.7-3.7c.9-1.2 1.4-2.6 1.4-4.1C13.4 2.9 10.5 0 7 0S.6 2.9.6 6.5 3.5 13 7 13c1.5 0 2.9-.5 4.1-1.4l3.7 3.7.9-.9zM2 6.5C2 3.7 4.2 1.5 7 1.5S12 3.7 12 6.5 9.8 11.5 7 11.5 2 9.3 2 6.5z"/>
                     </svg>
-                    Get Report
+                    Tampilkan Laporan
                 </button>
+                <a href="{{ route('report.nominatif') }}" class="inline-flex items-center px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-sm font-medium rounded shadow-sm whitespace-nowrap">
+                    Reset
+                </a>
             </form>
         </div>
+
+        @unless ($selectedUnitKerja)
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-8 text-center text-gray-500 dark:text-gray-400">
+                Pilih unit kerja untuk menampilkan laporan nominatif pegawai.
+            </div>
+        @endunless
 
         @if ($selectedUnitKerja)
             {{-- Report Card --}}

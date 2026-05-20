@@ -5,7 +5,7 @@
         <div class="sm:flex sm:justify-between sm:items-center mb-6">
             <div class="mb-4 sm:mb-0">
                 <nav class="text-sm text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
-                    <span class="font-semibold text-gray-700 dark:text-gray-200">Report</span>
+                    <span class="font-semibold text-gray-700 dark:text-gray-200">Laporan</span>
                     <span>/</span>
                     <span>Pensiun</span>
                     @if ($selectedPeriode)
@@ -14,7 +14,7 @@
                     @endif
                 </nav>
                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">
-                    Report <span class="text-base font-normal text-gray-500 dark:text-gray-400">Pensiun</span>
+                    Laporan <span class="text-base font-normal text-gray-500 dark:text-gray-400">Pensiun</span>
                 </h1>
             </div>
         </div>
@@ -28,7 +28,7 @@
                         Pilih Periode
                     </label>
                     <select name="periode" id="periodeSelect"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                        class="form-select w-full">
                         <option value="">-- Pilih Periode --</option>
                         @foreach ($periodeOptions as $val => $label)
                             <option value="{{ $val }}" {{ $selectedPeriode === $val ? 'selected' : '' }}>
@@ -42,10 +42,19 @@
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
                         <path d="M15.7 14.3l-3.7-3.7c.9-1.2 1.4-2.6 1.4-4.1C13.4 2.9 10.5 0 7 0S.6 2.9.6 6.5 3.5 13 7 13c1.5 0 2.9-.5 4.1-1.4l3.7 3.7.9-.9zM2 6.5C2 3.7 4.2 1.5 7 1.5S12 3.7 12 6.5 9.8 11.5 7 11.5 2 9.3 2 6.5z"/>
                     </svg>
-                    Get Report
+                    Tampilkan Laporan
                 </button>
+                <a href="{{ route('report.pensiun') }}" class="inline-flex items-center px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-sm font-medium rounded shadow-sm whitespace-nowrap">
+                    Reset
+                </a>
             </form>
         </div>
+
+        @if ($selectedPeriode === '')
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-8 text-center text-gray-500 dark:text-gray-400">
+                Pilih periode untuk menampilkan laporan pensiun.
+            </div>
+        @endif
 
         {{-- Table Card (selalu tampil setelah filter) --}}
         @if ($selectedPeriode !== '')
@@ -54,17 +63,17 @@
                 {{-- Table controls --}}
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700 gap-3">
                     <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                        <span>Show</span>
+                        <span>Tampilkan</span>
                         <select id="perPageSelect"
                             class="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200">
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
                         </select>
-                        <span>entries</span>
+                        <span>baris</span>
                     </div>
                     <div class="flex items-center gap-2 text-sm">
-                        <label class="text-gray-500 dark:text-gray-400">Search:</label>
+                        <label class="text-gray-500 dark:text-gray-400">Cari:</label>
                         <input type="text" id="tableSearch"
                             class="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
                             placeholder="Cari..." />
@@ -148,7 +157,7 @@
                             @empty
                                 <tr id="emptyRow">
                                     <td colspan="7" class="px-5 py-8 text-center text-gray-400 dark:text-gray-500">
-                                        No data available in table
+                                        Belum ada data pensiun yang sesuai dengan periode ini.
                                     </td>
                                 </tr>
                             @endforelse

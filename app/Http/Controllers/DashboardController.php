@@ -10,14 +10,23 @@ use App\Models\Diklat;
 use App\Models\Penghargaan;
 use App\Models\Jabatan;
 use App\Models\Eselon;
+use App\Models\RencanaDiklat;
 use App\Models\UnitKerja;
 use App\Models\Pangkat;
 use App\Models\MasterGolongan;
 use App\Models\MasterEselon;
+use App\Services\DiklatGapAnalyticsService;
+use App\Services\DiklatScopeService;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        private DiklatScopeService $diklatScopeService,
+        private DiklatGapAnalyticsService $diklatGapAnalyticsService,
+    ) {
+    }
+
     public function index()
     {
         // Role pegawai langsung diarahkan ke halaman profil
@@ -156,6 +165,26 @@ class DashboardController extends Controller
             ];
         })->values()->toArray();
 
+        $currentYear = (int) now()->year;
+        $user = auth()->user();
+        $diklatRencana = $this->diklatScopeService
+            ->scopeRencanaDiklatQuery(
+                RencanaDiklat::with(['diklat', 'pegawai.unit_kerja'])->where('tahun_rencana', $currentYear),
+                $user
+            )
+            ->get();
+        $diklatRealisasi = $this->diklatScopeService
+            ->scopeDiklatQuery(
+                Diklat::with(['rencanaDiklat', 'pegawai.unit_kerja'])->where('tahun', $currentYear),
+                $user
+            )
+            ->get();
+        $diklatAnalytics = $this->diklatGapAnalyticsService->summary($diklatRencana, $diklatRealisasi);
+        $diklatAnalytics['year'] = $currentYear;
+        $diklatAnalytics['unit_name'] = $user->role === 'admin'
+            ? ($user->unit_kerja->nama_unit ?? 'Unit kerja Anda')
+            : 'Semua Unit Kerja';
+
         return view('pages/dashboard/dashboard', compact(
             'totalPegawai',
             'totalOPD',
@@ -167,7 +196,8 @@ class DashboardController extends Controller
             'statistikGolongan',
             'statistikEselon',
             'statistikJenisKelamin',
-            'statistikStatus'
+            'statistikStatus',
+            'diklatAnalytics'
         ));
     }
 

@@ -1,17 +1,23 @@
 <x-app-layout>
-    <div class="px-4 sm:px-6 lg:px-8 py-6 w-full max-w-9xl mx-auto">
+    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
 
-        {{-- Breadcrumb --}}
-        <div class="mb-4 text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
-            <span class="font-semibold text-gray-700 dark:text-gray-200">Profile</span>
-            <span>/</span>
-            <span>Pegawai</span>
-            @if ($pegawai)
-                <span>/</span>
-                <span>{{ $pegawai->nama }}{{ $pegawai->gelar ? ', ' . $pegawai->gelar : '' }}</span>
-                <span>/</span>
-                <span>NIP. {{ $pegawai->nip }}</span>
-            @endif
+        {{-- Page Header --}}
+        <div class="sm:flex sm:justify-between sm:items-start mb-8 gap-4">
+            <div class="mb-4 sm:mb-0">
+                <nav class="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                    <span>Dashboard</span>
+                    <span class="mx-1">/</span>
+                    <span>Profile Pegawai</span>
+                    @if ($pegawai)
+                        <span class="mx-1">/</span>
+                        <span>{{ $pegawai->nama }}{{ $pegawai->gelar ? ', ' . $pegawai->gelar : '' }}</span>
+                    @endif
+                </nav>
+                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Profile Pegawai</h1>
+                @if ($pegawai)
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">NIP. {{ $pegawai->nip }}</p>
+                @endif
+            </div>
         </div>
 
         @if (!$pegawai)
@@ -32,30 +38,26 @@
             </div>
         @endif
 
+
+
         {{-- Tab Navigation + Content (satu x-data agar tab sinkron) --}}
-        <div x-data="{ tab: 'profil' }">
+        <div x-data="{ tab: @js($initialTab) }">
 
             {{-- Tab Navigation --}}
-            <div class="flex flex-wrap gap-1 mb-4 border-b border-gray-200 dark:border-gray-700">
-                @php
-                    $tabs = [
-                        ['id' => 'profil',      'label' => 'Profile',     'color' => 'bg-blue-500'],
-                        ['id' => 'suami_istri', 'label' => 'Suami/Istri', 'color' => 'bg-green-500'],
-                        ['id' => 'anak',        'label' => 'Anak',        'color' => 'bg-teal-500'],
-                        ['id' => 'ortu',        'label' => 'Or.Tu',       'color' => 'bg-cyan-500'],
-                        ['id' => 'pendidikan',  'label' => 'Pendidikan',  'color' => 'bg-indigo-500'],
-                        ['id' => 'skp',         'label' => 'SKP',         'color' => 'bg-purple-500'],
-                        ['id' => 'tpp',         'label' => 'TPP',         'color' => 'bg-pink-500'],
-                        ['id' => 'kgb',         'label' => 'KGB',         'color' => 'bg-rose-500'],
-                        ['id' => 'artis',       'label' => 'Artis',       'color' => 'bg-orange-500'],
-                    ];
-                @endphp
-                @foreach ($tabs as $t)
-                    <button @click="tab = '{{ $t['id'] }}'"
-                        :class="tab === '{{ $t['id'] }}' ? '{{ $t['color'] }} text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'"
-                        class="px-3 py-1.5 text-xs font-medium rounded-t transition">
-                        {{ $t['label'] }}
-                    </button>
+            <div class="flex flex-wrap items-end gap-3 mb-4 border-b border-gray-200 dark:border-gray-700">
+                @foreach ($profileTabs as $group)
+                    <div class="pb-2">
+                        <p class="mb-1 text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{{ $group['group'] }}</p>
+                        <div class="flex flex-wrap gap-1">
+                            @foreach ($group['items'] as $t)
+                                <button type="button" @click="tab = '{{ $t['id'] }}'"
+                                    :class="tab === '{{ $t['id'] }}' ? '{{ $t['color'] }} text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'"
+                                    class="px-3 py-1.5 text-xs font-medium rounded-t transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900">
+                                    {{ $t['label'] }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
                 @endforeach
 
                 {{-- Print button + Edit button --}}
@@ -78,108 +80,98 @@
             </div>
 
             {{-- ===== TAB PROFIL ===== --}}
-            <div x-show="tab === 'profil'" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div x-show="tab === 'profil'" class="space-y-4">
+                <div class="sr-only" data-testid="profile-active-tab">{{ $initialTab }}</div>
 
-                {{-- Kolom kiri: foto + biodata --}}
-                <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
-
-                    <div class="flex flex-col sm:flex-row gap-5">
-                        {{-- Foto --}}
-                        <div class="flex flex-col items-center gap-2 shrink-0">
-                            <div class="w-32 h-36 rounded overflow-hidden border border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-700">
-                                @if ($pegawai->foto)
-                                    <img src="{{ asset($pegawai->foto) }}" alt="Foto" class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                        <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-                                        </svg>
-                                    </div>
-                                @endif
-                            </div>
-                            <span class="text-xs text-center text-gray-500 dark:text-gray-400 font-mono">{{ $pegawai->nip }}</span>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                                # Biodata Pegawai
-                            </span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    @foreach ($summaryCards as $card)
+                        <div class="rounded-lg border p-4 {{ $toneClasses[$card['tone']] }}">
+                            <p class="text-xs font-semibold uppercase tracking-wide opacity-80">{{ $card['label'] }}</p>
+                            <p class="mt-2 text-sm font-semibold leading-6 break-words">{{ $card['value'] }}</p>
                         </div>
-
-                        {{-- Biodata --}}
-                        <div class="flex-1">
-                            <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">
-                                {{ $pegawai->nama }}{{ $pegawai->gelar ? ', ' . $pegawai->gelar : '' }}
-                            </h2>
-                            @php
-                                $fields = [
-                                    ['label' => 'NIP',                'value' => $pegawai->nip],
-                                    ['label' => 'Gelar Depan',        'value' => '-'],
-                                    ['label' => 'Gelar Belakang',     'value' => $pegawai->gelar],
-                                    ['label' => 'Tempat Tanggal Lahir','value' => ($pegawai->tmpt_lahir ?? '') . ', ' . (\Carbon\Carbon::parse($pegawai->tgl_lahir)->format('Y-m-d') ?? '')],
-                                    ['label' => 'Umur',               'value' => $usia ? $usia->y . ' Tahun, ' . $usia->m . ' Bulan, ' . $usia->d . ' Hari' : '-'],
-                                    ['label' => 'Jenis Kelamin',      'value' => ucfirst($pegawai->jenis_kelamin)],
-                                    ['label' => 'Agama',              'value' => $pegawai->agama],
-                                    ['label' => 'Golongan Darah',     'value' => $pegawai->golongan_darah],
-                                    ['label' => 'Status Pernikahan',  'value' => $pegawai->status_pernikahan],
-                                    ['label' => 'NIK',                'value' => $pegawai->nik],
-                                    ['label' => 'No. Telp',           'value' => $pegawai->no_hp],
-                                    ['label' => 'Email',              'value' => $pegawai->email],
-                                    ['label' => 'Email Gov',          'value' => $pegawai->email_gov],
-                                    ['label' => 'Alamat',             'value' => $pegawai->alamat],
-                                    ['label' => 'No. NPWP',          'value' => $pegawai->no_npwp],
-                                    ['label' => 'No. BPJS',          'value' => $pegawai->no_bpjs],
-                                    ['label' => 'Status Kepegawaian', 'value' => $pegawai->status_kepegawaian],
-                                    ['label' => 'Karpeg',             'value' => $pegawai->karpeg],
-                                    ['label' => 'No. SK CPNS',       'value' => $pegawai->no_sk_cpns],
-                                    ['label' => 'TMT CPNS',          'value' => $pegawai->tmt_cpns],
-                                    ['label' => 'No. SK PNS',        'value' => $pegawai->no_sk_pns],
-                                    ['label' => 'TMT PNS',           'value' => $pegawai->tmt_pns],
-                                ];
-                            @endphp
-                            <table class="w-full text-xs">
-                                @foreach ($fields as $f)
-                                    <tr class="border-b border-gray-100 dark:border-gray-700">
-                                        <td class="py-1.5 pr-3 text-gray-500 dark:text-gray-400 w-40 shrink-0">{{ $f['label'] }}</td>
-                                        <td class="py-1.5 text-gray-800 dark:text-gray-200">{{ $f['value'] ?? '-' }}</td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
-                {{-- Kolom kanan: Kepegawaian quick links --}}
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4">
-                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3 flex items-center justify-between">
-                        Kepegawaian
-                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M9 6.855A3.502 3.502 0 0 0 8 0a3.5 3.5 0 0 0-1 6.855v1.656L5.534 9.65a3.5 3.5 0 1 0 1.229 1.578L8 10.267l1.238.962a3.5 3.5 0 1 0 1.229-1.578L9 8.511V6.855Z"/>
-                        </svg>
-                    </h3>
-                    @php
-                        $kepLinks = [
-                            ['label' => 'Periode Pangkat', 'color' => 'bg-blue-500',   'count' => $pangkat ? 1 : 0],
-                            ['label' => 'Jabatan',         'color' => 'bg-yellow-500', 'count' => $jabatan ? 1 : 0],
-                            ['label' => 'Periode KGB',     'color' => 'bg-green-500',  'count' => 0],
-                            ['label' => 'Kepangkatan',     'color' => 'bg-teal-500',   'count' => 0],
-                            ['label' => 'Hukuman',         'color' => 'bg-red-500',    'count' => $hukuman->count()],
-                            ['label' => 'Penghargaan',     'color' => 'bg-purple-500', 'count' => $penghargaan->count()],
-                            ['label' => 'Seminar',         'color' => 'bg-indigo-500', 'count' => $seminar->count()],
-                            ['label' => 'Penugasan LN',    'color' => 'bg-pink-500',   'count' => 0],
-                            ['label' => 'Latihan Jabatan', 'color' => 'bg-orange-500', 'count' => $latihanJab->count()],
-                            ['label' => 'Cuti',            'color' => 'bg-cyan-500',   'count' => $cuti->count()],
-                            ['label' => 'IKI Tunjangan',   'color' => 'bg-lime-500',   'count' => $tunjangan->count()],
-                            ['label' => 'Mutasi',          'color' => 'bg-amber-500',  'count' => $mutasi->count()],
-                            ['label' => 'Izin Perkawinan', 'color' => 'bg-rose-500',   'count' => $izinKawin->count()],
-                        ];
-                    @endphp
-                    <div class="grid grid-cols-2 gap-2">
-                        @foreach ($kepLinks as $kl)
-                            <button class="flex items-center gap-2 px-2 py-1.5 rounded text-xs font-medium text-white {{ $kl['color'] }} hover:opacity-90 transition">
-                                {{ $kl['label'] }}
-                                @if ($kl['count'] > 0)
-                                    <span class="ml-auto bg-white/30 rounded px-1">{{ $kl['count'] }}</span>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+                    {{-- Kolom kiri: foto + biodata --}}
+                    <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
+
+                        <div class="flex flex-col sm:flex-row gap-5">
+                            {{-- Foto --}}
+                            <div class="flex flex-col items-center gap-2 shrink-0">
+                                <div class="w-32 h-36 rounded overflow-hidden border border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-700">
+                                    @if ($pegawai->foto)
+                                        <img src="{{ asset($pegawai->foto) }}" alt="Foto" class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                            <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                                            </svg>
+                                        </div>
+                                    @endif
+                                </div>
+                                <span class="text-xs text-center text-gray-500 dark:text-gray-400 font-mono">{{ $pegawai->nip }}</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                    # Biodata Pegawai
+                                </span>
+                            </div>
+
+                            {{-- Biodata --}}
+                            <div class="flex-1">
+                                <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">
+                                    {{ $pegawai->nama }}{{ $pegawai->gelar ? ', ' . $pegawai->gelar : '' }}
+                                </h2>
+                                <table class="w-full text-xs">
+                                    @foreach ($biodataFields as $f)
+                                        <tr class="border-b border-gray-100 dark:border-gray-700">
+                                            <td class="py-1.5 pr-3 text-gray-500 dark:text-gray-400 w-40 shrink-0">{{ $f['label'] }}</td>
+                                            <td class="py-1.5 text-gray-800 dark:text-gray-200">{{ \App\Support\ProfilePegawaiUi::formatValue($f['value']) }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Kolom kanan: Kepegawaian quick links --}}
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4">
+                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center justify-between">
+                            Data Kepegawaian
+                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M9 6.855A3.502 3.502 0 0 0 8 0a3.5 3.5 0 0 0-1 6.855v1.656L5.534 9.65a3.5 3.5 0 1 0 1.229 1.578L8 10.267l1.238.962a3.5 3.5 0 1 0 1.229-1.578L9 8.511V6.855Z"/>
+                            </svg>
+                        </h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Pilih ringkasan untuk membuka bagian data yang sudah tersedia pada halaman ini.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
+                            @foreach ($kepegawaianLinks as $kl)
+                                @if (!empty($kl['tab']))
+                                    <button
+                                        type="button"
+                                        @click="tab = '{{ $kl['tab'] }}'"
+                                        class="w-full rounded-lg border px-3 py-3 text-left transition hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 {{ $toneClasses[$kl['tone']] }}"
+                                    >
+                                        <span class="flex items-start justify-between gap-3">
+                                            <span>
+                                                <span class="block text-xs font-semibold uppercase tracking-wide opacity-80">{{ $kl['label'] }}</span>
+                                                <span class="mt-1 block text-xs opacity-80">Buka bagian terkait</span>
+                                            </span>
+                                            <span class="inline-flex min-w-8 items-center justify-center rounded-md bg-white/70 px-2 py-1 text-xs font-semibold text-gray-700 dark:bg-gray-900/40 dark:text-gray-100">{{ $kl['count'] }}</span>
+                                        </span>
+                                    </button>
+                                @else
+                                    <div class="w-full rounded-lg border px-3 py-3 {{ $toneClasses[$kl['tone']] }}">
+                                        <span class="flex items-start justify-between gap-3">
+                                            <span>
+                                                <span class="block text-xs font-semibold uppercase tracking-wide opacity-80">{{ $kl['label'] }}</span>
+                                                <span class="mt-1 block text-xs opacity-80">{{ $kl['info'] }}</span>
+                                            </span>
+                                            <span class="inline-flex min-w-8 items-center justify-center rounded-md bg-white/70 px-2 py-1 text-xs font-semibold text-gray-700 dark:bg-gray-900/40 dark:text-gray-100">{{ $kl['count'] }}</span>
+                                        </span>
+                                    </div>
                                 @endif
-                            </button>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
@@ -367,7 +359,7 @@
                 </div>
             </div>
 
-            {{-- Tab lainnya (SKP, TPP, KGB, Artis) - placeholder --}}
+            {{-- Tab lainnya (SKP, TPP, KGB, Diklat) - placeholder --}}
             <div x-show="tab === 'skp'" class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                 <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Data SKP / Prestasi Kerja</h3>
                 @if ($skp->isEmpty())
@@ -489,12 +481,18 @@
                 @endif
             </div>
 
-            <div x-show="tab === 'artis'" class="space-y-4">
-                {{-- Diklat --}}
+            <div x-show="tab === 'diklat'" class="space-y-4">
+                @if ($initialTab === 'diklat')
+                {{-- Diklat Resmi --}}
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
-                    <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-3">Diklat</h3>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-gray-700 dark:text-gray-200">Diklat Resmi</h3>
+                        <a href="{{ route('diklat_saya.index') }}" class="text-xs text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium">
+                            Kelola di Diklat Saya &rarr;
+                        </a>
+                    </div>
                     @if ($diklat->isEmpty())
-                        <p class="text-sm text-gray-400 italic">Belum ada data diklat.</p>
+                        <p class="text-sm text-gray-400 italic">Belum ada data diklat resmi.</p>
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs">
@@ -502,25 +500,24 @@
                                     <tr>
                                         <th class="px-3 py-2 text-left">No</th>
                                         <th class="px-3 py-2 text-left">Nama Diklat</th>
-                                        <th class="px-3 py-2 text-left">Penyelenggara</th>
-                                        <th class="px-3 py-2 text-left">Tempat</th>
-                                        <th class="px-3 py-2 text-left">Angkatan</th>
                                         <th class="px-3 py-2 text-left">Tahun</th>
-                                        <th class="px-3 py-2 text-left">Jml Jam</th>
-                                        <th class="px-3 py-2 text-left">No. STTPP</th>
+                                        <th class="px-3 py-2 text-left">No. Sertifikat / STTPP</th>
+                                        <th class="px-3 py-2 text-left">Penyelenggara</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    @foreach ($diklat as $i => $d)
-                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                                            <td class="px-3 py-2">{{ $i + 1 }}</td>
-                                            <td class="px-3 py-2 font-medium text-gray-800 dark:text-gray-100">{{ $d->nama_diklat ?? '-' }}</td>
-                                            <td class="px-3 py-2">{{ $d->penyelenggara ?? '-' }}</td>
-                                            <td class="px-3 py-2">{{ $d->tempat ?? '-' }}</td>
-                                            <td class="px-3 py-2">{{ $d->angkatan ?? '-' }}</td>
-                                            <td class="px-3 py-2">{{ $d->tahun ?? '-' }}</td>
-                                            <td class="px-3 py-2">{{ $d->jumlah_jam ?? '-' }}</td>
+                                <tbody class="text-gray-700 dark:text-gray-300">
+                                    @foreach ($diklat as $d)
+                                        <tr class="border-b border-gray-200 dark:border-gray-700">
+                                            <td class="px-3 py-2">{{ $loop->iteration }}</td>
+                                            <td class="px-3 py-2">
+                                                {{ $d->nama_diklat }}
+                                                @if ($d->rencanaDiklat)
+                                                    <span class="text-xs text-gray-500">({{ $d->rencanaDiklat->nama_diklat_rencana }})</span>
+                                                @endif
+                                            </td>
+                                            <td class="px-3 py-2">{{ $d->tahun }}</td>
                                             <td class="px-3 py-2">{{ $d->no_sttpp ?? '-' }}</td>
+                                            <td class="px-3 py-2">{{ $d->penyelenggara }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -600,6 +597,15 @@
                         </div>
                     @endif
                 </div>
+                @else
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
+                        <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-2">Diklat Saya</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Buka halaman Diklat Saya untuk melihat riwayat resmi, seminar, dan latihan jabatan.</p>
+                        <a href="{{ route('diklat_saya.index') }}" class="text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium">
+                            Kelola di Diklat Saya &rarr;
+                        </a>
+                    </div>
+                @endif
             </div>
 
         </div>{{-- end x-data tab --}}

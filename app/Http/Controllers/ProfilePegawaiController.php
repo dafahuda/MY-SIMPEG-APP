@@ -14,6 +14,7 @@ use App\Models\RiwayatKeluargaOrangtua;
 use App\Models\Hukuman;
 use App\Models\Penghargaan;
 use App\Models\Diklat;
+use App\Models\RencanaDiklat;
 use App\Models\Seminar;
 use App\Models\LatihanJabatan;
 use App\Models\Cuti;
@@ -31,6 +32,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use App\Support\ProfilePegawaiUi;
 
 class ProfilePegawaiController extends Controller
 {
@@ -78,7 +80,8 @@ class ProfilePegawaiController extends Controller
         // Kepegawaian
         $hukuman      = Hukuman::where('pegawai_id', $pegawai->id)->get();
         $penghargaan  = Penghargaan::where('pegawai_id', $pegawai->id)->get();
-        $diklat       = Diklat::where('pegawai_id', $pegawai->id)->get();
+        $diklat       = Diklat::with('rencanaDiklat')->where('pegawai_id', $pegawai->id)->get();
+        $rencanaDiklat = RencanaDiklat::with('diklat')->where('pegawai_id', $pegawai->id)->get();
         $seminar      = Seminar::where('pegawai_id', $pegawai->id)->get();
         $latihanJab   = LatihanJabatan::where('pegawai_id', $pegawai->id)->get();
         $cuti         = Cuti::where('pegawai_id', $pegawai->id)->get();
@@ -101,13 +104,35 @@ class ProfilePegawaiController extends Controller
             ? \Carbon\Carbon::parse($pegawai->tgl_lahir)->diff(now())
             : null;
 
+        $profileTabs = ProfilePegawaiUi::tabs();
+        $initialTab = ProfilePegawaiUi::resolveTab(request('tab'));
+        $toneClasses = ProfilePegawaiUi::toneClasses();
+        $summaryCards = ProfilePegawaiUi::summaryCards($pegawai, $pangkat, $jabatan);
+        $kepegawaianLinks = ProfilePegawaiUi::kepegawaianLinks([
+            'pangkat' => $pangkat ? 1 : 0,
+            'jabatan' => $jabatan ? 1 : 0,
+            'allPangkat' => $allPangkat->count(),
+            'hukuman' => $hukuman->count(),
+            'penghargaan' => $penghargaan->count(),
+            'seminar' => $seminar->count(),
+            'latihanJab' => $latihanJab->count(),
+            'diklat' => $diklat->count(),
+            'cuti' => $cuti->count(),
+            'tunjangan' => $tunjangan->count(),
+            'mutasi' => $mutasi->count(),
+            'izinKawin' => $izinKawin->count(),
+        ]);
+        $biodataFields = ProfilePegawaiUi::biodataFields($pegawai, $usia);
+
         return view('pages.dashboard.profile_pegawai.indexProfilePegawai', compact(
             'user', 'pegawai', 'pangkat', 'jabatan', 'usia',
             'pendidikanSekolah', 'pendidikanLanjut', 'pendidikanBahasa',
             'suamiIstri', 'anak', 'orangTua',
-            'hukuman', 'penghargaan', 'diklat', 'seminar',
+            'hukuman', 'penghargaan', 'diklat', 'rencanaDiklat', 'seminar',
             'latihanJab', 'cuti', 'tunjangan', 'mutasi', 'izinKawin',
-            'skp', 'tpp', 'allPangkat'
+            'skp', 'tpp', 'allPangkat',
+            'profileTabs', 'initialTab', 'toneClasses', 'summaryCards',
+            'kepegawaianLinks', 'biodataFields'
         ));
     }
 
@@ -167,12 +192,24 @@ class ProfilePegawaiController extends Controller
         // Instansi
         $instansi = InstansiLembaga::first();
 
+        // Diklat
+        $rencanaDiklat = RencanaDiklat::where('pegawai_id', $pegawai->id)->get();
+        $diklat = Diklat::with('rencanaDiklat')->where('pegawai_id', $pegawai->id)->get();
+        $diklatPrintSummary = [
+            'planned_count' => $rencanaDiklat->count(),
+            'realized_linked_count' => $diklat->whereNotNull('rencana_diklat_id')->count(),
+            'not_realized_count' => RencanaDiklat::where('pegawai_id', $pegawai->id)
+                ->whereDoesntHave('diklat')
+                ->count(),
+            'out_of_plan_count' => $diklat->whereNull('rencana_diklat_id')->count(),
+        ];
+
         return view('pages.dashboard.profile_pegawai.printBiodataPegawai', compact(
             'pegawai', 'pangkat', 'jabatan', 'allJabatan', 'allPangkat',
             'pendidikanSekolah', 'pendidikanLanjut', 'pendidikanBahasa',
             'suamiIstri', 'anak', 'orangTua',
             'hukuman', 'penghargaan', 'penugasanLN',
-            'instansi'
+            'instansi', 'rencanaDiklat', 'diklat', 'diklatPrintSummary'
         ));
     }
 

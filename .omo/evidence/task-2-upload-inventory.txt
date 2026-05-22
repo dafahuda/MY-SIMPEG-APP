@@ -1,0 +1,77 @@
+Task 2 Upload/Delete Inventory
+Date: 2026-05-20
+Scope: app/Http/Controllers/*.php
+Patterns: storeAs(, getClientOriginalName(, gambarLama, fileLama, Storage::disk('public')->delete(
+
+Summary Counts
+- storeAs: 22 matches across 11 controllers
+- getClientOriginalName: 22 matches across 11 controllers
+- gambarLama/fileLama markers: 10 matches across 5 controllers
+- direct public delete: 12 matches across 11 controllers
+- Existing helper usage (baseline): FileUploadHelper used only in DiklatController and DiklatSayaController
+
+High-risk (client-provided delete path + trusted original filename)
+1) app/Http/Controllers/SeminarController.php
+   - store: line 80 getClientOriginalName + line 81 storeAs(document,...)
+   - update: line 141 if($request->fileLama) then line 142 delete($request->fileLama)
+   - update upload: line 146 getClientOriginalName + line 147 storeAs(images,...)
+   - Risk: request-controlled delete path; inconsistent directory document->images.
+
+2) app/Http/Controllers/LatihanJabatanController.php
+   - store: line 79 getClientOriginalName + line 80 storeAs(document,...)
+   - update: line 139 if($request->fileLama) then line 140 delete($request->fileLama)
+   - update upload: line 144 getClientOriginalName + line 145 storeAs(document,...)
+   - Risk: request-controlled delete path.
+
+3) app/Http/Controllers/PenugasanLuarNegeriController.php
+   - store: line 78 getClientOriginalName + line 79 storeAs(document,...)
+   - update: line 138 if($request->fileLama) then line 139 delete($request->fileLama)
+   - update upload: line 143 getClientOriginalName + line 144 storeAs(images,...)
+   - Risk: request-controlled delete path; inconsistent directory document->images.
+
+4) app/Http/Controllers/PegawaiController.php
+   - store: line 101 getClientOriginalName + line 102 storeAs(images,...)
+   - update: line 207 if($request->gambarLama) then line 208 delete($request->gambarLama)
+   - update upload: line 212 getClientOriginalName + line 213 storeAs(images,...)
+   - Risk: request-controlled delete path.
+
+5) app/Http/Controllers/MutasiController.php
+   - store: line 75 getClientOriginalName + line 76 storeAs(document,...)
+   - update delete: lines 134-137 delete(str_replace('/storage/', '', $request->fileLama))
+   - update upload: line 141 getClientOriginalName + line 142 storeAs(document,...)
+   - Risk: request-controlled delete path with lightweight normalization only.
+
+Medium-risk (model-based old path delete + trusted original filename)
+6) app/Http/Controllers/CutiController.php
+   - store/update upload: lines 82/153 getClientOriginalName, lines 83/154 storeAs(document,...)
+   - update delete: lines 147-149 delete model-derived $oldPath
+
+7) app/Http/Controllers/HukumanController.php
+   - store/update upload: lines 84/154 getClientOriginalName, lines 85/155 storeAs(document,...)
+   - update delete: lines 148-150 delete model-derived $oldPath
+
+8) app/Http/Controllers/PenghargaanController.php
+   - store/update upload: lines 79/144 getClientOriginalName, lines 80/145 storeAs(document,...)
+   - update delete: lines 138-140 delete model-derived $oldPath
+
+9) app/Http/Controllers/InstansiLembagaController.php
+   - store/update upload: lines 50/105 getClientOriginalName, lines 51/106 storeAs(images,...)
+   - update delete: lines 99-101 delete model-derived $oldPath
+
+10) app/Http/Controllers/SekretariatController.php
+   - store/update upload: lines 57/112 getClientOriginalName, lines 58/113 storeAs(images,...)
+   - update delete: lines 106-108 delete model-derived $oldPath
+
+11) app/Http/Controllers/ProfilePegawaiController.php
+   - update/uploadFoto upload: lines 293/340 getClientOriginalName, lines 294/341 storeAs(images,...)
+   - delete: lines 287-288 and 334-335 delete model-derived $oldPath after exists check
+
+Lower-risk baseline already on helper contract
+12) app/Http/Controllers/DiklatController.php
+   - validateAndStore + helper delete usage
+13) app/Http/Controllers/DiklatSayaController.php
+   - validateAndStore + helper delete usage
+
+Task-12 handoff signal
+- Highest priority migration targets: Seminar, LatihanJabatan, PenugasanLuarNegeri, Pegawai, Mutasi.
+- Migration pattern: replace filename creation + storeAs + direct public delete with FileUploadHelper::validateAndStore / FileUploadHelper::delete.

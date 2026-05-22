@@ -1,0 +1,33 @@
+Task 5 Query Guard Evidence
+Date: 2026-05-21
+
+Implemented guard location
+- tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php
+- Test: test_report_query_guard_n_plus_one_scaffold_has_representative_budget_fixture
+
+Guard strategy
+- Task 5 is test/fixture scaffolding only; production report optimization is deferred to Task 13.
+- The guard pins representative legacy report routes that Task 13 must optimize/check:
+  - report.nominatif: max_select_queries <= 8
+  - report.duk: max_select_queries <= 8
+  - report.keadaan_pegawai: max_select_queries <= 10
+  - report.bezetting: max_select_queries <= 8
+- The test asserts every route guard has:
+  1) positive max_select_queries metadata
+  2) non-empty notes explaining the N+1/performance risk
+- This avoids fragile live query assertions before Task 13 while preserving a concrete budget contract.
+
+Verification commands executed
+1) php artisan test tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php
+   Observed result:
+   - `✓ report query guard n plus one scaffold has representative budget fixture`
+   - Suite result: 3 passed, 3 skipped, 29 assertions
+
+2) php artisan test tests/Feature/AdminSuperadminUiux
+   Observed result:
+   - ReportCorrectnessPerformanceFixtureScaffoldTest executed inside the full AdminSuperadminUiux suite.
+   - Suite result: 29 passed, 4 skipped, 262 assertions
+
+Notes
+- No production code modified.
+- Skips are explicit known blockers for Task 6 route authorization and Task 13 report correctness fixes; they do not bless the buggy behavior.

@@ -1,0 +1,26 @@
+Task 9 — Arbitrary public file deletion blocked
+
+Scope
+- Hardened app/Http/Controllers/PegawaiController.php update() so replacement photo deletion no longer uses request-provided gambarLama.
+- New flow stores replacement via App\Support\FileUploadHelper::validateAndStore(), updates the Pegawai row, then deletes only the old photo path that came from the database.
+- The crafted client field gambarLama is ignored for deletion control.
+
+Regression guard
+- tests/Feature/Security/FileUploadSecurityTest.php::test_pegawai_update_ignores_crafted_gambar_lama_and_deletes_only_db_owned_photo
+- Fixture uses Storage::fake('public') with:
+  - victim file: images/victim.png
+  - DB-owned old photo: /storage/images/db-owned-old.png
+- Request sends gambarLama=images/victim.png plus a valid replacement photo.
+- Assertions:
+  - response redirects to /data_pegawai/pegawai with Indonesian success flash Berhasil mengubah data!
+  - images/victim.png still exists
+  - images/db-owned-old.png is deleted
+  - new photo path is /storage/images/{uuid}.png and exists on public disk
+
+Verification
+- Command: php artisan test tests/Feature/Security/FileUploadSecurityTest.php
+- Result: PASS — 8 passed, 32 assertions, Duration 44.10s
+
+Status
+- Acceptance met: crafted gambarLama cannot delete arbitrary public disk files.
+- Acceptance met: legitimate photo update still replaces the old DB-owned photo.

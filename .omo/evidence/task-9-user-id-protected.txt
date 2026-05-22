@@ -1,0 +1,23 @@
+Task 9 — Pegawai user_id protected
+
+Scope
+- Hardened app/Http/Controllers/PegawaiController.php update() so normal Pegawai edits preserve the existing DB-owned user_id mapping.
+- The controller no longer assigns $request->input('user_id') during update().
+- Crafted user_id values and omitted user_id fields cannot null or hijack the pegawai-user mapping.
+- Admin/superadmin can still manage other official Pegawai fields through the existing data_pegawai update path; this task only protects the account mapping field in normal update.
+
+Regression guard
+- tests/Feature/Security/FileUploadSecurityTest.php::test_pegawai_update_preserves_user_id_when_payload_omits_or_crafts_user_id
+- Fixture creates original pegawai user, another pegawai user, and a Pegawai row linked to the original user.
+- Scenario 1 sends a crafted user_id for another user.
+- Scenario 2 omits user_id entirely.
+- Assertions:
+  - both updates redirect to /data_pegawai/pegawai with Indonesian success flash Berhasil mengubah data!
+  - Pegawai user_id remains the original user id after both requests
+
+Verification
+- Command: php artisan test tests/Feature/Security/FileUploadSecurityTest.php
+- Result: PASS — 8 passed, 32 assertions, Duration 44.10s
+
+Status
+- Acceptance met: omitted/crafted user_id cannot null or hijack pegawai-user mapping.

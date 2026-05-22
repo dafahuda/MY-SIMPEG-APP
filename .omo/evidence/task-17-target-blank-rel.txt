@@ -1,0 +1,38 @@
+# Task 17 - target=_blank rel protection
+
+Scope:
+- Added `rel="noopener noreferrer"` to audited/new-tab Blade links without changing hrefs or target behavior.
+- Touched report print links:
+  - `resources/views/pages/dashboard/report/nominatif.blade.php`
+  - `resources/views/pages/dashboard/report/duk.blade.php`
+  - `resources/views/pages/dashboard/report/bezetting.blade.php`
+  - `resources/views/pages/dashboard/report/keadaan_pegawai.blade.php`
+- Touched profile print link:
+  - `resources/views/pages/dashboard/profile_pegawai/indexProfilePegawai.blade.php`
+- Touched register terms/privacy links:
+  - `resources/views/auth/register.blade.php`
+- Also fixed existing audited target blank links found by repository grep:
+  - `resources/views/components/dashboard/dashboard-card-05.blade.php`
+  - `resources/views/pages/dashboard/kepegawaian/cuti/indexCuti.blade.php`
+
+Regression guard:
+- `tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php`
+  - `test_audited_target_blank_links_include_rel_noopener_noreferrer`
+  - Checks audited Blade files and fails if any `target="_blank"` anchor lacks `rel` containing both `noopener` and `noreferrer`.
+
+Static grep:
+- Grep for `target="_blank"` anchors lacking `rel="...noopener...noreferrer..."` under `resources/views/**/*.blade.php` returned no files.
+
+Verification:
+- `php artisan test tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php`
+  - PASS: 6 passed, 41 assertions, Duration 3.54s.
+- `php artisan test tests/Feature/AdminSuperadminUiux`
+  - PASS: 37 passed, 310 assertions, Duration 67.51s.
+- `npm run build`
+  - PASS: Vite build completed successfully in 54.08s.
+  - Existing warning remains: JS chunk `assets/app-g5vxbfYH.js` is larger than 500 kB after minification.
+
+Status:
+- No link destination changed.
+- No new-tab behavior changed.
+- Audited links now have reverse-tabnabbing protection.

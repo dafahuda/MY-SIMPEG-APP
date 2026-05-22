@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Penghargaan;
 use App\Models\Pegawai;
 use App\Models\InstansiLembaga;
+use App\Support\FileUploadHelper;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -75,10 +76,16 @@ class PenghargaanController extends Controller
             DB::beginTransaction();
 
             if($request->hasFile('file_sertifikat_penghargaan')) {
-                $file = $request->file('file_sertifikat_penghargaan');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['file_sertifikat_penghargaan'] = '/storage/' . $path;
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_sertifikat_penghargaan'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_sertifikat_penghargaan'
+                );
+
+                $validateData['file_sertifikat_penghargaan'] = $storedFile['file_path'];
             }
 
             Penghargaan::create($validateData);
@@ -133,20 +140,28 @@ class PenghargaanController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldFile = $penghargaan->file_sertifikat_penghargaan;
+
             if($request->hasFile('file_sertifikat_penghargaan')) {
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_sertifikat_penghargaan'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_sertifikat_penghargaan'
+                );
 
-                if($penghargaan->file_sertifikat_penghargaan) {
-                    $oldPath = str_replace('/storage/', '', $penghargaan->file_sertifikat_penghargaan);
-                    Storage::disk('public')->delete($oldPath);
-                }
-
-                $file = $request->file('file_sertifikat_penghargaan');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['file_sertifikat_penghargaan'] = '/storage/' . $path;
+                $validateData['file_sertifikat_penghargaan'] = $storedFile['file_path'];
+            } else {
+                unset($validateData['file_sertifikat_penghargaan']);
             }
 
             $penghargaan->update($validateData);
+
+            if($request->hasFile('file_sertifikat_penghargaan')) {
+                FileUploadHelper::delete($oldFile, 'public');
+            }
 
             DB::commit();
 
@@ -200,7 +215,7 @@ class PenghargaanController extends Controller
         if($request->cariPenghargaan) {
             $query->where(function($q) use ($request) {
 
-                // dari tabel izin kawin
+                // dari tabel penghargaan
                 $q->where('nama_penghargaan', 'like', '%' . $request->cariPenghargaan . '%');
 
                 $q->orWhere('tingkat_kegiatan', 'like', '%' . $request->cariPenghargaan . '%');

@@ -1,0 +1,18 @@
+Task 7 - Allowed Fields and Photo
+
+Scope:
+- Preserved pegawai self-service update for allowed personal/contact fields: nama, gelar, tmpt_lahir, tgl_lahir, jenis_kelamin, agama, golongan_darah, status_pernikahan, nik, alamat, no_hp, email, email_gov, no_npwp, no_bpjs.
+- Preserved foto update while replacing original-name based storeAs() with App\Support\FileUploadHelper::validateAndStore() for UUID safe names and MIME/size checks.
+- Old foto deletion now uses FileUploadHelper::delete() for normalized DB-owned storage paths.
+- Indonesian flash success remains: Berhasil mengubah data profile!
+
+Regression guard:
+- tests/Feature/ProfilePegawaiUiContractTest.php::test_pegawai_self_edit_can_update_allowed_profile_fields_and_photo
+- The test updates allowed fields, uploads a fake image, verifies DB updates, verifies /storage/images/{uuid}.png path shape, and asserts the file exists on the public disk.
+
+Verification:
+- Command: php artisan test tests/Feature/ProfilePegawaiUiContractTest.php
+- Result: PASS - 9 passed, 111 assertions, Duration 12.12s.
+
+Status:
+- Acceptance met: pegawai can still update allowed personal/contact fields and photo; flash behavior remains Indonesian/user-friendly.

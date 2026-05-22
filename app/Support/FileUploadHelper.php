@@ -30,7 +30,7 @@ class FileUploadHelper
         }
 
         $uuid = (string) Str::uuid();
-        $extension = $file->getClientOriginalExtension();
+        $extension = strtolower($file->extension() ?: $file->getClientOriginalExtension() ?: 'bin');
         $safeFileName = $uuid . '.' . $extension;
 
         $filePath = $file->storeAs($directory, $safeFileName, $disk);
@@ -47,8 +47,25 @@ class FileUploadHelper
             return false;
         }
 
-        $relativePath = str_replace(Storage::disk($disk)->url('/'), '', $filePath);
+        $normalizedPath = trim($filePath);
 
-        return Storage::disk($disk)->delete($relativePath);
+        if (filter_var($normalizedPath, FILTER_VALIDATE_URL)) {
+            $normalizedPath = (string) parse_url($normalizedPath, PHP_URL_PATH);
+        }
+
+        $normalizedPath = str_replace('\\', '/', $normalizedPath);
+        $normalizedPath = ltrim($normalizedPath, '/');
+
+        $publicPrefix = trim((string) parse_url(Storage::disk($disk)->url('/'), PHP_URL_PATH), '/');
+
+        if ($publicPrefix !== '' && Str::startsWith($normalizedPath, $publicPrefix . '/')) {
+            $normalizedPath = substr($normalizedPath, strlen($publicPrefix) + 1);
+        }
+
+        if ($normalizedPath === '') {
+            return false;
+        }
+
+        return Storage::disk($disk)->delete($normalizedPath);
     }
 }

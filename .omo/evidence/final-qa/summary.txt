@@ -1,0 +1,14 @@
+Final QA fallback execution - 2026-05-14
+- Playwright attempted against http://127.0.0.1:9092 but app root failed due to MySQL session connection error: SQLSTATE[HY000] [2002] connection refused.
+- Browser verification of sidebar and terms/policy could not be completed because authenticated/runtime flow blocked before page render.
+- Fallback evidence:
+  - routes/web.php: backup routes guarded by Route::middleware('can:superadmin')->group(...)
+  - tests/Feature/Security/BackupAuthorizationTest.php: guest redirected to login; admin and pegawai forbidden (403); superadmin allowed.
+  - resources/views/terms.blade.php: uses BladeSecurityHelper::safeHtml($terms).
+  - resources/views/policy.blade.php: uses BladeSecurityHelper::safeHtml($policy).
+  - app/Http/Controllers/DiklatController.php: controller validation restricts file_sertifikat_diklat to pdf/jpeg/png max:2048 and uses FileUploadHelper::validateAndStore(..., 2048, 'public', 'document').
+  - app/Http/Controllers/DiklatSayaController.php: employee evidence upload uses FileUploadHelper::validateAndStore(..., 2048 * 1024, 'public', 'document').
+  - tests/Feature/Security/FileUploadSecurityTest.php covers php/exe/oversize rejection and allowed pdf/jpeg/png behavior.
+- LSP diagnostics clean for checked remediation files: BladeSecurityHelper.php, FileUploadHelper.php, routes/web.php, sidebar.blade.php.
+- Additional finding: resources/views/components/app/sidebar.blade.php still contains a malformed anchor/logo line near line 23 in current workspace read, so sidebar render path cannot be declared clean from static fallback alone.
+- Additional finding: AuthServiceProvider.php does not define Gate::define('superadmin'); backup authorization appears test-local plus route middleware assumption, so runtime authorization should be considered environment-unverified here.

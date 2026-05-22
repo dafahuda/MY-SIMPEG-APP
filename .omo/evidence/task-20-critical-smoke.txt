@@ -1,0 +1,36 @@
+# Task 20 - critical smoke QA evidence
+
+Smoke command:
+`php artisan test tests/Feature/Security/BackupAuthorizationTest.php tests/Feature/Security/FileUploadSecurityTest.php tests/Feature/AdminSuperadminUiux/RouteAccessMatrixTest.php tests/Feature/AdminSuperadminUiux/ReportScopeExportTest.php tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php tests/Feature/AdminSuperadminUiux/SidebarRoleMatrixTest.php tests/Feature/ProfilePegawaiUiContractTest.php`
+
+Result:
+- PASS — 48 passed, 432 assertions, Duration 76.26s.
+
+Covered smoke flows:
+1. Authorization/report routes
+   - `RouteAccessMatrixTest::test_pegawai_report_direct_url_is_forbidden`
+   - Confirms pegawai direct report URLs return 403.
+   - `ReportScopeExportTest::*`
+   - Confirms admin scoped report access, superadmin intended global/unit access, and forged filters do not leak scope.
+2. Profile self-edit
+   - `ProfilePegawaiUiContractTest::test_pegawai_self_edit_cannot_mutate_protected_hr_and_account_fields`
+   - Confirms crafted protected fields remain unchanged.
+   - `ProfilePegawaiUiContractTest::test_pegawai_self_edit_can_update_allowed_profile_fields_and_photo`
+   - Confirms allowed personal/contact/photo fields update.
+   - `ProfilePegawaiUiContractTest::test_pegawai_self_edit_replaces_only_db_owned_old_photo`
+   - Confirms crafted hidden path is ignored and DB-owned old photo is deleted.
+3. Representative upload replacement/storage
+   - `FileUploadSecurityTest::*`
+   - Confirms dangerous files rejected, non-file foto rejected, helper-generated names used, hidden old paths ignored, DB-owned cleanup enforced.
+4. Backup superadmin access
+   - `BackupAuthorizationTest::*`
+   - Confirms guests redirect, admin/pegawai forbidden, superadmin page/download allowed, route middleware is `role:superadmin`, dump streams through cursor and not `get()`.
+5. Sidebar/dashboard/UI/modal
+   - `SidebarRoleMatrixTest::*`
+   - Confirms role-gated sidebar links remain correct.
+   - `FrontendMarkupA11yBaselineTest::*`
+   - Confirms valid sidebar logo markup, asset helper paths, accessible confirm modal hooks, confirm JS null-checks/requestSubmit, target blank rel protection, meaningful alt text.
+
+Notes:
+- This is Feature-test equivalent smoke evidence as allowed by Task 20 when browser/server seeded users are not separately launched.
+- No human-only clicking was used.

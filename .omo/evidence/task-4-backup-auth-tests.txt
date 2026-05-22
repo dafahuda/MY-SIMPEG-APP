@@ -1,0 +1,23 @@
+Task 4 Backup Authorization Tests Evidence
+Date: 2026-05-20
+
+Command:
+php -l "tests/Feature/Security/BackupAuthorizationTest.php"; php artisan test tests/Feature/Security/BackupAuthorizationTest.php
+
+Result:
+No syntax errors detected in tests/Feature/Security/BackupAuthorizationTest.php
+
+PASS  Tests\Feature\Security\BackupAuthorizationTest
+✓ guest redirected to login for backup data page
+✓ guest redirected to login for backup data download
+✓ admin and pegawai are forbidden from backup routes
+✓ superadmin can access backup data page
+✓ superadmin can download backup with small stubbed dataset baseline
+✓ backup routes use consistent superadmin middleware stack
+
+Tests: 6 passed (28 assertions)
+Duration: 9.45s
+
+Notes:
+- This is a baseline test for current route/middleware behavior; Task 10 may replace `can:superadmin` with `role:superadmin` and must update the route middleware expectation accordingly.
+- No backup controller/route implementation change was made for Task 4.

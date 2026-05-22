@@ -1,0 +1,46 @@
+# Task 16 - Confirm Handler No-Form Evidence
+
+Scope: harden global confirm JS in `resources/views/layouts/app.blade.php` so missing form/href cases do not throw runtime errors and form submissions preserve validation/submit handlers when possible.
+
+Files changed:
+- `resources/views/layouts/app.blade.php`
+- `tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php`
+
+JS changes:
+- `.confirm-edit`:
+  - keeps existing confirmation flow and Indonesian text.
+  - adds `if (! href) return;` before opening the confirm modal.
+- `.confirm-delete`:
+  - adds `if (! form) return;` so a confirm-delete button outside a form does not dereference null.
+  - uses `form.requestSubmit()` when available.
+  - retains `form.submit()` fallback for older browsers.
+- `.confirm-save`:
+  - adds `if (! form) return;`.
+  - uses `form.requestSubmit()` when available.
+  - retains `form.submit()` fallback.
+
+Why this satisfies Task 16:
+- Missing form for confirm buttons is handled gracefully by returning early.
+- `requestSubmit()` preserves browser validation and submit handlers better than direct `form.submit()`.
+- Existing event delegation and modal architecture remain unchanged.
+
+Regression guard:
+- `test_global_confirm_handler_null_checks_forms_and_uses_request_submit`
+  - asserts href/form null checks exist,
+  - asserts `requestSubmit()` is used,
+  - asserts fallback `form.submit()` remains,
+  - asserts `.confirm-delete` and `.confirm-save` delegation remain.
+
+Verification commands:
+- `php artisan test tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php`
+  - PASS: 5 passed, 40 assertions, Duration 8.15s.
+- `php artisan test tests/Feature/AdminSuperadminUiux`
+  - PASS: 36 passed, 309 assertions, Duration 59.19s.
+- `npm run build`
+  - PASS: Vite built successfully in 47.15s.
+  - Existing size warning remains: one JS chunk larger than 500 kB.
+
+Acceptance check:
+- Missing form path does not call `form.submit()` on null.
+- Submission path uses `requestSubmit()` where supported.
+- Existing Indonesian labels/confirm flows remain intact.

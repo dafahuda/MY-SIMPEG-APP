@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mutasi;
 use App\Models\Pegawai;
+use App\Support\FileUploadHelper;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -71,10 +72,16 @@ class MutasiController extends Controller
             DB::beginTransaction();
 
             if($request->hasFile('file_sk_mutasi')) {
-                $file = $request->file('file_sk_mutasi');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['file_sk_mutasi'] = '/storage/' . $path;
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_sk_mutasi'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_sk_mutasi'
+                );
+
+                $validateData['file_sk_mutasi'] = $storedFile['file_path'];
             }
 
             Mutasi::create($validateData);
@@ -127,24 +134,28 @@ class MutasiController extends Controller
         try {
             DB::beginTransaction();
 
-            $mutasi->update($validateData);
+            $oldFile = $mutasi->file_sk_mutasi;
 
             if ($request->hasFile('file_sk_mutasi')) {
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_sk_mutasi'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_sk_mutasi'
+                );
 
-                if ($request->fileLama) {
-                    Storage::disk('public')->delete(
-                        str_replace('/storage/', '', $request->fileLama)
-                    );
-                }
-
-                $file = $request->file('file_sk_mutasi');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-
-                $validateData['file_sk_mutasi'] = '/storage/' . $path;
+                $validateData['file_sk_mutasi'] = $storedFile['file_path'];
+            } else {
+                unset($validateData['file_sk_mutasi']);
             }
 
             $mutasi->update($validateData);
+
+            if ($request->hasFile('file_sk_mutasi')) {
+                FileUploadHelper::delete($oldFile, 'public');
+            }
 
             DB::commit();
 

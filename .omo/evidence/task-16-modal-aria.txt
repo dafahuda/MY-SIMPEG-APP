@@ -1,0 +1,46 @@
+# Task 16 - Confirm Modal ARIA Evidence
+
+Scope: harden the global confirm modal accessibility without replacing the existing Alpine architecture or changing Indonesian button labels.
+
+Files changed:
+- `resources/views/components/app/confirm-modal.blade.php`
+- `tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php`
+
+Modal accessibility changes:
+- Added semantic dialog markup to the modal box:
+  - `role="dialog"`
+  - `aria-modal="true"`
+  - `aria-labelledby="confirm-modal-title"`
+  - `aria-describedby="confirm-modal-description"`
+  - `tabindex="-1"`
+  - `x-ref="dialog"`
+- Added stable label/description IDs:
+  - `id="confirm-modal-title"`
+  - `id="confirm-modal-description"`
+- Marked backdrop as decorative with `aria-hidden="true"`.
+- Preserved Escape and backdrop cancel behavior:
+  - `@keydown.escape.window="cancel()"`
+  - backdrop `@click="cancel()"`
+- Added practical focus behavior:
+  - stores the previously focused element before opening,
+  - focuses the cancel button/dialog after open,
+  - restores focus on close,
+  - traps Tab/Shift+Tab within focusable modal elements via `trapFocus(event)`.
+
+Regression guard:
+- `test_confirm_modal_has_accessible_dialog_and_focus_hooks`
+  - asserts dialog attributes, title/description IDs, focus refs, last-focused-element storage, and trap method exist.
+
+Verification commands:
+- `php artisan test tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php`
+  - PASS: 5 passed, 40 assertions, Duration 8.15s.
+- `php artisan test tests/Feature/AdminSuperadminUiux`
+  - PASS: 36 passed, 309 assertions, Duration 59.19s.
+- `npm run build`
+  - PASS: Vite built successfully in 47.15s.
+  - Existing size warning remains: one JS chunk larger than 500 kB.
+
+Acceptance check:
+- Modal has semantic dialog attributes and labels.
+- Escape/backdrop behavior remains intact.
+- Focus management/focus restore/trap behavior added within existing Alpine pattern.

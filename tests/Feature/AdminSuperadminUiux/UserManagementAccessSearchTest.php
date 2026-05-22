@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\AdminSuperadminUiux;
 
+use App\Http\Controllers\UserPegawaiController;
 use App\Models\UnitKerja;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -29,6 +30,17 @@ class UserManagementAccessSearchTest extends TestCase
                 ->get('/manajemen_setup/data_user_admin')
                 ->assertForbidden();
         }
+    }
+
+    public function test_user_pegawai_index_route_has_single_effective_get_definition(): void
+    {
+        $matchingRoutes = collect(app('router')->getRoutes()->getRoutes())->filter(function ($route): bool {
+            return in_array('GET', $route->methods(), true)
+                && $route->uri() === 'manajemen_setup/data_user_pegawai';
+        });
+
+        $this->assertCount(1, $matchingRoutes);
+        $this->assertSame(UserPegawaiController::class . '@index', $matchingRoutes->first()?->getActionName());
     }
 
     public function test_user_pegawai_management_blocks_pegawai_and_scopes_admin_to_own_unit(): void

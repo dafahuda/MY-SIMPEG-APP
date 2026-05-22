@@ -2,78 +2,178 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 class BackupDatabaseController extends Controller
 {
     public function BackupDatabasePages()
     {
+        $user = Auth::user();
+
+        if ($user->role !== 'superadmin') {
+            abort(403);
+        }
+
         return view("pages.dashboard.backup_database.indexBackupDatabase");
     }
 
     public function download()
     {
-        $dbHost     = config('database.connections.mysql.host');
-        $dbPort     = config('database.connections.mysql.port');
-        $dbName     = config('database.connections.mysql.database');
-        $dbUser     = config('database.connections.mysql.username');
-        $dbPassword = config('database.connections.mysql.password');
+        $user = Auth::user();
 
+        if ($user->role !== 'superadmin') {
+            abort(403);
+        }
+
+        $dbName = (string) config('database.connections.mysql.database');
         $filename = 'backup_' . $dbName . '_' . date('Y-m-d_H-i-s') . '.sql';
 
-        // Build the SQL dump manually using Laravel's DB connection
+        return response()->streamDownload(function () use ($dbName): void {
+            if (! $this->writeMysqldump($dbName)) {
+                $this->writePhpStreamingDump($dbName);
+            }
+        }, $filename, [
+            'Content-Type' => 'application/sql; charset=UTF-8',
+        ]);
+    }
+
+    private function writeMysqldump(string $dbName): bool
+    {
+        $binary = trim((string) config('database.backup.mysqldump_path', 'mysqldump'));
+
+        if ($binary === '') {
+            return false;
+        }
+
+        $connection = config('database.default', 'mysql');
+        $databaseConfig = config("database.connections.{$connection}", []);
+
+        if (($databaseConfig['driver'] ?? null) !== 'mysql') {
+            return false;
+        }
+
+        $command = [
+            $binary,
+            '--single-transaction',
+            '--skip-lock-tables',
+            '--quick',
+            '--host=' . (string) ($databaseConfig['host'] ?? '127.0.0.1'),
+            '--port=' . (string) ($databaseConfig['port'] ?? '3306'),
+            '--user=' . (string) ($databaseConfig['username'] ?? ''),
+            $dbName,
+        ];
+
+        $socket = $databaseConfig['unix_socket'] ?? null;
+        if (is_string($socket) && $socket !== '') {
+            $command[] = '--socket=' . $socket;
+        }
+
+        $env = null;
+        $password = (string) ($databaseConfig['password'] ?? '');
+        if ($password !== '') {
+            $env = ['MYSQL_PWD' => $password];
+        }
+
+        $descriptorSpec = [
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
+
+        $process = @proc_open($command, $descriptorSpec, $pipes, null, $env);
+
+        if (! is_resource($process)) {
+            return false;
+        }
+
+        while (! feof($pipes[1])) {
+            echo fread($pipes[1], 8192);
+        }
+
+        $stderr = stream_get_contents($pipes[2]);
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+
+        $exitCode = proc_close($process);
+
+        if ($exitCode !== 0) {
+            throw new RuntimeException('mysqldump failed: ' . trim((string) $stderr));
+        }
+
+        return true;
+    }
+
+    private function writePhpStreamingDump(string $dbName): void
+    {
+        $dbHost = (string) config('database.connections.mysql.host');
         $tables = DB::select('SHOW TABLES');
         $tableKey = 'Tables_in_' . $dbName;
 
-        $sql = "-- Database Backup: {$dbName}\n";
-        $sql .= "-- Generated: " . date('Y-m-d H:i:s') . "\n";
-        $sql .= "-- Host: {$dbHost}\n\n";
-        $sql .= "SET FOREIGN_KEY_CHECKS=0;\n\n";
+        echo "-- Database Backup: {$dbName}\n";
+        echo "-- Generated: " . date('Y-m-d H:i:s') . "\n";
+        echo "-- Host: {$dbHost}\n\n";
+        echo "SET FOREIGN_KEY_CHECKS=0;\n\n";
 
         foreach ($tables as $tableObj) {
-            $table = $tableObj->$tableKey;
+            $table = (string) ($tableObj->{$tableKey} ?? reset($tableObj));
 
-            // Drop + Create table
-            $createResult = DB::select("SHOW CREATE TABLE `{$table}`");
-            $createSql    = $createResult[0]->{'Create Table'};
-
-            $sql .= "-- ----------------------------\n";
-            $sql .= "-- Table structure for `{$table}`\n";
-            $sql .= "-- ----------------------------\n";
-            $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
-            $sql .= $createSql . ";\n\n";
-
-            // Dump rows
-            $rows = DB::table($table)->get();
-            if ($rows->count() > 0) {
-                $sql .= "-- ----------------------------\n";
-                $sql .= "-- Records of `{$table}`\n";
-                $sql .= "-- ----------------------------\n";
-
-                foreach ($rows as $row) {
-                    $rowArray = (array) $row;
-                    $columns  = '`' . implode('`, `', array_keys($rowArray)) . '`';
-                    $values   = implode(', ', array_map(function ($val) {
-                        if (is_null($val)) {
-                            return 'NULL';
-                        }
-                        return "'" . addslashes($val) . "'";
-                    }, array_values($rowArray)));
-
-                    $sql .= "INSERT INTO `{$table}` ({$columns}) VALUES ({$values});\n";
-                }
-                $sql .= "\n";
+            if ($table === '') {
+                continue;
             }
+
+            $quotedTable = $this->quoteIdentifier($table);
+            $createResult = DB::select('SHOW CREATE TABLE ' . $quotedTable);
+            $createSql = (string) ($createResult[0]->{'Create Table'} ?? '');
+
+            echo "-- ----------------------------\n";
+            echo "-- Table structure for {$quotedTable}\n";
+            echo "-- ----------------------------\n";
+            echo "DROP TABLE IF EXISTS {$quotedTable};\n";
+            echo $createSql . ";\n\n";
+
+            echo "-- ----------------------------\n";
+            echo "-- Records of {$quotedTable}\n";
+            echo "-- ----------------------------\n";
+
+            foreach (DB::table($table)->cursor() as $row) {
+                $rowArray = (array) $row;
+
+                if ($rowArray === []) {
+                    continue;
+                }
+
+                $columns = implode(', ', array_map([$this, 'quoteIdentifier'], array_keys($rowArray)));
+                $values = implode(', ', array_map([$this, 'quoteValue'], array_values($rowArray)));
+
+                echo "INSERT INTO {$quotedTable} ({$columns}) VALUES ({$values});\n";
+            }
+
+            echo "\n";
         }
 
-        $sql .= "SET FOREIGN_KEY_CHECKS=1;\n";
+        echo "SET FOREIGN_KEY_CHECKS=1;\n";
+    }
 
-        return response($sql, 200, [
-            'Content-Type'        => 'application/octet-stream',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-            'Content-Length'      => strlen($sql),
-        ]);
+    private function quoteIdentifier(string $identifier): string
+    {
+        return '`' . str_replace('`', '``', $identifier) . '`';
+    }
+
+    private function quoteValue(mixed $value): string
+    {
+        if ($value === null) {
+            return 'NULL';
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_int($value) || is_float($value)) {
+            return (string) $value;
+        }
+
+        return "'" . str_replace(["\\", "'"], ["\\\\", "''"], (string) $value) . "'";
     }
 }

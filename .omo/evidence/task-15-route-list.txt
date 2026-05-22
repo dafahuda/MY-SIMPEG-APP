@@ -1,0 +1,25 @@
+# Task 15 - Route List Evidence
+
+Scope: remove duplicate GET route definition for `/manajemen_setup/data_user_pegawai` without changing the public URL or controller.
+
+Change made:
+- Removed the duplicate `Route::get('/data_user_pegawai', [UserPegawaiController::class, 'index']);` from the nested `role:superadmin` route group in `routes/web.php`.
+- Kept the single intended route in the outer `manajemen_setup` group so access remains governed by `UserPegawaiController::index()` / `authorizeUserPegawaiAccess()`.
+- Sidebar URL `/manajemen_setup/data_user_pegawai` remains unchanged.
+
+Route-list verification:
+Command:
+`php artisan route:list --path=manajemen_setup/data_user_pegawai`
+
+Result:
+```text
+GET|HEAD            manajemen_setup/data_user_pegawai .................................. UserPegawaiController@index
+GET|POST|HEAD       manajemen_setup/data_user_pegawai/cariUserPegawai ........ UserPegawaiController@cariUserPegawai
+
+Showing [2] routes
+```
+
+Acceptance check:
+- Exactly one GET route exists for the URI `manajemen_setup/data_user_pegawai`.
+- The remaining index route still points to `UserPegawaiController@index`.
+- Search route remains separate and unchanged.

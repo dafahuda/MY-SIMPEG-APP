@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sekretariat;
+use App\Support\FileUploadHelper;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 
 class SekretariatController extends Controller
@@ -53,10 +53,16 @@ class SekretariatController extends Controller
             DB::beginTransaction();
 
             if($request->hasFile('gambar_logo')) {
-                $file = $request->file('gambar_logo');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('images', $fileName, 'public');
-                $validateData['gambar_logo'] = '/storage/' . $path;
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('gambar_logo'),
+                    ['image/jpeg', 'image/png', 'image/gif'],
+                    2 * 1024 * 1024,
+                    'public',
+                    'images',
+                    'gambar_logo'
+                );
+
+                $validateData['gambar_logo'] = $storedFile['file_path'];
             }
 
             Sekretariat::create($validateData);
@@ -101,22 +107,28 @@ class SekretariatController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldLogo = $sekretariat->gambar_logo;
+
             if($request->hasFile('gambar_logo')) {
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('gambar_logo'),
+                    ['image/jpeg', 'image/png', 'image/gif'],
+                    2 * 1024 * 1024,
+                    'public',
+                    'images',
+                    'gambar_logo'
+                );
 
-                if($sekretariat->gambar_logo) {
-                    $oldPath = str_replace('/storage/', '', $sekretariat->gambar_logo);
-                    Storage::disk('public')->delete($oldPath);
-                }
-
-                $file = $request->file('gambar_logo');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('images', $fileName, 'public');
-                $validateData['gambar_logo'] = '/storage/' . $path;
+                $validateData['gambar_logo'] = $storedFile['file_path'];
             } else {
                 unset($validateData['gambar_logo']);
             }
 
             $sekretariat->update($validateData);
+
+            if($request->hasFile('gambar_logo')) {
+                FileUploadHelper::delete($oldLogo, 'public');
+            }
 
             DB::commit();
 

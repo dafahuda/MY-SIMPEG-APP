@@ -1,0 +1,25 @@
+# Task 18 - destroy cleanup remains DB-owned only
+
+Scope:
+- `app/Http/Controllers/PegawaiController.php::destroy()` now captures the current DB-owned `foto` path before deleting the row, deletes the row, then deletes only that captured DB path via `FileUploadHelper::delete($photoPath, 'public')`.
+- Default photo paths are preserved and not deleted: `/storage/images/default.jpg`, `images/default.png`.
+- No request-provided old-path field is used during destroy.
+- No historical orphan scan or broad storage cleanup was added.
+- Existing Task 14 Diklat destroy cleanup remains DB-owned only through the captured `file_sertifikat_diklat` path.
+
+Regression guards:
+- `tests/Feature/Security/FileUploadSecurityTest.php::test_pegawai_destroy_deletes_only_db_owned_photo`
+  - Creates public-disk files `images/db-owned-delete.png` and `images/unrelated-delete.png`.
+  - Creates a Pegawai row with `foto => /storage/images/db-owned-delete.png`.
+  - Deletes the Pegawai as scoped admin.
+  - Asserts row is deleted, DB-owned photo is deleted, unrelated photo remains.
+- Existing Task 14 guard retained:
+  - `tests/Feature/Diklat/DiklatAuthorizationTest.php::test_destroy_deletes_only_db_owned_certificate_file`.
+
+Verification:
+- `php artisan test tests/Feature/Security/FileUploadSecurityTest.php`
+- Result: PASS — 12 passed, 59 assertions, Duration 30.26s.
+
+Combined Task 9/12/14 regression verification:
+- `php artisan test tests/Feature/Security/FileUploadSecurityTest.php tests/Feature/Diklat/DiklatAuthorizationTest.php tests/Feature/ProfilePegawaiUiContractTest.php`
+- Result: PASS — 29 passed, 225 assertions, Duration 62.71s.

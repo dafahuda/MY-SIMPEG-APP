@@ -34,7 +34,7 @@ class DiklatGapRoleScopeTest extends TestCase
             ->assertSeeHtml('data-testid="diklat-gap-unit-select" data-selected="' . $pegawaiA->unit_kerja_id . '"');
     }
 
-    public function test_pegawai_is_forced_to_self_scope_only(): void
+    public function test_pegawai_is_forbidden_from_direct_diklat_gap_report_url(): void
     {
         [$pegawaiA, $pegawaiB] = $this->seedTwoPegawaiAcrossUnits();
 
@@ -47,12 +47,7 @@ class DiklatGapRoleScopeTest extends TestCase
             'pegawai_id' => $pegawaiA->id,
         ]));
 
-        $response->assertOk()
-            ->assertSee('Rencana Pegawai B')
-            ->assertDontSee('Rencana Pegawai A')
-            ->assertSeeHtml('data-testid="diklat-gap-summary-value-planned" data-value="1"')
-            ->assertSeeHtml('data-testid="diklat-gap-pegawai-select" data-selected="' . $pegawaiB->id . '"')
-            ->assertDontSeeHtml('data-testid="diklat-gap-unit-select"');
+        $response->assertForbidden();
     }
 
     private function seedTwoUnitsWithAdmin(): array

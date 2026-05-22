@@ -1,0 +1,25 @@
+Task 2 Helper Tests Evidence
+Date: 2026-05-20
+
+Command:
+php -l "app/Support/FileUploadHelper.php"; php -l "tests/Unit/Support/FileUploadHelperTest.php"; php artisan test tests/Unit/Support/FileUploadHelperTest.php
+
+Result:
+No syntax errors detected in app/Support/FileUploadHelper.php
+No syntax errors detected in tests/Unit/Support/FileUploadHelperTest.php
+
+PASS  Tests\Unit\Support\FileUploadHelperTest
+✓ helper rejects dangerous mime type with default field key
+✓ helper rejects dangerous mime type with custom field key
+✓ helper rejects oversize file with custom field key
+✓ helper accepts valid pdf and returns uuid file path
+✓ helper uses mime based extension for unicode double extension filename
+✓ helper delete supports full public url and storage prefixed path
+✓ helper delete is idempotent for same relative path
+
+Tests: 7 passed (22 assertions)
+Duration: 9.76s
+
+Notes:
+- Tiny helper contract fix accepted under Task 2 scope: stored extension now derives from MIME (`$file->extension()`) with fallback to original extension/`bin`, preventing `.pdf.php` original filenames from controlling stored suffix.
+- Delete path normalization accepts full public URL, `/storage/...`, and relative paths.

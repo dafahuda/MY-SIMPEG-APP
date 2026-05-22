@@ -1,0 +1,41 @@
+Task 13 evidence: education rank correctness
+
+Scope
+- File changed: app/Http/Controllers/ReportController.php
+- Regression file changed: tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php
+
+Behavior fixed
+- Replaced repeated `(array_search(...) ?: -1)` education rank checks with strict helper `educationRankIndex()`.
+- `array_search()` result `0` is now treated as a valid rank index, not coerced to `-1`.
+- Shared `highestEducation()` now powers nominatif, nominatif print, DUK, keadaan pegawai, bezetting, and bezetting print enrichment.
+
+Regression guard
+- `test_education_rank_index_zero_sd_is_valid_in_production_report_mapping`
+  - Creates a persisted admin/unit/pegawai fixture.
+  - Creates `RiwayatPendidikanSekolah` with `jenjang_pendidikan = SD`.
+  - Requests `route('report.nominatif')` as admin.
+  - Asserts the report renders the SD education data instead of treating index 0 as missing.
+
+Additional guard
+- `test_unknown_null_gender_values_are_not_counted_as_perempuan_in_production_stats`
+  - Verifies unknown/empty persisted enum values do not fall into the perempuan bucket.
+
+Verification
+- Command: `php artisan test tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php`
+- Result: PASS — 7 passed, 42 assertions, Duration 48.65s.
+
+Pre-commit/scope verification
+- Command: `php artisan test tests/Feature/AdminSuperadminUiux/ReportScopeExportTest.php`
+- Result: PASS — 6 passed, 65 assertions, Duration 54.60s.
+
+Combined verification
+- Command: `php artisan test tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php tests/Feature/AdminSuperadminUiux/ReportScopeExportTest.php`
+- Result: PASS — 13 passed, 107 assertions, Duration 52.01s.
+
+Static check
+- Grep for old falsy rank pattern in ReportController: no files found for `array_search` combined with `?: -1`.
+
+Status
+- Acceptance met: education rank index 0 is handled correctly.
+- Report route names/views unchanged.
+- Admin/superadmin scoping from Task 6 preserved by ReportScopeExportTest.

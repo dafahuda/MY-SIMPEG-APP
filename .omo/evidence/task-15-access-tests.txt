@@ -1,0 +1,37 @@
+# Task 15 - User Pegawai Access Tests Evidence
+
+Scope: preserve intended user pegawai management access after duplicate route cleanup.
+
+Change made:
+- Removed only the duplicate index route inside the `role:superadmin` group.
+- Kept the single route in the broader `manajemen_setup` group so controller authorization still allows:
+  - `superadmin`: all pegawai user accounts.
+  - `admin`: scoped pegawai user accounts in the admin's `unit_kerja_id`.
+  - `pegawai`: forbidden.
+
+Regression guard added:
+- `tests/Feature/AdminSuperadminUiux/UserManagementAccessSearchTest.php`
+  - Added `test_user_pegawai_index_route_has_single_effective_get_definition`.
+  - It checks Laravel's route collection and asserts exactly one `GET` definition exists for `manajemen_setup/data_user_pegawai` and that it resolves to `UserPegawaiController@index`.
+
+Verification command:
+`php artisan test tests/Feature/AdminSuperadminUiux/UserManagementAccessSearchTest.php`
+
+Result:
+```text
+PASS  Tests\Feature\AdminSuperadminUiux\UserManagementAccessSearchTest
+✓ user admin management is superadmin only by direct url
+✓ user pegawai index route has single effective get definition
+✓ user pegawai management blocks pegawai and scopes admin to own unit
+✓ user pegawai search blocks pegawai and scopes admin to own unit
+✓ user admin search form uses get route and remains superadmin only
+
+Tests: 5 passed (28 assertions)
+Duration: 30.67s
+```
+
+Acceptance check:
+- Duplicate route ambiguity removed.
+- Admin/superadmin access behavior preserved by existing controller guards.
+- Pegawai access remains forbidden.
+- Sidebar/public URL remains unchanged.

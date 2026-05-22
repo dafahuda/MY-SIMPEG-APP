@@ -1,0 +1,51 @@
+Task 13 evidence: report query count / N+1 reduction
+
+Scope
+- File changed: app/Http/Controllers/ReportController.php
+- Regression file changed: tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php
+
+Performance fix
+- Collapsed per-pegawai report enrichment queries into preloaded maps:
+  - `latestPangkatMap()` loads pangkat + master pangkat/golongan for all pegawai in one collection query set.
+  - `latestEducationMaps()` loads school and higher education rows for all pegawai in two collection queries.
+  - `enrichPegawaiForReport()` assigns `pangkat_terakhir`, `pendidikan_terakhir`, optional DUK masa kerja, and optional bezetting usia from those maps.
+- Applied shared enrichment to:
+  - Nominatif page
+  - Nominatif print
+  - DUK page/print via `buildDukData()`
+  - Bezetting page
+  - Bezetting print
+- `buildKeadaanData()` now reuses the same strict education and pangkat map helpers.
+
+Gender correctness included
+- Added `normalizedGender()`.
+- `buildKeadaanData()` now increments `laki` only for normalized `laki-laki`, increments `perempuan` only for normalized `perempuan`, and ignores unknown/empty values for gender buckets instead of silently counting them as perempuan.
+
+Regression guard
+- `test_representative_report_queries_stay_within_budget_for_multiple_pegawai`
+  - Creates six pegawai in one unit.
+  - Adds pangkat and education fixtures for each pegawai.
+  - Enables DB query log and requests `route('report.duk')` as scoped admin.
+  - Asserts SELECT query count stays within documented fixed budget (`<= 10`) instead of growing per pegawai.
+- Existing metadata guard still covers route keys for nominatif, DUK, keadaan_pegawai, and bezetting.
+
+Verification
+- Command: `php artisan test tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php`
+- Result: PASS — 7 passed, 42 assertions, Duration 48.65s.
+
+Pre-commit/scope verification
+- Command: `php artisan test tests/Feature/AdminSuperadminUiux/ReportScopeExportTest.php`
+- Result: PASS — 6 passed, 65 assertions, Duration 54.60s.
+
+Combined verification
+- Command: `php artisan test tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php tests/Feature/AdminSuperadminUiux/ReportScopeExportTest.php`
+- Result: PASS — 13 passed, 107 assertions, Duration 52.01s.
+
+Static check
+- Grep for old per-row `where('pegawai_id', $pegawai->id)` report lookup pattern in ReportController: no N+1 enrichment lookup remains; only centralized `Pangkat::with(['master_pangkat', 'master_golongan'])` map query remains.
+
+Status
+- Acceptance met: representative report query count is guarded and no longer uses obvious per-pegawai pangkat/education lookups.
+- Admin/superadmin scoping preserved.
+- No report routes/views renamed.
+- No raw SQL with user input introduced.

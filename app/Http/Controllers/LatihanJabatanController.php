@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LatihanJabatan;
 use App\Models\Pegawai;
+use App\Support\FileUploadHelper;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -75,10 +76,16 @@ class LatihanJabatanController extends Controller
             DB::beginTransaction();
 
             if($request->hasFile('file_sertifikat')) {
-                $file = $request->file('file_sertifikat');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['file_sertifikat'] = '/storage/' . $path;
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_sertifikat'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_sertifikat'
+                );
+
+                $validateData['file_sertifikat'] = $storedFile['file_path'];
             }
 
             LatihanJabatan::create($validateData);
@@ -134,19 +141,28 @@ class LatihanJabatanController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldFile = $latihanJabatan->file_sertifikat;
+
             if($request->hasFile('file_sertifikat')) {
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_sertifikat'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_sertifikat'
+                );
 
-                if($request->fileLama) {
-                    Storage::disk('public')->delete($request->fileLama);
-                }
-
-                $file = $request->file('file_sertifikat');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['file_sertifikat'] = '/storage/' . $path;
+                $validateData['file_sertifikat'] = $storedFile['file_path'];
+            } else {
+                unset($validateData['file_sertifikat']);
             }
 
             $latihanJabatan->update($validateData);
+
+            if($request->hasFile('file_sertifikat')) {
+                FileUploadHelper::delete($oldFile, 'public');
+            }
 
             DB::commit();
 

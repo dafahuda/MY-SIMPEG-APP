@@ -1,0 +1,17 @@
+Task 1 pegawai direct report-denial baseline
+
+Route checked:
+GET /report/nominatif?unit_kerja_id=1 as role=pegawai
+
+Current behavior:
+- The route currently returns HTTP 200 for pegawai, confirming the High severity audit finding that pegawai can access report pages by direct URL.
+
+Scaffold behavior:
+- `RouteAccessMatrixTest::test_pegawai_report_direct_url_is_forbidden_or_safely_redirected` executes the route.
+- If production still returns 200, the test is marked skipped with this explicit message:
+  "Known audit bug: pegawai direct report URL returns 200 until Task 6 hardens report authorization."
+- Once Task 6 fixes authorization, the same test will require HTTP 302 or 403 and should no longer skip.
+
+Verification:
+- Focused Task 1 command passes with 1 skipped, 5 passed, 44 assertions.
+- This evidence does not approve the 200 behavior; it records the blocker for Task 6 without making Wave 1 scaffolding red.

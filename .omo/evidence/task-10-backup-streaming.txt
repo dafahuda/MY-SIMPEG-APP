@@ -1,0 +1,28 @@
+# Task 10 - backup streaming implementation
+
+Scope:
+- Backup download remains superadmin-only through route middleware `role:superadmin` and controller-level role guard.
+- Download uses `response()->streamDownload(...)` and does not persist public backup files.
+- Preferred path attempts `mysqldump` with safe options when available:
+  - `--single-transaction`
+  - `--skip-lock-tables`
+  - `--quick`
+- DB password is not placed on the command-line. If present, it is passed through `MYSQL_PWD` process environment.
+- If `database.backup.mysqldump_path` is blank/unavailable or the active DB driver is not mysql, controller falls back to PHP streaming dump.
+- PHP fallback streams table rows through `DB::table($table)->cursor()` and does not use `get()` for all rows.
+- SQL identifiers are backtick-quoted; values handle null, bool, numeric, single quotes, and backslashes.
+
+Regression guard:
+- `tests/Feature/Security/BackupAuthorizationTest.php::test_superadmin_can_download_backup_with_small_stubbed_dataset_baseline`
+  - Sets `database.backup.mysqldump_path` to blank to exercise PHP fallback deterministically.
+  - Mocks `SHOW TABLES`, `SHOW CREATE TABLE`, and cursor rows.
+  - Asserts streamed SQL content and escaping.
+  - Asserts `DB::get()` is not called.
+
+Verification:
+- `php artisan test tests/Feature/Security/BackupAuthorizationTest.php`
+- Result: PASS — 6 passed, 30 assertions, Duration 9.26s.
+
+Related Task 19/20 verification:
+- Focused audit suite: PASS — 157 passed, 1313 assertions.
+- Critical smoke suite: PASS — 48 passed, 432 assertions.

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+use App\Support\FileUploadHelper;
 use App\Models\User;
 
 class PegawaiController extends Controller
@@ -96,11 +96,17 @@ class PegawaiController extends Controller
         try {
             DB::beginTransaction();
 
-            if($request->has('foto')) {
-                $file = $request->file('foto');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('images', $fileName, 'public');
-                $validateData['foto'] = '/storage/' . $path;
+            if ($request->hasFile('foto')) {
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('foto'),
+                    ['image/jpeg', 'image/png', 'image/gif'],
+                    2 * 1024 * 1024,
+                    'public',
+                    'images',
+                    'foto'
+                );
+
+                $validateData['foto'] = $storedFile['file_path'];
             }
 
             $validateData['user_id'] = $request->input('user_id');
@@ -202,22 +208,28 @@ class PegawaiController extends Controller
         try {
             DB::beginTransaction();
 
-            if($request->hasFile('foto')) {
+            $oldPhoto = $pegawai->foto;
 
-                if($request->gambarLama) {
-                    Storage::disk('public')->delete($request->gambarLama);
-                }
+            if ($request->hasFile('foto')) {
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('foto'),
+                    ['image/jpeg', 'image/png', 'image/gif'],
+                    2 * 1024 * 1024,
+                    'public',
+                    'images',
+                    'foto'
+                );
 
-                $file = $request->file('foto');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('images', $fileName, 'public');
-                $validateData['foto'] = '/storage/' . $path;
+                $validateData['foto'] = $storedFile['file_path'];
             }
 
-            $validateData['user_id'] = $request->input('user_id');
+            $validateData['user_id'] = $pegawai->user_id;
 
             $pegawai->update($validateData);
 
+            if ($request->hasFile('foto') && $oldPhoto && ! in_array($oldPhoto, ['/storage/images/default.jpg', 'images/default.png'], true)) {
+                FileUploadHelper::delete($oldPhoto, 'public');
+            }
 
             DB::commit();
 
@@ -238,7 +250,13 @@ class PegawaiController extends Controller
     {
         $this->authorizePegawaiAccess($pegawai);
 
+        $photoPath = $pegawai->foto;
+
         $pegawai->delete();
+
+        if ($photoPath && ! in_array($photoPath, ['/storage/images/default.jpg', 'images/default.png'], true)) {
+            FileUploadHelper::delete($photoPath, 'public');
+        }
 
         return redirect('/data_pegawai/pegawai')->with('success', 'Berhasil menghapus data!');
     }

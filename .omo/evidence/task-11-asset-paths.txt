@@ -1,0 +1,28 @@
+Task 11 evidence — Asset paths via asset() helper
+
+Scope:
+- Replaced route-relative logo/favicon paths in touched layouts with Laravel asset() helper usage.
+- Kept the Task 3 confirm modal mount baseline intact.
+
+Files updated:
+- resources/views/layouts/app.blade.php
+  - Favicon changed from href="images/logo_asn.png" to href="{{ asset('images/logo_asn.png') }}".
+- resources/views/layouts/authentication.blade.php
+  - Favicon changed from href="images/logo_asn.png" to href="{{ asset('images/logo_asn.png') }}".
+  - Header logo changed from src="images/logo_asn.png" to src="{{ asset('images/logo_asn.png') }}".
+  - Logo alt text changed from empty alt to alt="Logo ASN".
+
+Regression guard:
+- tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php
+  - test_layout_asset_paths_use_asset_helper_and_confirm_modal_mount_remains
+  - Asserts app/auth layouts contain asset('images/logo_asn.png') for favicon/logo.
+  - Asserts old route-relative href/src patterns are absent.
+  - Asserts confirm modal mount and delete event delegation remain present.
+
+Verification:
+- php artisan test tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php
+  Result: PASS — 4 passed, 28 assertions, Duration 13.35s.
+- php artisan test tests/Feature/AdminSuperadminUiux/SidebarRoleMatrixTest.php
+  Result: PASS — 3 passed, 70 assertions, Duration 25.25s.
+
+Status: PASS. Logo/favicon paths now resolve through asset() and should not break on nested routes.

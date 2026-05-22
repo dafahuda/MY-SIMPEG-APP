@@ -1,0 +1,38 @@
+# Task 19 - full suites assessment
+
+Unit suite:
+- Command: `php artisan test --testsuite=Unit`
+- Result: PASS — 8 passed, 23 assertions, Duration 3.57s.
+
+Feature suite:
+- Command: `php artisan test --testsuite=Feature`
+- Result: FAIL — 6 failed, 7 skipped, 175 passed, 1352 assertions, Duration 112.08s.
+
+Failing tests and exact classification:
+1. `Tests\Feature\AuthenticationTest::test_users_can_authenticate_using_the_login_screen`
+   - Failure: user is not authenticated after login attempt.
+   - Classification: existing Jetstream/auth baseline outside website-audit task scope; not caused by Tasks 1-19 security/report/upload/Diklat/UI changes.
+2. `Tests\Feature\ExampleTest::test_the_application_returns_a_successful_response`
+   - Failure: `/` returned 302 instead of expected 200.
+   - Classification: existing app route/auth redirect behavior outside audit scope.
+3. `Tests\Feature\PasswordResetTest::test_reset_password_link_can_be_requested`
+   - Failure: expected reset password notification not sent.
+   - Classification: existing password reset/auth baseline outside audit scope.
+4. `Tests\Feature\PasswordResetTest::test_reset_password_screen_can_be_rendered`
+   - Failure: expected reset password notification not sent.
+   - Classification: existing password reset/auth baseline outside audit scope.
+5. `Tests\Feature\PasswordResetTest::test_password_can_be_reset_with_valid_token`
+   - Failure: expected reset password notification not sent.
+   - Classification: existing password reset/auth baseline outside audit scope.
+6. `Tests\Feature\RegistrationTest::test_new_users_can_register`
+   - Failure: user is not authenticated after registration attempt.
+   - Classification: existing registration/auth baseline outside audit scope.
+
+Skipped/warned tests:
+- Jetstream API token tests skipped because API support is not enabled.
+- Email verification tests skipped because email verification is not enabled.
+- Registration disabled test skipped because registration support is enabled.
+
+Audit-focused suites passed separately:
+- `php artisan test tests/Feature/Security tests/Feature/AdminSuperadminUiux tests/Feature/Diklat tests/Feature/ProfilePegawaiUiContractTest.php`
+- Result: PASS — 157 passed, 1313 assertions, Duration 94.54s.

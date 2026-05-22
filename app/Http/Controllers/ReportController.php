@@ -12,6 +12,8 @@ use App\Models\RiwayatPendidikanLanjut;
 
 class ReportController extends Controller
 {
+    private const JENJANG_ORDER = ['SD','SMP','SMA','SMK','D1','D2','D3','D4','S1','S2','S3'];
+
     private function isAdminScoped(Request $request): bool
     {
         return $request->user()?->role === 'admin';
@@ -50,6 +52,91 @@ class ReportController extends Controller
         return $unitKerja;
     }
 
+    private function educationRankIndex(?string $jenjang): int
+    {
+        if ($jenjang === null) {
+            return -1;
+        }
+
+        $index = array_search(strtoupper(trim($jenjang)), self::JENJANG_ORDER, true);
+
+        return $index === false ? -1 : $index;
+    }
+
+    private function latestPangkatMap(array $pegawaiIds)
+    {
+        return Pangkat::with(['master_pangkat', 'master_golongan'])
+            ->whereIn('pegawai_id', $pegawaiIds)
+            ->get()
+            ->groupBy('pegawai_id')
+            ->map(fn ($rows) => $rows->sortByDesc('tmt_pangkat_mulai')->first());
+    }
+
+    private function latestEducationMaps(array $pegawaiIds): array
+    {
+        return [
+            RiwayatPendidikanSekolah::whereIn('pegawai_id', $pegawaiIds)
+                ->get()
+                ->groupBy('pegawai_id')
+                ->map(fn ($rows) => $rows->sortByDesc('tgl_ijazah')->first()),
+            RiwayatPendidikanLanjut::whereIn('pegawai_id', $pegawaiIds)
+                ->get()
+                ->groupBy('pegawai_id')
+                ->map(fn ($rows) => $rows->sortByDesc('thn_selesai')->first()),
+        ];
+    }
+
+    private function highestEducation($pendSekolah, $pendLanjut)
+    {
+        $idxSekolah = $pendSekolah ? $this->educationRankIndex($pendSekolah->jenjang_pendidikan) : -1;
+        $idxLanjut = $pendLanjut ? $this->educationRankIndex($pendLanjut->jenjang_pendidikan) : -1;
+
+        return ($idxLanjut >= $idxSekolah && $pendLanjut) ? $pendLanjut : $pendSekolah;
+    }
+
+    private function enrichPegawaiForReport($pegawaiList, bool $includeUsia = false, bool $includeMasaKerja = false)
+    {
+        $pegawaiIds = $pegawaiList->pluck('id')->all();
+        $pangkatMap = $this->latestPangkatMap($pegawaiIds);
+        [$pendSekolahMap, $pendLanjutMap] = $this->latestEducationMaps($pegawaiIds);
+
+        return $pegawaiList->map(function ($pegawai) use ($pangkatMap, $pendSekolahMap, $pendLanjutMap, $includeUsia, $includeMasaKerja) {
+            $pangkat = $pangkatMap[$pegawai->id] ?? null;
+
+            $pegawai->pangkat_terakhir = $pangkat;
+            $pegawai->pendidikan_terakhir = $this->highestEducation(
+                $pendSekolahMap[$pegawai->id] ?? null,
+                $pendLanjutMap[$pegawai->id] ?? null
+            );
+
+            if ($includeMasaKerja) {
+                $pegawai->mk_thn = 0;
+                $pegawai->mk_bln = 0;
+
+                if ($pangkat && $pangkat->tmt_pangkat_mulai) {
+                    $diff = \Carbon\Carbon::parse($pangkat->tmt_pangkat_mulai)->diff(\Carbon\Carbon::now());
+                    $pegawai->mk_thn = $diff->y;
+                    $pegawai->mk_bln = $diff->m;
+                }
+            }
+
+            if ($includeUsia) {
+                $pegawai->usia = $pegawai->tgl_lahir
+                    ? \Carbon\Carbon::parse($pegawai->tgl_lahir)->age
+                    : '-';
+            }
+
+            return $pegawai;
+        });
+    }
+
+    private function normalizedGender(?string $gender): ?string
+    {
+        $normalized = $gender === null ? null : strtolower(trim($gender));
+
+        return in_array($normalized, ['laki-laki', 'perempuan'], true) ? $normalized : null;
+    }
+
     public function reportNominatif(Request $request)
     {
         $unitKerjaList = $this->scopedUnitKerjaList($request);
@@ -63,48 +150,15 @@ class ReportController extends Controller
         if ($unitKerjaId) {
             $unitKerja = UnitKerja::find($unitKerjaId);
 
-            $pegawaiList = Pegawai::with([
-                    'jabatan_aktif.master_jabatan',
-                    'jabatan_aktif.master_eselon',
-                ])
-                ->where('unit_kerja_id', $unitKerjaId)
-                ->orderBy('nama')
-                ->get()
-                ->map(function ($pegawai) {
-                    // Pangkat terakhir
-                    $pangkat = Pangkat::with(['master_pangkat', 'master_golongan'])
-                        ->where('pegawai_id', $pegawai->id)
-                        ->latest('tmt_pangkat_mulai')
-                        ->first();
-
-                    // Pendidikan terakhir (gabung sekolah + lanjut, ambil tertinggi)
-                    $jenjangOrder = ['SD','SMP','SMA','SMK','D1','D2','D3','D4','S1','S2','S3'];
-
-                    $pendSekolah = RiwayatPendidikanSekolah::where('pegawai_id', $pegawai->id)
-                        ->latest('tgl_ijazah')->first();
-                    $pendLanjut  = RiwayatPendidikanLanjut::where('pegawai_id', $pegawai->id)
-                        ->latest('thn_selesai')->first();
-
-                    // Pilih yang jenjangnya lebih tinggi
-                    $pendidikan = null;
-                    $idxSekolah = $pendSekolah
-                        ? (array_search(strtoupper(trim($pendSekolah->jenjang_pendidikan)), $jenjangOrder) ?: -1)
-                        : -1;
-                    $idxLanjut  = $pendLanjut
-                        ? (array_search(strtoupper(trim($pendLanjut->jenjang_pendidikan)), $jenjangOrder) ?: -1)
-                        : -1;
-
-                    if ($idxLanjut >= $idxSekolah && $pendLanjut) {
-                        $pendidikan = $pendLanjut;
-                    } elseif ($pendSekolah) {
-                        $pendidikan = $pendSekolah;
-                    }
-
-                    $pegawai->pangkat_terakhir = $pangkat;
-                    $pegawai->pendidikan_terakhir = $pendidikan;
-
-                    return $pegawai;
-                });
+            $pegawaiList = $this->enrichPegawaiForReport(
+                Pegawai::with([
+                        'jabatan_aktif.master_jabatan',
+                        'jabatan_aktif.master_eselon',
+                    ])
+                    ->where('unit_kerja_id', $unitKerjaId)
+                    ->orderBy('nama')
+                    ->get()
+            );
         }
 
         return view('pages.dashboard.report.nominatif', [
@@ -120,40 +174,15 @@ class ReportController extends Controller
         $instansi  = InstansiLembaga::first();
         $unitKerja = $this->authorizePrintableUnit($request);
 
-        $jenjangOrder = ['SD','SMP','SMA','SMK','D1','D2','D3','D4','S1','S2','S3'];
-
-        $pegawaiList = Pegawai::with([
-                'jabatan_aktif.master_jabatan',
-                'jabatan_aktif.master_eselon',
-            ])
-            ->where('unit_kerja_id', $unitKerja->id)
-            ->orderBy('nama')
-            ->get()
-            ->map(function ($pegawai) use ($jenjangOrder) {
-                $pangkat = Pangkat::with(['master_pangkat', 'master_golongan'])
-                    ->where('pegawai_id', $pegawai->id)
-                    ->latest('tmt_pangkat_mulai')
-                    ->first();
-
-                $pendSekolah = RiwayatPendidikanSekolah::where('pegawai_id', $pegawai->id)
-                    ->latest('tgl_ijazah')->first();
-                $pendLanjut  = RiwayatPendidikanLanjut::where('pegawai_id', $pegawai->id)
-                    ->latest('thn_selesai')->first();
-
-                $idxSekolah = $pendSekolah
-                    ? (array_search(strtoupper(trim($pendSekolah->jenjang_pendidikan)), $jenjangOrder) ?: -1)
-                    : -1;
-                $idxLanjut  = $pendLanjut
-                    ? (array_search(strtoupper(trim($pendLanjut->jenjang_pendidikan)), $jenjangOrder) ?: -1)
-                    : -1;
-
-                $pendidikan = ($idxLanjut >= $idxSekolah && $pendLanjut) ? $pendLanjut : $pendSekolah;
-
-                $pegawai->pangkat_terakhir    = $pangkat;
-                $pegawai->pendidikan_terakhir = $pendidikan;
-
-                return $pegawai;
-            });
+        $pegawaiList = $this->enrichPegawaiForReport(
+            Pegawai::with([
+                    'jabatan_aktif.master_jabatan',
+                    'jabatan_aktif.master_eselon',
+                ])
+                ->where('unit_kerja_id', $unitKerja->id)
+                ->orderBy('nama')
+                ->get()
+        );
 
         return view('pages.dashboard.report.nominatif_print', [
             'unitKerja'   => $unitKerja,
@@ -206,55 +235,16 @@ class ReportController extends Controller
      */
     private function buildDukData(int $unitKerjaId): \Illuminate\Support\Collection
     {
-        $jenjangOrder = ['SD','SMP','SMA','SMK','D1','D2','D3','D4','S1','S2','S3'];
-
-        return Pegawai::with([
-                'jabatan_aktif.master_jabatan',
-                'jabatan_aktif.master_eselon',
-            ])
-            ->where('unit_kerja_id', $unitKerjaId)
-            ->orderBy('nama')
-            ->get()
-            ->map(function ($pegawai) use ($jenjangOrder) {
-                // Pangkat terakhir
-                $pangkat = Pangkat::with(['master_pangkat', 'master_golongan'])
-                    ->where('pegawai_id', $pegawai->id)
-                    ->latest('tmt_pangkat_mulai')
-                    ->first();
-
-                // Masa Kerja Golongan: dari tmt_pangkat_mulai sampai sekarang
-                $mkThn = 0;
-                $mkBln = 0;
-                if ($pangkat && $pangkat->tmt_pangkat_mulai) {
-                    $tmt  = \Carbon\Carbon::parse($pangkat->tmt_pangkat_mulai);
-                    $now  = \Carbon\Carbon::now();
-                    $diff = $tmt->diff($now);
-                    $mkThn = $diff->y;
-                    $mkBln = $diff->m;
-                }
-
-                // Pendidikan tertinggi
-                $pendSekolah = RiwayatPendidikanSekolah::where('pegawai_id', $pegawai->id)
-                    ->latest('tgl_ijazah')->first();
-                $pendLanjut  = RiwayatPendidikanLanjut::where('pegawai_id', $pegawai->id)
-                    ->latest('thn_selesai')->first();
-
-                $idxSekolah = $pendSekolah
-                    ? (array_search(strtoupper(trim($pendSekolah->jenjang_pendidikan)), $jenjangOrder) ?: -1)
-                    : -1;
-                $idxLanjut  = $pendLanjut
-                    ? (array_search(strtoupper(trim($pendLanjut->jenjang_pendidikan)), $jenjangOrder) ?: -1)
-                    : -1;
-
-                $pendidikan = ($idxLanjut >= $idxSekolah && $pendLanjut) ? $pendLanjut : $pendSekolah;
-
-                $pegawai->pangkat_terakhir    = $pangkat;
-                $pegawai->mk_thn              = $mkThn;
-                $pegawai->mk_bln              = $mkBln;
-                $pegawai->pendidikan_terakhir = $pendidikan;
-
-                return $pegawai;
-            });
+        return $this->enrichPegawaiForReport(
+            Pegawai::with([
+                    'jabatan_aktif.master_jabatan',
+                    'jabatan_aktif.master_eselon',
+                ])
+                ->where('unit_kerja_id', $unitKerjaId)
+                ->orderBy('nama')
+                ->get(),
+            includeMasaKerja: true
+        );
     }
 
     public function reportKeadaanPegawai(Request $request)
@@ -303,8 +293,6 @@ class ReportController extends Controller
      */
     private function buildKeadaanData(int $unitKerjaId): array
     {
-        $jenjangOrder = ['SD','SMP','SMA','SMK','D1','D2','D3','D4','S1','S2','S3'];
-
         // Semua pegawai di unit kerja ini
         $pegawaiAll = Pegawai::with(['jabatan_aktif.master_eselon'])
             ->where('unit_kerja_id', $unitKerjaId)
@@ -313,19 +301,10 @@ class ReportController extends Controller
         $pegawaiIds = $pegawaiAll->pluck('id')->toArray();
 
         // Pangkat terakhir per pegawai
-        $pangkatMap = \App\Models\Pangkat::with('master_golongan')
-            ->whereIn('pegawai_id', $pegawaiIds)
-            ->get()
-            ->groupBy('pegawai_id')
-            ->map(fn($rows) => $rows->sortByDesc('tmt_pangkat_mulai')->first());
+        $pangkatMap = $this->latestPangkatMap($pegawaiIds);
 
         // Pendidikan tertinggi per pegawai
-        $pendSekolahMap = \App\Models\RiwayatPendidikanSekolah::whereIn('pegawai_id', $pegawaiIds)
-            ->get()->groupBy('pegawai_id')
-            ->map(fn($rows) => $rows->sortByDesc('tgl_ijazah')->first());
-        $pendLanjutMap  = \App\Models\RiwayatPendidikanLanjut::whereIn('pegawai_id', $pegawaiIds)
-            ->get()->groupBy('pegawai_id')
-            ->map(fn($rows) => $rows->sortByDesc('thn_selesai')->first());
+        [$pendSekolahMap, $pendLanjutMap] = $this->latestEducationMaps($pegawaiIds);
 
         // Mutasi bulan berjalan untuk unit kerja ini
         $bulanAwal = now()->startOfMonth();
@@ -390,9 +369,7 @@ class ReportController extends Controller
             // Pendidikan tertinggi
             $ps  = $pendSekolahMap[$pegawai->id] ?? null;
             $pl  = $pendLanjutMap[$pegawai->id] ?? null;
-            $iS  = $ps ? (array_search(strtoupper(trim($ps->jenjang_pendidikan)), $jenjangOrder) ?: -1) : -1;
-            $iL  = $pl ? (array_search(strtoupper(trim($pl->jenjang_pendidikan)), $jenjangOrder) ?: -1) : -1;
-            $pend = ($iL >= $iS && $pl) ? $pl : $ps;
+            $pend = $this->highestEducation($ps, $pl);
             $jenjang = $pend ? strtoupper(trim($pend->jenjang_pendidikan)) : null;
 
             // Fungsi increment
@@ -402,10 +379,11 @@ class ReportController extends Controller
                 if ($kEsl === 'staff') $cnt[$key]['staff']++;
             };
 
-            // Jenis kelamin
-            if (strtolower($pegawai->jenis_kelamin) === 'laki-laki') {
+            // Jenis kelamin: nilai null/unknown tidak dimasukkan ke bucket laki/perempuan.
+            $gender = $this->normalizedGender($pegawai->jenis_kelamin);
+            if ($gender === 'laki-laki') {
                 $inc('laki');
-            } else {
+            } elseif ($gender === 'perempuan') {
                 $inc('perempuan');
             }
 
@@ -451,47 +429,15 @@ class ReportController extends Controller
         if ($unitKerjaId) {
             $unitKerja = UnitKerja::find($unitKerjaId);
 
-            $jenjangOrder = ['SD','SMP','SMA','SMK','D1','D2','D3','D4','S1','S2','S3'];
-
-            $pegawaiList = Pegawai::with([
-                    'jabatan_aktif.master_jabatan',
-                ])
-                ->where('unit_kerja_id', $unitKerja->id)
-                ->orderBy('nama')
-                ->get()
-                ->map(function ($pegawai) use ($jenjangOrder) {
-                    // Pangkat terakhir
-                    $pangkat = Pangkat::with(['master_pangkat', 'master_golongan'])
-                        ->where('pegawai_id', $pegawai->id)
-                        ->latest('tmt_pangkat_mulai')
-                        ->first();
-
-                    // Pendidikan tertinggi
-                    $pendSekolah = RiwayatPendidikanSekolah::where('pegawai_id', $pegawai->id)
-                        ->latest('tgl_ijazah')->first();
-                    $pendLanjut  = RiwayatPendidikanLanjut::where('pegawai_id', $pegawai->id)
-                        ->latest('thn_selesai')->first();
-
-                    $idxSekolah = $pendSekolah
-                        ? (array_search(strtoupper(trim($pendSekolah->jenjang_pendidikan)), $jenjangOrder) ?: -1)
-                        : -1;
-                    $idxLanjut  = $pendLanjut
-                        ? (array_search(strtoupper(trim($pendLanjut->jenjang_pendidikan)), $jenjangOrder) ?: -1)
-                        : -1;
-
-                    $pendidikan = ($idxLanjut >= $idxSekolah && $pendLanjut) ? $pendLanjut : $pendSekolah;
-
-                    // Usia dalam tahun
-                    $usia = $pegawai->tgl_lahir
-                        ? \Carbon\Carbon::parse($pegawai->tgl_lahir)->age
-                        : '-';
-
-                    $pegawai->pangkat_terakhir    = $pangkat;
-                    $pegawai->pendidikan_terakhir = $pendidikan;
-                    $pegawai->usia                = $usia;
-
-                    return $pegawai;
-                });
+            $pegawaiList = $this->enrichPegawaiForReport(
+                Pegawai::with([
+                        'jabatan_aktif.master_jabatan',
+                    ])
+                    ->where('unit_kerja_id', $unitKerja->id)
+                    ->orderBy('nama')
+                    ->get(),
+                includeUsia: true
+            );
         }
 
         return view('pages.dashboard.report.bezetting', [
@@ -509,40 +455,13 @@ class ReportController extends Controller
         $instansi  = InstansiLembaga::first();
         $unitKerja = $this->authorizePrintableUnit($request);
 
-        $jenjangOrder = ['SD','SMP','SMA','SMK','D1','D2','D3','D4','S1','S2','S3'];
-
-        $pegawaiList = Pegawai::with(['jabatan_aktif.master_jabatan'])
-            ->where('unit_kerja_id', $unitKerja->id)
-            ->orderBy('nama')
-            ->get()
-            ->map(function ($pegawai) use ($jenjangOrder) {
-                $pangkat = Pangkat::with(['master_pangkat', 'master_golongan'])
-                    ->where('pegawai_id', $pegawai->id)
-                    ->latest('tmt_pangkat_mulai')
-                    ->first();
-
-                $pendSekolah = RiwayatPendidikanSekolah::where('pegawai_id', $pegawai->id)
-                    ->latest('tgl_ijazah')->first();
-                $pendLanjut  = RiwayatPendidikanLanjut::where('pegawai_id', $pegawai->id)
-                    ->latest('thn_selesai')->first();
-
-                $idxSekolah = $pendSekolah
-                    ? (array_search(strtoupper(trim($pendSekolah->jenjang_pendidikan)), $jenjangOrder) ?: -1)
-                    : -1;
-                $idxLanjut  = $pendLanjut
-                    ? (array_search(strtoupper(trim($pendLanjut->jenjang_pendidikan)), $jenjangOrder) ?: -1)
-                    : -1;
-
-                $pendidikan = ($idxLanjut >= $idxSekolah && $pendLanjut) ? $pendLanjut : $pendSekolah;
-
-                $pegawai->pangkat_terakhir    = $pangkat;
-                $pegawai->pendidikan_terakhir = $pendidikan;
-                $pegawai->usia                = $pegawai->tgl_lahir
-                    ? \Carbon\Carbon::parse($pegawai->tgl_lahir)->age
-                    : '-';
-
-                return $pegawai;
-            });
+        $pegawaiList = $this->enrichPegawaiForReport(
+            Pegawai::with(['jabatan_aktif.master_jabatan'])
+                ->where('unit_kerja_id', $unitKerja->id)
+                ->orderBy('nama')
+                ->get(),
+            includeUsia: true
+        );
 
         return view('pages.dashboard.report.bezetting_print', [
             'unitKerja'   => $unitKerja,

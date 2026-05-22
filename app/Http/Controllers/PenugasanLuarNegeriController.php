@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PenugasanLuarNegeri;
+use App\Support\FileUploadHelper;
 use Illuminate\Http\Request;
 use Exception;
 use App\Models\Pegawai;
@@ -74,10 +75,16 @@ class PenugasanLuarNegeriController extends Controller
             DB::beginTransaction();
 
             if($request->hasFile('st')) {
-                $file = $request->file('st');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['st'] = '/storage/' . $path;
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('st'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'st'
+                );
+
+                $validateData['st'] = $storedFile['file_path'];
             }
 
             PenugasanLuarNegeri::create($validateData);
@@ -133,19 +140,28 @@ class PenugasanLuarNegeriController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldFile = $penugasanLuarNegeri->st;
+
             if($request->hasFile('st')) {
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('st'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'st'
+                );
 
-                if($request->fileLama) {
-                    Storage::disk('public')->delete($request->fileLama);
-                }
-
-                $file = $request->file('st');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('images', $fileName, 'public');
-                $validateData['st'] = '/storage/' . $path;
+                $validateData['st'] = $storedFile['file_path'];
+            } else {
+                unset($validateData['st']);
             }
 
             $penugasanLuarNegeri->update($validateData);
+
+            if($request->hasFile('st')) {
+                FileUploadHelper::delete($oldFile, 'public');
+            }
 
             DB::commit();
 

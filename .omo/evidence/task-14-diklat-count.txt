@@ -1,0 +1,35 @@
+Task 14 evidence — Diklat profile count
+
+Scope
+- Fixed profile print Diklat summary in `app/Http/Controllers/ProfilePegawaiController.php`.
+- `diklatPrintSummary` now uses `App\Services\DiklatGapAnalyticsService::summary()` instead of local ad-hoc count logic.
+- `RencanaDiklat` rows are loaded with `diklat` relation and `Diklat` rows with `rencanaDiklat`, preserving service source-of-truth formulas.
+
+Behavior protected
+- `not_realized_count` follows active-gap definition from `DiklatGapAnalyticsService`:
+  - active statuses: `planned`, `realized`
+  - draft rows excluded
+  - cancelled rows excluded
+  - linked realized rows excluded from not-realized
+- Profile print still scopes data to authenticated pegawai only.
+
+Regression guard
+- `tests/Feature/Diklat/ProfilePegawaiDiklatPrintTest.php`
+- Added `test_print_page_not_realized_count_ignores_draft_and_cancelled_rencana`.
+- Fixture creates planned, draft, cancelled, and realized-linked rencana for one pegawai.
+- Assertions:
+  - planned summary value is `2` (planned + realized active only)
+  - realized summary value is `1`
+  - not-realized summary value is `1`
+  - out-of-plan summary value is `0`
+
+Verification
+- `php artisan test tests/Feature/Diklat/ProfilePegawaiDiklatPrintTest.php tests/Feature/Diklat/DiklatAuthorizationTest.php`
+  - PASS: 9 passed, 69 assertions, Duration 30.16s
+- `php artisan test tests/Feature/Diklat/ProfilePegawaiDiklatPrintTest.php tests/Feature/Diklat/DiklatAuthorizationTest.php tests/Feature/ProfilePegawaiUiContractTest.php`
+  - PASS: 19 passed, 187 assertions, Duration 32.15s
+- Pre-commit command: `php artisan test tests/Feature/Diklat/ProfilePegawaiDiklatPrintTest.php`
+  - PASS: 2 passed, 21 assertions, Duration 25.51s
+
+Status
+- Acceptance met: profile Diklat `not_realized_count` ignores inactive statuses and is aligned with `DiklatGapAnalyticsService`.

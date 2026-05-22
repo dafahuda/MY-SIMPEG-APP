@@ -1,0 +1,41 @@
+Task 12 evidence — Hidden previous-file path delete blocked
+
+Scope:
+- Converted high-risk upload/update paths to stop trusting request-provided previous file paths such as fileLama/gambarLama.
+- Old files are deleted only from the DB-owned current model path after the replacement upload has been stored and the model update has run.
+
+Controllers converted:
+- app/Http/Controllers/CutiController.php
+- app/Http/Controllers/HukumanController.php
+- app/Http/Controllers/LatihanJabatanController.php
+- app/Http/Controllers/MutasiController.php
+- app/Http/Controllers/PenghargaanController.php
+- app/Http/Controllers/PenugasanLuarNegeriController.php
+- app/Http/Controllers/SeminarController.php
+- app/Http/Controllers/PegawaiController.php
+- app/Http/Controllers/ProfilePegawaiController.php
+- app/Http/Controllers/InstansiLembagaController.php
+- app/Http/Controllers/SekretariatController.php
+
+Delete behavior:
+- Removed update-time deletion from crafted request values like fileLama/gambarLama.
+- Replacement upload flow now captures the existing DB path first, stores the new file via FileUploadHelper, updates the model, then deletes the captured DB-owned old path via FileUploadHelper::delete(...).
+- No historical orphan cleanup or filename migration was performed.
+
+Regression guard:
+- tests/Feature/Security/FileUploadSecurityTest.php
+  - test_mutasi_update_ignores_crafted_file_lama_and_deletes_only_db_owned_document
+  - Creates victim file document/victim-mutasi.pdf and DB-owned old file document/db-owned-mutasi.pdf.
+  - Sends crafted fileLama=document/victim-mutasi.pdf while uploading a replacement file.
+  - Asserts victim file still exists, DB-owned old file is deleted, new DB path is helper-generated UUID under /storage/document/.
+- Existing Task 9 pegawai guard remains active:
+  - test_pegawai_update_ignores_crafted_gambar_lama_and_deletes_only_db_owned_photo
+
+Verification:
+- php artisan test tests/Feature/Security/FileUploadSecurityTest.php
+  Result: PASS — 10 passed, 48 assertions, Duration 121.66s.
+
+Pattern check:
+- Grep for getClientOriginalName|storeAs\(|fileLama|gambarLama under app/Http/Controllers returned: No files found.
+
+Status: PASS. Converted controller update paths no longer trust hidden previous-file path inputs for deletion.

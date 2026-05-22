@@ -1,0 +1,27 @@
+Task 10 — Backup route authorization matrix
+
+Scope
+- Changed backup routes in routes/web.php from can:superadmin to the existing role middleware: role:superadmin.
+- Kept controller-level defense-in-depth in app/Http/Controllers/BackupDatabaseController.php: both BackupDatabasePages() and download() still abort 403 unless Auth::user()->role === 'superadmin'.
+- No Gate dependency is needed for this route now.
+
+Regression guards
+- tests/Feature/Security/BackupAuthorizationTest.php::test_guest_redirected_to_login_for_backup_data_page
+- tests/Feature/Security/BackupAuthorizationTest.php::test_guest_redirected_to_login_for_backup_data_download
+- tests/Feature/Security/BackupAuthorizationTest.php::test_admin_and_pegawai_are_forbidden_from_backup_routes
+- tests/Feature/Security/BackupAuthorizationTest.php::test_superadmin_can_access_backup_data_page
+- tests/Feature/Security/BackupAuthorizationTest.php::test_backup_routes_use_consistent_superadmin_middleware_stack
+
+Assertions
+- Guest page/download requests redirect to /login.
+- Admin and pegawai direct URL access to /backup_data and /backup_data/download return 403.
+- Superadmin can open backup page.
+- Page and download routes share auth:sanctum, verified, role:superadmin middleware.
+
+Verification
+- Command: php artisan test tests/Feature/Security/BackupAuthorizationTest.php
+- Result: PASS — 6 passed, 30 assertions, Duration 7.16s
+
+Status
+- Acceptance met: backup route is superadmin-only via tested middleware and controller guard.
+- Acceptance met: admin and pegawai cannot trigger backup by direct URL.

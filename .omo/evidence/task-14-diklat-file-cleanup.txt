@@ -1,0 +1,38 @@
+Task 14 evidence — Diklat/profile DB-owned file cleanup
+
+Scope
+- Fixed `app/Http/Controllers/DiklatController.php::destroy()` to delete the current DB-owned certificate path after the Diklat row is deleted.
+- Kept admin/pegawai/superadmin authorization behavior from prior tasks.
+- Strengthened `app/Http/Controllers/ProfilePegawaiController.php::update()` so old profile photo deletion happens only after the new upload is stored and the DB update succeeds.
+- Profile update continues to ignore crafted hidden old-file inputs and deletes only the old path stored on the current Pegawai row.
+- No historical orphan scan/delete was added.
+
+Behavior protected
+- Deleting a Diklat removes only its `file_sertifikat_diklat` value from DB.
+- Unrelated public-disk files remain untouched.
+- Profile self-edit photo replacement deletes only the DB-owned previous `foto`, not a crafted `gambarLama` path.
+
+Regression guards
+- `tests/Feature/Diklat/DiklatAuthorizationTest.php`
+  - Added `test_destroy_deletes_only_db_owned_certificate_file`.
+  - Uses `Storage::fake('public')`, creates DB-owned certificate and unrelated file, deletes Diklat as scoped admin, asserts:
+    - Diklat DB row removed
+    - DB-owned certificate file removed
+    - unrelated file remains
+- `tests/Feature/ProfilePegawaiUiContractTest.php`
+  - Added `test_pegawai_self_edit_replaces_only_db_owned_old_photo`.
+  - Sends crafted `gambarLama` pointing at an unrelated public file while uploading a replacement photo, asserts:
+    - DB-owned old photo removed
+    - crafted victim path remains
+    - new helper-generated image path exists
+
+Verification
+- `php artisan test tests/Feature/Diklat/ProfilePegawaiDiklatPrintTest.php tests/Feature/Diklat/DiklatAuthorizationTest.php`
+  - PASS: 9 passed, 69 assertions, Duration 30.16s
+- `php artisan test tests/Feature/Diklat/ProfilePegawaiDiklatPrintTest.php tests/Feature/Diklat/DiklatAuthorizationTest.php tests/Feature/ProfilePegawaiUiContractTest.php`
+  - PASS: 19 passed, 187 assertions, Duration 32.15s
+- Pre-commit command: `php artisan test tests/Feature/Diklat/ProfilePegawaiDiklatPrintTest.php`
+  - PASS: 2 passed, 21 assertions, Duration 25.51s
+
+Status
+- Acceptance met: Diklat destroy removes only DB-owned certificate file; profile photo replacement deletes only DB-owned old path and does not trust hidden request paths.

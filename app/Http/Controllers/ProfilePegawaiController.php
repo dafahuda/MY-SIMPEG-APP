@@ -32,6 +32,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use App\Services\DiklatGapAnalyticsService;
+use App\Support\FileUploadHelper;
 use App\Support\ProfilePegawaiUi;
 
 class ProfilePegawaiController extends Controller
@@ -193,16 +195,9 @@ class ProfilePegawaiController extends Controller
         $instansi = InstansiLembaga::first();
 
         // Diklat
-        $rencanaDiklat = RencanaDiklat::where('pegawai_id', $pegawai->id)->get();
+        $rencanaDiklat = RencanaDiklat::with('diklat')->where('pegawai_id', $pegawai->id)->get();
         $diklat = Diklat::with('rencanaDiklat')->where('pegawai_id', $pegawai->id)->get();
-        $diklatPrintSummary = [
-            'planned_count' => $rencanaDiklat->count(),
-            'realized_linked_count' => $diklat->whereNotNull('rencana_diklat_id')->count(),
-            'not_realized_count' => RencanaDiklat::where('pegawai_id', $pegawai->id)
-                ->whereDoesntHave('diklat')
-                ->count(),
-            'out_of_plan_count' => $diklat->whereNull('rencana_diklat_id')->count(),
-        ];
+        $diklatPrintSummary = app(DiklatGapAnalyticsService::class)->summary($rencanaDiklat, $diklat);
 
         return view('pages.dashboard.profile_pegawai.printBiodataPegawai', compact(
             'pegawai', 'pangkat', 'jabatan', 'allJabatan', 'allPangkat',
@@ -248,9 +243,7 @@ class ProfilePegawaiController extends Controller
         }
 
         $validateData = $request->validate([
-            'nip' => 'required|string',
             'nama' => 'required|string',
-            'unit_kerja_id' => 'required|exists:tb_unit_kerja,id',
             'gelar' => 'nullable|string',
             'tmpt_lahir' => 'required|string',
             'tgl_lahir' => 'required|date',
@@ -265,37 +258,33 @@ class ProfilePegawaiController extends Controller
             'email_gov' => 'required|email',
             'no_npwp' => 'required|string',
             'no_bpjs' => 'required|string',
-            'status_kepegawaian' => 'required',
-            'karpeg' => 'required|string',
-            'no_sk_cpns' => 'nullable',
-            'tmt_cpns' => 'required|date',
-            'no_sk_pns' => 'nullable',
-            'tmt_pns' => 'required|date',
-            'gol_awal' => 'required|string',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'nilai_tpp' => 'required'
         ]);
 
         try {
             DB::beginTransaction();
 
+            $oldPhoto = $pegawai->foto;
+
             // Handle foto upload
             if($request->hasFile('foto')) {
-                // Delete old photo if exists
-                if($pegawai->foto && $pegawai->foto !== '/storage/images/default.jpg') {
-                    $oldPath = str_replace('/storage/', '', $pegawai->foto);
-                    if(Storage::disk('public')->exists($oldPath)) {
-                        Storage::disk('public')->delete($oldPath);
-                    }
-                }
+                $upload = FileUploadHelper::validateAndStore(
+                    $request->file('foto'),
+                    ['image/jpeg', 'image/png', 'image/gif'],
+                    2 * 1024 * 1024,
+                    'public',
+                    'images',
+                    'foto'
+                );
 
-                $file = $request->file('foto');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('images', $fileName, 'public');
-                $validateData['foto'] = '/storage/' . $path;
+                $validateData['foto'] = $upload['file_path'];
             }
 
             $pegawai->update($validateData);
+
+            if($request->hasFile('foto') && $oldPhoto && !in_array($oldPhoto, ['/storage/images/default.jpg', 'images/default.png'], true)) {
+                FileUploadHelper::delete($oldPhoto, 'public');
+            }
 
             DB::commit();
 
@@ -328,21 +317,23 @@ class ProfilePegawaiController extends Controller
         try {
             DB::beginTransaction();
 
-            // Delete old photo if exists
-            if($pegawai->foto && $pegawai->foto !== '/storage/images/default.jpg') {
-                $oldPath = str_replace('/storage/', '', $pegawai->foto);
-                if(Storage::disk('public')->exists($oldPath)) {
-                    Storage::disk('public')->delete($oldPath);
-                }
-            }
-
-            $file = $request->file('foto');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('images', $fileName, 'public');
+            $oldPhoto = $pegawai->foto;
+            $storedFile = FileUploadHelper::validateAndStore(
+                $request->file('foto'),
+                ['image/jpeg', 'image/png', 'image/gif'],
+                2 * 1024 * 1024,
+                'public',
+                'images',
+                'foto'
+            );
 
             $pegawai->update([
-                'foto' => '/storage/' . $path
+                'foto' => $storedFile['file_path']
             ]);
+
+            if($oldPhoto && !in_array($oldPhoto, ['/storage/images/default.jpg', 'images/default.png'], true)) {
+                FileUploadHelper::delete($oldPhoto, 'public');
+            }
 
             DB::commit();
 

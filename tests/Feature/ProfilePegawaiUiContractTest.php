@@ -3,9 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Pegawai;
+use App\Models\UnitKerja;
 use App\Models\User;
 use App\Support\ProfilePegawaiUi;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProfilePegawaiUiContractTest extends TestCase
@@ -149,6 +152,149 @@ class ProfilePegawaiUiContractTest extends TestCase
         }
     }
 
+    public function test_pegawai_self_edit_cannot_mutate_protected_hr_and_account_fields(): void
+    {
+        $this->skipIfDatabaseUnavailable();
+
+        $user = User::factory()->create(['role' => 'pegawai']);
+        $otherUser = User::factory()->create(['role' => 'pegawai']);
+        $unitKerja = UnitKerja::factory()->create();
+        $otherUnitKerja = UnitKerja::factory()->create();
+        $pegawai = Pegawai::factory()->create([
+            'user_id' => $user->id,
+            'unit_kerja_id' => $unitKerja->id,
+            'nip' => '199001012020011001',
+            'status_kepegawaian' => 'PNS',
+            'nilai_tpp' => 1000000,
+            'karpeg' => 'KP-ORIGINAL',
+            'no_sk_cpns' => 'CPNS-ORIGINAL',
+            'tmt_cpns' => '2020-01-01',
+            'no_sk_pns' => 'PNS-ORIGINAL',
+            'tmt_pns' => '2021-01-01',
+            'gol_awal' => 'III/a',
+        ]);
+
+        $response = $this->actingAs($user)->put('/profile_saya/updateProfilePegawai/' . $pegawai->id, array_merge(
+            $this->allowedProfilePayload(),
+            [
+                'nip' => '999999999999999999',
+                'unit_kerja_id' => $otherUnitKerja->id,
+                'status_kepegawaian' => 'PPPK',
+                'nilai_tpp' => 9999999,
+                'user_id' => $otherUser->id,
+                'role' => 'superadmin',
+                'karpeg' => 'KP-CHANGED',
+                'no_sk_cpns' => 'CPNS-CHANGED',
+                'tmt_cpns' => '1999-01-01',
+                'no_sk_pns' => 'PNS-CHANGED',
+                'tmt_pns' => '1999-02-02',
+                'gol_awal' => 'IV/e',
+            ]
+        ));
+
+        $response->assertRedirect('/profile_saya');
+        $response->assertSessionHas('success', 'Berhasil mengubah data profile!');
+
+        $pegawai->refresh();
+
+        $this->assertSame('199001012020011001', $pegawai->nip);
+        $this->assertSame($unitKerja->id, $pegawai->unit_kerja_id);
+        $this->assertSame('PNS', $pegawai->status_kepegawaian);
+        $this->assertSame(1000000, (int) $pegawai->nilai_tpp);
+        $this->assertSame($user->id, $pegawai->user_id);
+        $this->assertSame('KP-ORIGINAL', $pegawai->karpeg);
+        $this->assertSame('CPNS-ORIGINAL', $pegawai->no_sk_cpns);
+        $this->assertSame('2020-01-01', (string) $pegawai->tmt_cpns);
+        $this->assertSame('PNS-ORIGINAL', $pegawai->no_sk_pns);
+        $this->assertSame('2021-01-01', (string) $pegawai->tmt_pns);
+        $this->assertSame('III/a', $pegawai->gol_awal);
+    }
+
+    public function test_pegawai_self_edit_can_update_allowed_profile_fields_and_photo(): void
+    {
+        $this->skipIfDatabaseUnavailable();
+
+        Storage::fake('public');
+
+        $user = User::factory()->create(['role' => 'pegawai']);
+        $pegawai = Pegawai::factory()->create([
+            'user_id' => $user->id,
+            'foto' => '/storage/images/default.jpg',
+            'nama' => 'Nama Lama',
+            'email' => 'lama@example.test',
+        ]);
+
+        $response = $this->actingAs($user)->put('/profile_saya/updateProfilePegawai/' . $pegawai->id, array_merge(
+            $this->allowedProfilePayload([
+                'nama' => 'Nama Baru',
+                'gelar' => 'M.Kom',
+                'tmpt_lahir' => 'Bandung',
+                'tgl_lahir' => '1992-05-06',
+                'jenis_kelamin' => 'perempuan',
+                'agama' => 'Islam',
+                'golongan_darah' => 'O',
+                'status_pernikahan' => 'Nikah',
+                'nik' => '3273010101010001',
+                'alamat' => 'Jl. Profile Baru',
+                'no_hp' => '081234567890',
+                'email' => 'baru@example.test',
+                'email_gov' => 'baru@gov.test',
+                'no_npwp' => '1234567890123456',
+                'no_bpjs' => '1234567890123',
+            ]),
+            ['foto' => UploadedFile::fake()->image('foto-profile.png')]
+        ));
+
+        $response->assertRedirect('/profile_saya');
+        $response->assertSessionHas('success', 'Berhasil mengubah data profile!');
+
+        $pegawai->refresh();
+
+        $this->assertSame('Nama Baru', $pegawai->nama);
+        $this->assertSame('M.Kom', $pegawai->gelar);
+        $this->assertSame('Bandung', $pegawai->tmpt_lahir);
+        $this->assertSame('1992-05-06', (string) $pegawai->tgl_lahir);
+        $this->assertSame('perempuan', $pegawai->jenis_kelamin);
+        $this->assertSame('baru@example.test', $pegawai->email);
+        $this->assertSame('baru@gov.test', $pegawai->email_gov);
+        $this->assertStringStartsWith('/storage/images/', $pegawai->foto);
+        $this->assertMatchesRegularExpression('/\/storage\/images\/[0-9a-f-]{36}\.png$/', $pegawai->foto);
+        Storage::disk('public')->assertExists(str_replace('/storage/', '', $pegawai->foto));
+    }
+
+    public function test_pegawai_self_edit_replaces_only_db_owned_old_photo(): void
+    {
+        $this->skipIfDatabaseUnavailable();
+
+        Storage::fake('public');
+        Storage::disk('public')->put('images/db-owned-profile-old.png', 'old-photo');
+        Storage::disk('public')->put('images/victim-profile.png', 'keep-me');
+
+        $user = User::factory()->create(['role' => 'pegawai']);
+        $pegawai = Pegawai::factory()->create([
+            'user_id' => $user->id,
+            'foto' => '/storage/images/db-owned-profile-old.png',
+        ]);
+
+        $response = $this->actingAs($user)->put('/profile_saya/updateProfilePegawai/' . $pegawai->id, array_merge(
+            $this->allowedProfilePayload(),
+            [
+                'gambarLama' => 'images/victim-profile.png',
+                'foto' => UploadedFile::fake()->image('foto-baru.png'),
+            ]
+        ));
+
+        $response->assertRedirect('/profile_saya');
+        $response->assertSessionHas('success', 'Berhasil mengubah data profile!');
+
+        $pegawai->refresh();
+
+        Storage::disk('public')->assertMissing('images/db-owned-profile-old.png');
+        Storage::disk('public')->assertExists('images/victim-profile.png');
+        $this->assertStringStartsWith('/storage/images/', $pegawai->foto);
+        Storage::disk('public')->assertExists(str_replace('/storage/', '', $pegawai->foto));
+    }
+
     public function test_pegawai_sidebar_dead_non_pegawai_block_removed(): void
     {
         $view = file_get_contents(resource_path('views/components/app/sidebar.blade.php'));
@@ -157,6 +303,31 @@ class ProfilePegawaiUiContractTest extends TestCase
         $this->assertNotFalse($pegawaiBranchStart);
         $this->assertStringNotContainsString("auth()->user()->role !== 'pegawai'", substr($view, $pegawaiBranchStart));
         $this->assertStringContainsString('Profile Saya', substr($view, $pegawaiBranchStart));
+    }
+
+    /**
+     * @param array<string, mixed> $overrides
+     * @return array<string, mixed>
+     */
+    private function allowedProfilePayload(array $overrides = []): array
+    {
+        return array_merge([
+            'nama' => 'Pegawai Self Service',
+            'gelar' => 'S.Kom',
+            'tmpt_lahir' => 'Jakarta',
+            'tgl_lahir' => '1990-01-01',
+            'jenis_kelamin' => 'laki-laki',
+            'agama' => 'Islam',
+            'golongan_darah' => 'A',
+            'status_pernikahan' => 'Belum Nikah',
+            'nik' => '3173010101010001',
+            'alamat' => 'Jl. Self Service',
+            'no_hp' => '081111111111',
+            'email' => 'self.service@example.test',
+            'email_gov' => 'self.service@gov.test',
+            'no_npwp' => '1111111111111111',
+            'no_bpjs' => '1111111111111',
+        ], $overrides);
     }
 
     private function skipIfDatabaseUnavailable(): void

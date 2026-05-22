@@ -1,0 +1,14 @@
+Task 4 Backup Fast/Streaming-Seam Evidence
+Date: 2026-05-20
+
+Test:
+`BackupAuthorizationTest::test_superadmin_can_download_backup_with_small_stubbed_dataset_baseline`
+
+Behavior:
+- Uses DB facade stubs for `SHOW TABLES`, `SHOW CREATE TABLE`, and a one-row `DB::table(...)->get()` result.
+- Confirms a superadmin download returns an octet-stream payload containing table DDL and INSERT rows without building a large fixture database.
+- Asserts payload stays under 5000 bytes to preserve a lightweight future seam for Task 10 streaming/chunked fallback refactor.
+
+Verification:
+- Included in focused command: `php artisan test tests/Feature/Security/BackupAuthorizationTest.php`.
+- Result: 6 passed (28 assertions).

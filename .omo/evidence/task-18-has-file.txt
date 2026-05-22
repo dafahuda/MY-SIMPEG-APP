@@ -1,0 +1,28 @@
+# Task 18 - hasFile hygiene
+
+Scope:
+- Converted the touched Pegawai store upload branch to use explicit `hasFile('foto')` formatting/behavior and kept the helper-safe upload path introduced in Task 12.
+- Added regression guard for crafted non-file `foto` payloads so request strings cannot be treated as upload paths.
+- Removed/cleaned stale copy-paste comments in touched controllers:
+  - `app/Http/Controllers/DiklatController.php`: `// dari tabel diklat`
+  - `app/Http/Controllers/PenghargaanController.php`: `// dari tabel penghargaan`
+  - `app/Http/Controllers/HukumanController.php`: `// dari tabel hukuman`
+
+Regression guard:
+- `tests/Feature/Security/FileUploadSecurityTest.php::test_pegawai_store_rejects_non_file_foto_field`
+  - Sends `foto => 'images/fake-client-path.png'` to `/data_pegawai/tambah_data_pegawai`.
+  - Asserts validation error on `foto`.
+  - Asserts no `tb_pegawai` row stores the crafted string.
+  - Asserts no fake public-disk path is created.
+
+Static check:
+- Grep for `has('foto')` in `app/Http/Controllers` returned no matches.
+- Grep for stale `dari tabel izin kawin` in touched controllers returned no matches; one unrelated match remains in `PrestasiKerjaController.php`, intentionally untouched because Task 18 scope is limited to touched/local controllers.
+
+Verification:
+- `php artisan test tests/Feature/Security/FileUploadSecurityTest.php`
+- Result: PASS — 12 passed, 59 assertions, Duration 30.26s.
+
+Combined Task 9/12/14 regression verification:
+- `php artisan test tests/Feature/Security/FileUploadSecurityTest.php tests/Feature/Diklat/DiklatAuthorizationTest.php tests/Feature/ProfilePegawaiUiContractTest.php`
+- Result: PASS — 29 passed, 225 assertions, Duration 62.71s.

@@ -1,0 +1,51 @@
+Task 6 Pegawai Report Direct URL Forbidden - Evidence
+Date: 2026-05-21
+
+Scope
+- Modified routes/web.php only for report authorization behavior.
+- Modified report access tests:
+  - tests/Feature/AdminSuperadminUiux/RouteAccessMatrixTest.php
+  - tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php
+- No report named routes removed or renamed.
+- No report controller logic changed in this task.
+
+Implementation
+- Wrapped Diklat gap report routes under `role:admin,superadmin` middleware:
+  - /kepegawaian/report/diklat_gap
+  - /kepegawaian/report/diklat_gap/unit
+  - /kepegawaian/report/diklat_gap/unit/print
+  - /kepegawaian/report/diklat_gap/unit/export
+  - backward-compatible route name `report.diklat_gap`
+- Wrapped legacy dashboard report routes under `role:admin,superadmin` middleware:
+  - /report/nominatif
+  - /report/nominatif/print
+  - /report/duk
+  - /report/duk/print
+  - /report/bezetting
+  - /report/bezetting/print
+  - /report/keadaan_pegawai
+  - /report/keadaan_pegawai/print
+  - /report/pensiun
+
+Regression tests
+- RouteAccessMatrixTest::test_pegawai_report_direct_url_is_forbidden now asserts every representative report page/print/export URL returns 403 for pegawai.
+- ReportCorrectnessPerformanceFixtureScaffoldTest::test_pegawai_report_direct_access_contract_is_forbidden now asserts `/report/nominatif?unit_kerja_id=1` returns 403 for pegawai; the old Task 6 skip was removed.
+
+Verification commands executed
+1) php artisan test tests/Feature/AdminSuperadminUiux/RouteAccessMatrixTest.php tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php tests/Feature/AdminSuperadminUiux/ReportScopeExportTest.php
+   Result summary:
+   - 15 passed
+   - 2 skipped (Task 13 report correctness blockers only)
+   - 144 assertions
+   - Duration: 37.93s
+
+2) php artisan test tests/Feature/AdminSuperadminUiux
+   Result summary:
+   - 31 passed
+   - 2 skipped (Task 13 report correctness blockers only)
+   - 276 assertions
+   - Duration: 41.81s
+
+Status
+- Pegawai direct report access is now forbidden by route middleware.
+- The previous Task 6 skip for pegawai report HTTP 200 is gone.

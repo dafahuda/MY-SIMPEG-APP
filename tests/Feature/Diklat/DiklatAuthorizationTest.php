@@ -81,6 +81,86 @@ class DiklatAuthorizationTest extends TestCase
         $this->actingAs($admin)->get('/kepegawaian/diklat/download_sertifikat_diklat/' . $diklatUnitB->id)->assertForbidden();
     }
 
+    public function test_admin_cannot_move_existing_diklat_to_pegawai_outside_own_unit(): void
+    {
+        [$admin, $pegawaiUnitA, $diklatUnitA, $pegawaiUnitB] = $this->seedAdminCrossUnitFixture();
+
+        $this->actingAs($admin)
+            ->put('/kepegawaian/diklat/edit_diklat/' . $diklatUnitA->id, $this->payload($pegawaiUnitB->id))
+            ->assertSessionHasErrors('pegawai_id');
+
+        $diklatUnitA->refresh();
+
+        $this->assertSame($pegawaiUnitA->id, $diklatUnitA->pegawai_id);
+        $this->assertSame('Diklat Unit A', $diklatUnitA->nama_diklat);
+    }
+
+    public function test_admin_can_move_existing_diklat_to_pegawai_inside_own_unit(): void
+    {
+        [$admin, $pegawaiUnitA, $diklatUnitA] = $this->seedAdminCrossUnitFixture();
+        [, $sameUnitPegawai] = $this->createPegawaiUser(
+            'pegawai-unit-a-2',
+            'pegawai.unita2@example.test',
+            'Pegawai Unit A Dua',
+            $pegawaiUnitA->unit_kerja
+        );
+
+        $this->actingAs($admin)
+            ->put('/kepegawaian/diklat/edit_diklat/' . $diklatUnitA->id, $this->payload($sameUnitPegawai->id))
+            ->assertRedirect('/kepegawaian/diklat')
+            ->assertSessionHas('success', 'Berhasil mengubah data!');
+
+        $diklatUnitA->refresh();
+
+        $this->assertSame($sameUnitPegawai->id, $diklatUnitA->pegawai_id);
+        $this->assertSame('Diklat Baru', $diklatUnitA->nama_diklat);
+    }
+
+    public function test_superadmin_can_update_diklat_across_units(): void
+    {
+        [, , $diklatUnitA, $pegawaiUnitB] = $this->seedAdminCrossUnitFixture();
+        $superadmin = User::create([
+            'username' => 'superadmin-diklat-scope',
+            'name' => 'Superadmin Diklat Scope',
+            'email' => 'superadmin.diklat.scope@example.test',
+            'role' => 'superadmin',
+            'password' => bcrypt('password'),
+        ]);
+
+        $this->actingAs($superadmin)
+            ->put('/kepegawaian/diklat/edit_diklat/' . $diklatUnitA->id, $this->payload($pegawaiUnitB->id))
+            ->assertRedirect('/kepegawaian/diklat')
+            ->assertSessionHas('success', 'Berhasil mengubah data!');
+
+        $diklatUnitA->refresh();
+
+        $this->assertSame($pegawaiUnitB->id, $diklatUnitA->pegawai_id);
+    }
+
+    public function test_destroy_deletes_only_db_owned_certificate_file(): void
+    {
+        Storage::fake('public');
+
+        [$admin, , $diklatUnitA] = $this->seedAdminCrossUnitFixture();
+        Storage::disk('public')->put('document/db-owned-diklat.pdf', 'certificate');
+        Storage::disk('public')->put('document/unrelated-diklat.pdf', 'keep');
+
+        $diklatUnitA->update([
+            'file_sertifikat_diklat' => '/storage/document/db-owned-diklat.pdf',
+        ]);
+
+        $this->actingAs($admin)
+            ->delete('/kepegawaian/diklat/delete_data_diklat/' . $diklatUnitA->id)
+            ->assertRedirect('/kepegawaian/diklat')
+            ->assertSessionHas('success', 'Berhasil menghapus data!');
+
+        $this->assertDatabaseMissing('tb_diklat', [
+            'id' => $diklatUnitA->id,
+        ]);
+        Storage::disk('public')->assertMissing('document/db-owned-diklat.pdf');
+        Storage::disk('public')->assertExists('document/unrelated-diklat.pdf');
+    }
+
     private function seedPegawaiVisibilityFixture(): array
     {
         $unitA = UnitKerja::create([

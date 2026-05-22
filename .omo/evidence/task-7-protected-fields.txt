@@ -1,0 +1,18 @@
+Task 7 - Protected Fields
+
+Scope:
+- Hardened pegawai self-service profile update in app/Http/Controllers/ProfilePegawaiController.php.
+- Split self-edit validation/update to an explicit allowlist of personal/contact fields plus foto.
+- Server-side protected crafted payload fields: nip, unit_kerja_id, status_kepegawaian, nilai_tpp, user_id, role/account mapping, karpeg, no_sk_cpns, tmt_cpns, no_sk_pns, tmt_pns, gol_awal.
+- Did not change admin/superadmin official-data management paths.
+
+Regression guard:
+- tests/Feature/ProfilePegawaiUiContractTest.php::test_pegawai_self_edit_cannot_mutate_protected_hr_and_account_fields
+- The test sends allowed fields together with protected HR/account fields and verifies the response stays user-friendly while the protected database values remain unchanged.
+
+Verification:
+- Command: php artisan test tests/Feature/ProfilePegawaiUiContractTest.php
+- Result: PASS - 9 passed, 111 assertions, Duration 12.12s.
+
+Status:
+- Acceptance met: crafted request from pegawai cannot change protected fields.

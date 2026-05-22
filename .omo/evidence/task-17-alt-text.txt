@@ -1,0 +1,34 @@
+# Task 17 - informative image alt text
+
+Scope:
+- Added or tightened meaningful alt text for informative images in touched/audited Blade views.
+- `resources/views/pages/dashboard/profile_pegawai/indexProfilePegawai.blade.php`
+  - Employee photo alt changed from generic `Foto` to `Foto {{ $pegawai->nama }}`.
+- `resources/views/layouts/authentication.blade.php`
+  - Logo already used `alt="Logo ASN"` from Task 11 and remains preserved.
+  - Authentication hero image alt changed from generic `Authentication image` to `Ilustrasi aparatur sipil negara pada halaman autentikasi`.
+
+Regression guard:
+- `tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php`
+  - `test_touched_informative_images_have_meaningful_alt_text`
+  - Asserts touched profile/authentication images have meaningful alt text and old generic strings are absent.
+
+Static grep:
+- Grep for `alt=""` in touched scopes returned no files:
+  - `resources/views/pages/dashboard/profile_pegawai`
+  - `resources/views/layouts`
+  - `resources/views/auth`
+
+Verification:
+- `php artisan test tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php`
+  - PASS: 6 passed, 41 assertions, Duration 3.54s.
+- `php artisan test tests/Feature/AdminSuperadminUiux`
+  - PASS: 37 passed, 310 assertions, Duration 67.51s.
+- `npm run build`
+  - PASS: Vite build completed successfully in 54.08s.
+  - Existing warning remains: JS chunk `assets/app-g5vxbfYH.js` is larger than 500 kB after minification.
+
+Status:
+- Informative images in touched views have meaningful alt text.
+- Decorative empty alt values were not introduced.
+- No page content, route, or SEO strategy was rewritten.

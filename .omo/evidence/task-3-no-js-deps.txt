@@ -1,0 +1,10 @@
+Task 3 No-JS-Dependency Evidence
+
+Checked file:
+- tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php
+
+Result:
+- Test uses PHP filesystem/string inspection only.
+- No new JS package or frontend dependency is required for this baseline.
+- Verification command passed: `php artisan test tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php`.
+- Existing dirty worktree includes unrelated `package-lock.json` changes that predate/do not belong to Task 3; Task 3 did not require package changes.

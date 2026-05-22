@@ -20,7 +20,7 @@
             @if ($selectedUnitKerja && $pegawaiList->isNotEmpty())
                 <div class="flex gap-2">
                     <a href="{{ route('report.duk.print', ['unit_kerja_id' => $selectedUnitKerja->id]) }}"
-                        target="_blank"
+                        target="_blank" rel="noopener noreferrer"
                         class="btn bg-green-500 hover:bg-green-600 text-white">
                         <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
                             <path d="M15 10h-2V2H3v8H1a1 1 0 00-1 1v3a1 1 0 001 1h14a1 1 0 001-1v-3a1 1 0 00-1-1zM4 3h8v7H4V3zm8 10H4v-2h8v2zm2 0h-1v-2H3v2H2v-2h1V9h10v2h1v2z"/>

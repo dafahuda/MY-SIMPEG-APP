@@ -1,0 +1,45 @@
+Task 12 evidence — Safe upload names
+
+Scope:
+- Converted high-risk upload paths from original-name storage to App\Support\FileUploadHelper.
+- New uploads use helper-generated UUID basenames and MIME-derived extensions instead of time() + getClientOriginalName().
+- Public URL format remains helper-defined /storage/{directory}/{uuid}.{extension}.
+
+Controllers converted:
+- Document upload controllers:
+  - CutiController: file_surat_cuti
+  - HukumanController: file_sk_hukuman
+  - LatihanJabatanController: file_sertifikat
+  - MutasiController: file_sk_mutasi
+  - PenghargaanController: file_sertifikat_penghargaan
+  - PenugasanLuarNegeriController: st
+  - SeminarController: file_piagam
+- Image upload controllers:
+  - PegawaiController: foto
+  - ProfilePegawaiController: foto upload path
+  - InstansiLembagaController: gambar_logo
+  - SekretariatController: gambar_logo
+
+Helper usage:
+- Documents allow: application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, text/plain with 10 MB max.
+- Images allow: image/jpeg, image/png, image/gif with 2 MB max.
+- Storage directories preserved as document/images according to each domain path.
+
+Regression guard:
+- tests/Feature/Security/FileUploadSecurityTest.php
+  - test_seminar_store_uses_helper_generated_document_name_not_original_filename
+    - Uploads original filename unicode evil.php.pdf.
+    - Asserts stored DB path is /storage/document/{uuid}.pdf and does not contain the original filename.
+  - test_mutasi_update_ignores_crafted_file_lama_and_deletes_only_db_owned_document
+    - Uploads original filename evil.php.pdf.
+    - Asserts replacement DB path is /storage/document/{uuid}.pdf and does not contain the original filename.
+  - Existing image checks for Pegawai update assert /storage/images/{uuid}.png.
+
+Verification:
+- php artisan test tests/Feature/Security/FileUploadSecurityTest.php
+  Result: PASS — 10 passed, 48 assertions, Duration 121.66s.
+
+Pattern check:
+- Grep for getClientOriginalName|storeAs\(|fileLama|gambarLama under app/Http/Controllers returned: No files found.
+
+Status: PASS. Touched upload paths no longer trust original filenames for stored filenames.

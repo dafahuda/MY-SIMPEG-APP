@@ -16,7 +16,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <link rel="icon" type="image/png" href="images/logo_asn.png">
+        <link rel="icon" type="image/png" href="{{ asset('images/logo_asn.png') }}">
 
         <!-- Styles -->
         @livewireStyles
@@ -48,7 +48,7 @@
                             <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8 mt-12">
                                 <!-- Logo -->
                                 <a class="block" href="{{ route('dashboard') }}">
-                                    <img src="images/logo_asn.png" alt="" srcset="" class="w-22 h-22">
+                                    <img src="{{ asset('images/logo_asn.png') }}" alt="Logo ASN" class="w-22 h-22">
                                 </a>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                 <!-- Image -->
                 <div class="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2" aria-hidden="true">
                     <img class="object-cover object-center w-full h-full" src="{{ asset('images/gambar_pns.png') }}"
-                        width="760" height="1024" alt="Authentication image" />
+                        width="760" height="1024" alt="Ilustrasi aparatur sipil negara pada halaman autentikasi" />
                 </div>
 
             </div>

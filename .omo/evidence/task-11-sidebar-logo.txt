@@ -1,0 +1,29 @@
+Task 11 evidence — Sidebar logo markup
+
+Scope:
+- Repaired malformed logo anchor in resources/views/components/app/sidebar.blade.php.
+- The SVG is now child markup of a valid root link instead of being embedded inside the href attribute.
+- Preserved existing sidebar route links and role-gated navigation behavior.
+
+Implementation:
+- Replaced malformed markup:
+  <a class="block" href="/               <svg ...
+- New contract:
+  <a class="block" href="/" aria-label="SIMPEG App">
+      <svg class="fill-violet-500" ... viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+- No navigation hierarchy or route names were changed.
+
+Regression guards:
+- tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php
+  - test_sidebar_logo_markup_has_valid_anchor_and_svg_contract
+  - Asserts valid href, SVG presence, viewBox, and absence of the old malformed href+svg text.
+- tests/Feature/AdminSuperadminUiux/SidebarRoleMatrixTest.php
+  - Confirms existing superadmin/admin/pegawai sidebar role links remain intact.
+
+Verification:
+- php artisan test tests/Feature/AdminSuperadminUiux/SidebarRoleMatrixTest.php
+  Result: PASS — 3 passed, 70 assertions, Duration 25.25s.
+- php artisan test tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php
+  Result: PASS — 4 passed, 28 assertions, Duration 13.35s.
+
+Status: PASS. Sidebar logo markup is now valid and role-gated menu behavior remains covered.

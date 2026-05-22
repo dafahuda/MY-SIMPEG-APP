@@ -8,7 +8,7 @@
 
         <title>{{ config('app.name', 'Simpeg App') }}</title>
 
-        <link rel="icon" type="image/png" href="images/logo_asn.png">
+        <link rel="icon" type="image/png" href="{{ asset('images/logo_asn.png') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 
@@ -80,6 +80,7 @@
                 const href    = editLink.getAttribute('href');
                 const title   = editLink.dataset.title   || 'Edit Data';
                 const message = editLink.dataset.message || 'Anda akan membuka form edit data ini. Lanjutkan?';
+                if (! href) return;
                 showConfirm({
                     type: 'warning',
                     title: title,
@@ -97,12 +98,19 @@
                 const form    = deleteBtn.closest('form');
                 const title   = deleteBtn.dataset.title   || 'Hapus Data';
                 const message = deleteBtn.dataset.message || 'Data yang dihapus tidak dapat dikembalikan. Yakin ingin menghapus?';
+                if (! form) return;
                 showConfirm({
                     type: 'danger',
                     title: title,
                     message: message,
                     confirmText: 'Ya, Hapus',
-                    callback: () => { form.submit(); }
+                    callback: () => {
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit();
+                            return;
+                        }
+                        form.submit();
+                    }
                 });
                 return;
             }
@@ -114,12 +122,19 @@
                 const form    = saveBtn.closest('form');
                 const title   = saveBtn.dataset.title   || 'Simpan Perubahan';
                 const message = saveBtn.dataset.message || 'Apakah Anda yakin ingin menyimpan perubahan data ini?';
+                if (! form) return;
                 showConfirm({
                     type: 'info',
                     title: title,
                     message: message,
                     confirmText: 'Ya, Simpan',
-                    callback: () => { form.submit(); }
+                    callback: () => {
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit();
+                            return;
+                        }
+                        form.submit();
+                    }
                 });
                 return;
             }

@@ -1,0 +1,24 @@
+Task 3 Frontend Markup/A11y Baseline Evidence
+Date: 2026-05-20
+
+Command:
+php -l "tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php"; php artisan test tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php
+
+Result:
+No syntax errors detected in tests/Feature/AdminSuperadminUiux/FrontendMarkupA11yBaselineTest.php
+
+PASS  Tests\Feature\AdminSuperadminUiux\FrontendMarkupA11yBaselineTest
+✓ sidebar logo markup baseline pins current malformed anchor
+✓ layout asset path baseline pins relative favicon and confirm modal mount
+✓ confirm modal a11y focus baseline tracks missing dialog hooks
+✓ target blank rel baseline detects missing noopener for known views
+
+Tests: 4 passed (21 assertions)
+Duration: 7.70s
+
+Baseline scope:
+- Pins malformed sidebar logo anchor for Task 11 repair.
+- Pins relative favicon path and confirm modal mount for Task 11/16 repair.
+- Tracks missing dialog/focus hooks for confirm modal a11y repair.
+- Detects target=_blank links without noopener for Task 17 cleanup.
+- No production Blade files changed by Task 3 verification.

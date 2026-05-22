@@ -69,7 +69,7 @@
                         </svg>
                         Edit Profile
                     </a>
-                    <a href="{{ route('profile.pegawai.print') }}" target="_blank"
+                    <a href="{{ route('profile.pegawai.print') }}" target="_blank" rel="noopener noreferrer"
                         class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-medium rounded shadow-sm">
                         <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
                             <path d="M15 10h-2V2H3v8H1a1 1 0 00-1 1v3a1 1 0 001 1h14a1 1 0 001-1v-3a1 1 0 00-1-1zM4 3h8v7H4V3zm8 10H4v-2h8v2zm2 0h-1v-2H3v2H2v-2h1V9h10v2h1v2z"/>
@@ -102,7 +102,7 @@
                             <div class="flex flex-col items-center gap-2 shrink-0">
                                 <div class="w-32 h-36 rounded overflow-hidden border border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-700">
                                     @if ($pegawai->foto)
-                                        <img src="{{ asset($pegawai->foto) }}" alt="Foto" class="w-full h-full object-cover">
+                                        <img src="{{ asset($pegawai->foto) }}" alt="Foto {{ $pegawai->nama }}" class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center text-gray-400">
                                             <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">

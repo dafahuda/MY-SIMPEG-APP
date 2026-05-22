@@ -1,0 +1,16 @@
+# Task 20 - npm build evidence
+
+Command:
+`npm run build`
+
+Result:
+- PASS — Vite v6.4.2 built successfully.
+- Output assets:
+  - `public/build/manifest.json` 0.27 kB
+  - `public/build/assets/app-Mw1-see7.css` 123.33 kB (gzip 19.85 kB)
+  - `public/build/assets/app-g5vxbfYH.js` 531.23 kB (gzip 176.54 kB)
+- Duration: approximately 1m 3s.
+
+Warning:
+- Existing Vite warning remains: JS chunk `assets/app-g5vxbfYH.js` is larger than 500 kB after minification.
+- Classification: warning only; build exited successfully and this audit plan did not require chunk-splitting.

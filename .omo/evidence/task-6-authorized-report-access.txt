@@ -1,0 +1,43 @@
+Task 6 Authorized Report Access Preserved - Evidence
+Date: 2026-05-21
+
+Scope
+- Report route authorization changed to `role:admin,superadmin`.
+- Existing named routes were preserved.
+- Existing admin scoping and superadmin global filtering behavior were verified with report tests.
+
+Authorized access verification
+- ReportScopeExportTest verifies admin and superadmin still access intended reports:
+  1) admin cannot forge global/other-unit Diklat gap params; response remains 200 and scoped to admin unit.
+  2) superadmin can view global Diklat gap data and filter by intended unit.
+  3) Diklat print route scope matches unit report page scope.
+  4) Diklat export scope matches page scope for admin and superadmin.
+  5) invalid Diklat filters fail safely without leaking other-unit data.
+  6) legacy nominatif page and print routes preserve admin unit scope.
+- RouteAccessMatrixTest verifies report route registration for admin/superadmin route families remains valid.
+
+Verification commands executed
+1) php artisan test tests/Feature/AdminSuperadminUiux/RouteAccessMatrixTest.php tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php tests/Feature/AdminSuperadminUiux/ReportScopeExportTest.php
+   Result summary:
+   - 15 passed
+   - 2 skipped (Task 13 blockers only)
+   - 144 assertions
+   - Duration: 37.93s
+
+2) php artisan test tests/Feature/AdminSuperadminUiux
+   Result summary:
+   - 31 passed
+   - 2 skipped (Task 13 blockers only)
+   - 276 assertions
+   - Duration: 41.81s
+
+3) php artisan test tests/Feature/AdminSuperadminUiux/ReportScopeExportTest.php
+   Result summary:
+   - 6 passed
+   - 65 assertions
+   - Duration: 39.82s
+
+Notes
+- The remaining skips are unrelated Task 13 report logic blockers for education rank index 0 and unknown/null gender production mapping.
+- No route-not-found errors occurred for named report routes in the verified suite.
+- Admin and superadmin report access is preserved while pegawai direct URLs are blocked.

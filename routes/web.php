@@ -120,7 +120,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/data_user_admin', [UserAdminController::class, 'index']);
             Route::get('/view_form_tambah_user_admin', [UserAdminController::class, 'create']);
             Route::post('/tambah_user_admin', [UserAdminController::class, 'store']);
-            Route::get('/data_user_pegawai', [UserPegawaiController::class, 'index']);
             Route::get('/view_form_edit_user_admin/{user}', [UserAdminController::class, 'edit']);
             Route::put('/edit_data_user_admin/{user}', [UserAdminController::class, 'update']);
             Route::delete('/delete_user_admin/{user}', [UserAdminController::class, 'destroy']);
@@ -278,14 +277,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         });
 
         // URL Laporan Gap Diklat
-        Route::prefix('report/diklat_gap')->name('report.diklat_gap.')->group(function () {
-            Route::get('/', [DiklatGapReportController::class, 'index'])->name('index');
-            Route::get('/unit', [DiklatGapReportController::class, 'unitAggregate'])->name('unit');
-            Route::get('/unit/print', [DiklatGapReportController::class, 'printUnitAggregate'])->name('unit.print');
-            Route::get('/unit/export', [DiklatGapReportController::class, 'exportUnitAggregate'])->name('unit.export');
+        Route::middleware('role:admin,superadmin')->group(function () {
+            Route::prefix('report/diklat_gap')->name('report.diklat_gap.')->group(function () {
+                Route::get('/', [DiklatGapReportController::class, 'index'])->name('index');
+                Route::get('/unit', [DiklatGapReportController::class, 'unitAggregate'])->name('unit');
+                Route::get('/unit/print', [DiklatGapReportController::class, 'printUnitAggregate'])->name('unit.print');
+                Route::get('/unit/export', [DiklatGapReportController::class, 'exportUnitAggregate'])->name('unit.export');
+            });
+            // Backward-compat alias: tests use route('report.diklat_gap') without suffix.
+            Route::get('/report/diklat_gap', [DiklatGapReportController::class, 'index'])->name('report.diklat_gap');
         });
-        // Backward-compat alias: tests use route('report.diklat_gap') without suffix.
-        Route::get('/report/diklat_gap', [DiklatGapReportController::class, 'index'])->name('report.diklat_gap');
 
         // URL Kepegawaian penghargaan
         Route::get('/penghargaan', [PenghargaanController::class, 'index']);
@@ -415,7 +416,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 
     // Report
-    Route::prefix('report')->group(function() {
+    Route::middleware('role:admin,superadmin')->prefix('report')->group(function() {
         Route::get('/nominatif', [ReportController::class, 'reportNominatif'])->name('report.nominatif');
         Route::get('/nominatif/print', [ReportController::class, 'printNominatif'])->name('report.nominatif.print');
         Route::get('/duk', [ReportController::class, 'reportDUK'])->name('report.duk');
@@ -427,7 +428,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/pensiun', [ReportController::class, 'reportPensiun'])->name('report.pensiun');
     });
 
-    Route::middleware('can:superadmin')->group(function () {
+    Route::middleware('role:superadmin')->group(function () {
         Route::get('/backup_data', [BackupDatabaseController::class, 'BackupDatabasePages']);
         Route::get('/backup_data/download', [BackupDatabaseController::class, 'download'])->name('backup_data.download');
     });

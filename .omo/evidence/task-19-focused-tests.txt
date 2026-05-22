@@ -1,0 +1,22 @@
+# Task 19 - focused audit regression suite
+
+Command:
+`php artisan test tests/Feature/Security tests/Feature/AdminSuperadminUiux tests/Feature/Diklat tests/Feature/ProfilePegawaiUiContractTest.php`
+
+Initial run:
+- Result: FAIL — 156 passed, 1 failed, 1313 assertions, Duration 122.32s.
+- Failure: `Tests\Feature\Diklat\DiklatGapRoleScopeTest::test_pegawai_is_forced_to_self_scope_only` expected 200 but received 403.
+- Classification: regression test expectation was stale after Task 6 hardened report routes with `role:admin,superadmin`; pegawai direct report URLs must now be forbidden.
+- Fix: updated the test name/expectation to `test_pegawai_is_forbidden_from_direct_diklat_gap_report_url()` and assert `assertForbidden()`.
+
+Final run:
+- Result: PASS — 157 passed, 1313 assertions, Duration 94.54s.
+
+Coverage included:
+- `tests/Feature/Security`
+- `tests/Feature/AdminSuperadminUiux`
+- `tests/Feature/Diklat`
+- `tests/Feature/ProfilePegawaiUiContractTest.php`
+
+Notes:
+- This command covers the security/upload/backup, report/sidebar/UI, Diklat, and profile self-edit regression surfaces from Tasks 1-18.

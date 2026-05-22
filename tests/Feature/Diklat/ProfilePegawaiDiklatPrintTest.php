@@ -11,6 +11,32 @@ class ProfilePegawaiDiklatPrintTest extends TestCase
     use RefreshDatabase;
     use DiklatGapReportFixtures;
 
+    public function test_print_page_not_realized_count_ignores_draft_and_cancelled_rencana(): void
+    {
+        $currentYear = (string) now()->year;
+
+        $unit = UnitKerja::create([
+            'nama_unit' => 'Unit Print Diklat Count',
+            'alamat' => 'Jl. Print Count',
+        ]);
+
+        $pegawai = $this->createPegawai('pegawai-print-count', 'pegawai.print.count@example.test', 'Pegawai Print Count', $unit);
+
+        $this->createRencana($pegawai, $currentYear, 'Rencana Count Planned', 'planned', 36);
+        $this->createRencana($pegawai, $currentYear, 'Rencana Count Draft', 'draft', 12);
+        $this->createRencana($pegawai, $currentYear, 'Rencana Count Cancelled', 'cancelled', 12);
+        $rencanaRealized = $this->createRencana($pegawai, $currentYear, 'Rencana Count Realized', 'realized', 28);
+        $this->createDiklat($pegawai, $rencanaRealized, $currentYear, 'Diklat Count Linked', 24);
+
+        $response = $this->actingAs($pegawai->user)->get(route('profile.pegawai.print'));
+
+        $response->assertOk()
+            ->assertSeeHtml('data-testid="print-diklat-summary-planned" data-value="2"')
+            ->assertSeeHtml('data-testid="print-diklat-summary-realized" data-value="1"')
+            ->assertSeeHtml('data-testid="print-diklat-summary-not-realized" data-value="1"')
+            ->assertSeeHtml('data-testid="print-diklat-summary-out-of-plan" data-value="0"');
+    }
+
     public function test_print_page_includes_diklat_section_and_excludes_other_pegawai(): void
     {
         $currentYear = (string) now()->year;

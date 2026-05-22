@@ -25,7 +25,7 @@
                     x-transition:leave-end="opacity-0"
                     x-cloak
                 >
-                    <div class="text-xs text-center whitespace-nowrap">Built with <a class="underline" @focus="open = true" @focusout="open = false" href="https://www.chartjs.org/" target="_blank">Chart.js</a></div>
+                    <div class="text-xs text-center whitespace-nowrap">Built with <a class="underline" @focus="open = true" @focusout="open = false" href="https://www.chartjs.org/" target="_blank" rel="noopener noreferrer">Chart.js</a></div>
                 </div>
             </div>
         </div>

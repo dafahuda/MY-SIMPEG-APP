@@ -388,6 +388,32 @@
         </tbody>
     </table>
 
+    <div data-testid="print-diklat-section" class="print-section">
+        <h3>Rencana dan Realisasi Diklat Saya</h3>
+        <div>
+            <span data-testid="print-diklat-summary-planned" data-value="{{ $diklatPrintSummary['planned_count'] }}">Rencana: {{ $diklatPrintSummary['planned_count'] }}</span>
+            <span data-testid="print-diklat-summary-realized" data-value="{{ $diklatPrintSummary['realized_linked_count'] }}">Terealisasi: {{ $diklatPrintSummary['realized_linked_count'] }}</span>
+            <span data-testid="print-diklat-summary-not-realized" data-value="{{ $diklatPrintSummary['not_realized_count'] }}">Belum Terealisasi: {{ $diklatPrintSummary['not_realized_count'] }}</span>
+            <span data-testid="print-diklat-summary-out-of-plan" data-value="{{ $diklatPrintSummary['out_of_plan_count'] }}">Di Luar Rencana: {{ $diklatPrintSummary['out_of_plan_count'] }}</span>
+        </div>
+        <table>
+            <thead><tr><th>No</th><th>Nama Diklat</th><th>Tahun</th><th>No. Sertifikat / STTPP</th></tr></thead>
+            <tbody>
+                @foreach ($diklat as $i => $d)
+                <tr><td>{{ $i+1 }}</td><td>{{ $d->nama_diklat }}</td><td>{{ $d->tahun }}</td><td>{{ $d->no_sttpp }}</td></tr>
+                @endforeach
+            </tbody>
+        </table>
+        <table>
+            <thead><tr><th>No</th><th>Nama Rencana Diklat</th><th>Tahun</th><th>Status</th></tr></thead>
+            <tbody>
+                @foreach ($rencanaDiklat as $i => $r)
+                <tr><td>{{ $i+1 }}</td><td>{{ $r->nama_diklat_rencana }}</td><td>{{ $r->tahun_rencana }}</td><td>{{ $r->status }}</td></tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
     {{-- Tanda Tangan --}}
     <div class="ttd">
         <div class="ttd-box">

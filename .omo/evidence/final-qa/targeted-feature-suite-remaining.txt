@@ -1,0 +1,59 @@
+
+   PASS  Tests\Feature\AdminSuperadminUiux\RouteAccessMatrixTest
+  Ô£ô guest is redirected to login for authenticated route families                                                5.29s
+  Ô£ô pegawai is forbidden or safely redirected from admin and system routes                                       1.55s
+  Ô£ô pegawai report direct url is forbidden                                                                       0.95s
+  Ô£ô admin can reach expected route families without global system access                                         0.56s
+  Ô£ô superadmin expected route families are registered                                                            0.53s
+
+   PASS  Tests\Feature\AdminSuperadminUiux\ReportScopeExportTest
+  Ô£ô admin cannot forge global or other unit diklat report params                                                31.98s
+  Ô£ô superadmin can filter diklat report globally and by intended unit                                            1.22s
+  Ô£ô diklat print scope matches unit report page scope                                                            0.71s
+  Ô£ô diklat export scope matches page scope for admin and superadmin                                              0.85s
+  Ô£ô invalid diklat filters fail safely without leaking other unit scope                                          0.66s
+  Ô£ô legacy report admin scope is enforced for page and print                                                     0.72s
+
+   PASS  Tests\Feature\AdminSuperadminUiux\SidebarRoleMatrixTest
+  Ô£ô superadmin sidebar exposes setup user system and operational links                                           0.71s
+  Ô£ô admin sidebar hides superadmin only setup links but keeps operational links                                  0.51s
+  Ô£ô pegawai sidebar hides admin and superadmin sections                                                          0.55s
+
+   PASS  Tests\Feature\AdminSuperadminUiux\UserManagementAccessSearchTest
+  Ô£ô user admin management is superadmin only by direct url                                                       0.93s
+  Ô£ô user pegawai index route has single effective get definition                                                 0.44s
+  Ô£ô user pegawai management blocks pegawai and scopes admin to own unit                                          0.75s
+  Ô£ô user pegawai search blocks pegawai and scopes admin to own unit                                              0.81s
+  Ô£ô user admin search form uses get route and remains superadmin only                                            1.02s
+
+   PASS  Tests\Feature\ProfilePegawaiUiContractTest
+  Ô£ô profile ui helper resolves canonical and legacy tabs                                                         0.52s
+  Ô£ô profile page has canonical diklat tab and kepegawaian controls                                               0.48s
+  Ô£ô profile saya defaults to profil tab                                                                          1.11s
+  Ô£ô profile saya accepts diklat tab                                                                              0.77s
+  Ô£ô profile saya legacy artis tab alias opens diklat                                                             0.88s
+  Ô£ô edit profile form preserves contract and section grouping                                                    0.54s
+  Ô£ô pegawai self edit cannot mutate protected hr and account fields                                              0.89s
+  Ô£ô pegawai self edit can update allowed profile fields and photo                                                1.12s
+  Ô£ô pegawai self edit replaces only db owned old photo                                                           0.80s
+  Ô£ô pegawai sidebar dead non pegawai block removed                                                               0.63s
+
+   PASS  Tests\Feature\Diklat\DiklatAuthorizationTest
+  Ô£ô pegawai only sees own diklat and cannot mutate routes                                                        1.25s
+  Ô£ô pegawai diklat redirect lands on diklat saya                                                                 0.97s
+  Ô£ô admin is scoped to own unit for diklat mutations                                                             1.03s
+  Ô£ô admin cannot move existing diklat to pegawai outside own unit                                                0.55s
+  Ô£ô admin can move existing diklat to pegawai inside own unit                                                    0.57s
+  Ô£ô superadmin can update diklat across units                                                                    0.63s
+  Ô£ô destroy deletes only db owned certificate file                                                               0.53s
+
+   PASS  Tests\Feature\Diklat\ProfilePegawaiDiklatPrintTest
+  Ô£ô print page not realized count ignores draft and cancelled rencana                                            0.94s
+  Ô£ô print page includes diklat section and excludes other pegawai                                                0.78s
+
+   PASS  Tests\Feature\Diklat\DiklatGapRoleScopeTest
+  Ô£ô admin cannot escape own unit scope                                                                           0.92s
+  Ô£ô pegawai is forbidden from direct diklat gap report url                                                       0.61s
+
+  Tests:    40 passed (405 assertions)
+  Duration: 73.32s

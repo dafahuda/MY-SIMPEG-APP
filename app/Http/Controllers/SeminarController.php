@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Seminar;
 use App\Models\Pegawai;
+use App\Support\FileUploadHelper;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -76,10 +77,16 @@ class SeminarController extends Controller
             DB::beginTransaction();
 
             if($request->hasFile('file_piagam')) {
-                $file = $request->file('file_piagam');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['file_piagam'] = '/storage/' . $path;
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_piagam'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_piagam'
+                );
+
+                $validateData['file_piagam'] = $storedFile['file_path'];
             }
 
             Seminar::create($validateData);
@@ -136,19 +143,28 @@ class SeminarController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldFile = $seminar->file_piagam;
+
             if($request->hasFile('file_piagam')) {
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_piagam'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_piagam'
+                );
 
-                if($request->fileLama) {
-                    Storage::disk('public')->delete($request->fileLama);
-                }
-
-                $file = $request->file('file_piagam');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('images', $fileName, 'public');
-                $validateData['file_piagam'] = '/storage/' . $path;
+                $validateData['file_piagam'] = $storedFile['file_path'];
+            } else {
+                unset($validateData['file_piagam']);
             }
 
             $seminar->update($validateData);
+
+            if($request->hasFile('file_piagam')) {
+                FileUploadHelper::delete($oldFile, 'public');
+            }
 
             DB::commit();
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cuti;
 use App\Models\Pegawai;
+use App\Support\FileUploadHelper;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -78,10 +79,16 @@ class CutiController extends Controller
             DB::beginTransaction();
 
             if($request->hasFile('file_surat_cuti')) {
-                $file = $request->file('file_surat_cuti');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['file_surat_cuti'] = '/storage/' . $path;
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_surat_cuti'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_surat_cuti'
+                );
+
+                $validateData['file_surat_cuti'] = $storedFile['file_path'];
             }
 
             Cuti::create($validateData);
@@ -142,22 +149,28 @@ class CutiController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldFile = $cuti->file_surat_cuti;
+
             if($request->hasFile('file_surat_cuti')) {
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_surat_cuti'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_surat_cuti'
+                );
 
-                if($cuti->file_surat_cuti) {
-                    $oldPath = str_replace('/storage/', '', $cuti->file_surat_cuti);
-                    Storage::disk('public')->delete($oldPath);
-                }
-
-                $file = $request->file('file_surat_cuti');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['file_surat_cuti'] = '/storage/' . $path;
+                $validateData['file_surat_cuti'] = $storedFile['file_path'];
             } else {
                 unset($validateData['file_surat_cuti']);
             }
 
             $cuti->update($validateData);
+
+            if($request->hasFile('file_surat_cuti')) {
+                FileUploadHelper::delete($oldFile, 'public');
+            }
 
             DB::commit();
 

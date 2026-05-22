@@ -1,0 +1,53 @@
+Task 5 Report Correctness/Performance Fixtures - Evidence
+Date: 2026-05-21
+
+Scope
+- Verified existing Task 5 scaffold file: tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php
+- Verified existing report scope file remains passing: tests/Feature/AdminSuperadminUiux/ReportScopeExportTest.php
+- No production controller/route/blade changes made for Task 5.
+
+Covered Task-5 guards
+1) test_education_rank_index_zero_sd_fixture_contract_is_explicit
+   - Pins education rank order with SD at index 0.
+   - Asserts strict lookup returns 0 for SD, 9 for S2, and -1 for unknown.
+   - Prevents future tests from blessing falsy index coercion.
+
+2) test_education_rank_index_zero_sd_production_mapping_blocked_by_task_13
+   - Explicit Task 13 blocker.
+   - Documents current production ReportController mapping risk: `(array_search(...) ?: -1)` treats SD index 0 as missing.
+
+3) test_unknown_null_gender_bucket_fixture_is_not_silently_counted_as_perempuan
+   - Deterministic pure fixture covers laki-laki, perempuan, null, empty string, unknown, and trimmed/case variants.
+   - Asserts unknown/null values are counted in an `unknown` bucket, not silently as perempuan.
+
+4) test_unknown_null_gender_bucket_production_mapping_blocked_by_task_13
+   - Explicit Task 13 blocker for production report mapping where unknown/null gender currently falls into perempuan behavior.
+
+5) test_pegawai_report_direct_access_contract_forbidden_or_redirected
+   - Uses RoleMatrixFixtures pegawai user and requests `/report/nominatif?unit_kerja_id=1`.
+   - Skips with explicit Task 6 blocker while current behavior is HTTP 200.
+   - Otherwise asserts expected contract: 302 or 403.
+
+6) test_report_query_guard_n_plus_one_scaffold_has_representative_budget_fixture
+   - Pins representative route query-budget metadata for report.nominatif, report.duk, report.keadaan_pegawai, and report.bezetting.
+   - Asserts each guard has a positive max_select_queries and non-empty rationale.
+
+Verification commands executed
+1) php artisan test tests/Feature/AdminSuperadminUiux/ReportCorrectnessPerformanceFixtureScaffoldTest.php
+   Result summary:
+   - 3 passed
+   - 3 skipped (explicit Task 6/Task 13 blockers)
+   - 29 assertions
+   - Duration: 4.28s
+
+2) php artisan test tests/Feature/AdminSuperadminUiux
+   Result summary:
+   - 29 passed
+   - 4 skipped (known explicit Task 6/Task 13 blockers)
+   - 262 assertions
+   - Duration: 71.92s
+
+Status
+- Task 5 fixture/scaffold verification completed within test-only scope.
+- Acceptance criteria covered by deterministic tests/fixtures or explicit blockers for Task 6/Task 13.
+- No report implementation changes were made in this task.

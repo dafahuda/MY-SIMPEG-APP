@@ -12,12 +12,19 @@
     x-transition:leave-end="opacity-0"
     @open-confirm.window="show($event.detail)"
     @keydown.escape.window="cancel()"
+    @keydown.tab="trapFocus($event)"
 >
     {{-- Backdrop --}}
-    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="cancel()"></div>
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="cancel()" aria-hidden="true"></div>
 
     {{-- Modal Box --}}
     <div
+        x-ref="dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirm-modal-title"
+        aria-describedby="confirm-modal-description"
+        tabindex="-1"
         class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-sm mx-4 p-6"
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 scale-95 -translate-y-4"
@@ -51,14 +58,14 @@
         </div>
 
         {{-- Title --}}
-        <h3 class="text-base font-semibold text-gray-800 dark:text-gray-100 text-center mb-2" x-text="title"></h3>
+        <h3 id="confirm-modal-title" class="text-base font-semibold text-gray-800 dark:text-gray-100 text-center mb-2" x-text="title"></h3>
 
         {{-- Message --}}
-        <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-6" x-text="message"></p>
+        <p id="confirm-modal-description" class="text-sm text-gray-500 dark:text-gray-400 text-center mb-6" x-text="message"></p>
 
         {{-- Buttons --}}
         <div class="flex gap-3">
-            <button @click="cancel()"
+            <button x-ref="cancelButton" @click="cancel()"
                 class="flex-1 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition">
                 Batal
             </button>
@@ -84,24 +91,67 @@ function confirmModalState() {
         message: '',
         confirmText: 'Ya, Lanjutkan',
         _callback: null,
+        _lastFocusedElement: null,
 
-        show(detail) {
+        show(detail = {}) {
+            this._lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
             this.type        = detail.type        || 'danger';
             this.title       = detail.title       || 'Konfirmasi';
             this.message     = detail.message     || 'Apakah Anda yakin?';
             this.confirmText = detail.confirmText || 'Ya, Lanjutkan';
             this._callback   = detail.callback    || null;
             this.open = true;
+            this.$nextTick(() => {
+                const target = this.$refs.cancelButton || this.$refs.dialog;
+                target?.focus();
+            });
         },
 
         confirm() {
-            this.open = false;
-            if (typeof this._callback === 'function') this._callback();
+            const callback = this._callback;
+            this.close();
+            if (typeof callback === 'function') callback();
         },
 
         cancel() {
+            this.close();
+        },
+
+        close() {
             this.open = false;
             this._callback = null;
+            this.$nextTick(() => {
+                this._lastFocusedElement?.focus?.();
+                this._lastFocusedElement = null;
+            });
+        },
+
+        trapFocus(event) {
+            if (! this.open || ! this.$refs.dialog) return;
+
+            const focusable = Array.from(this.$refs.dialog.querySelectorAll(
+                'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            )).filter((element) => element.offsetParent !== null);
+
+            if (focusable.length === 0) {
+                event.preventDefault();
+                this.$refs.dialog.focus();
+                return;
+            }
+
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+                return;
+            }
+
+            if (! event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
         }
     }
 }

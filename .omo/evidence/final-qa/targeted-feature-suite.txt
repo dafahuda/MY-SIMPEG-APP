@@ -1,0 +1,49 @@
+
+   PASS  Tests\Feature\Security\BackupAuthorizationTest
+  Ô£ô guest redirected to login for backup data page                                                               6.53s
+  Ô£ô guest redirected to login for backup data download                                                           0.91s
+  Ô£ô admin and pegawai are forbidden from backup routes                                                           1.60s
+  Ô£ô superadmin can access backup data page                                                                       0.87s
+  Ô£ô superadmin can download backup with small stubbed dataset baseline                                           0.76s
+  Ô£ô backup routes use consistent superadmin middleware stack                                                     0.63s
+
+   PASS  Tests\Feature\Security\FileUploadSecurityTest
+  Ô£ô dangerous php file extension is rejected by controller validation                                           44.58s
+  Ô£ô executable mime type is rejected by controller validation                                                    1.00s
+  Ô£ô oversize file greater than 2mb is rejected                                                                   0.80s
+  Ô£ô allowed pdf file passes validation and does not store when other fields invalid                              0.98s
+  Ô£ô allowed image jpeg passes validation                                                                         1.07s
+  Ô£ô allowed image png passes validation                                                                          0.62s
+  Ô£ô pegawai store rejects non file foto field                                                                    1.22s
+  Ô£ô pegawai update ignores crafted gambar lama and deletes only db owned photo                                   1.06s
+  Ô£ô pegawai update preserves user id when payload omits or crafts user id                                        1.55s
+  Ô£ô pegawai destroy deletes only db owned photo                                                                  0.78s
+  Ô£ô mutasi update ignores crafted file lama and deletes only db owned document                                   1.11s
+  Ô£ô seminar store uses helper generated document name not original filename                                      1.52s
+
+   PASS  Tests\Feature\Security\RoleFixtureMatrixTest
+  Ô£ô role matrix fixtures cover superadmin admin and pegawai                                                      1.84s
+
+   PASS  Tests\Feature\AdminSuperadminUiux\DataPegawaiScopeSearchTest
+  Ô£ô admin unit a cannot see unit b employee on index or search                                                   1.23s
+  Ô£ô admin unit a cannot open unit b employee edit form                                                           1.04s
+  Ô£ô superadmin can see global data pegawai records                                                               1.62s
+  Ô£ô search form uses existing post route and get is not accepted                                                 3.85s
+  Ô£ô empty search result renders empty state message                                                              0.77s
+
+   PASS  Tests\Feature\AdminSuperadminUiux\FrontendMarkupA11yBaselineTest
+  Ô£ô sidebar logo markup has valid anchor and svg contract                                                        0.76s
+  Ô£ô layout asset paths use asset helper and confirm modal mount remains                                          0.69s
+  Ô£ô confirm modal has accessible dialog and focus hooks                                                          0.81s
+  Ô£ô global confirm handler null checks forms and uses request submit                                             0.77s
+  Ô£ô audited target blank links include rel noopener noreferrer                                                   0.61s
+  Ô£ô touched informative images have meaningful alt text                                                          0.57s
+
+   PASS  Tests\Feature\AdminSuperadminUiux\ReportCorrectnessPerformanceFixtureScaffoldTest
+  Ô£ô education rank index zero sd fixture contract is explicit                                                    0.80s
+  Ô£ô education rank index zero sd is valid in production report mapping                                           1.09s
+  Ô£ô unknown null gender bucket fixture is not silently counted as perempuan                                      0.76s
+  Ô£ô unknown null gender values are not counted as perempuan in production stats                                  1.42s
+  Ô£ô pegawai report direct access contract is forbidden                                                           1.20s
+  Ô£ô report query guard n plus one scaffold has representative budget fixture                                     0.79s
+  Ô£ô representative report queries stay within budget for multiple pegawai                                        1.37s

@@ -1,0 +1,21 @@
+Task 8 - Same-unit Diklat Update Allowed
+
+Scope:
+- Preserved legitimate admin same-unit Diklat update behavior.
+- Preserved superadmin unrestricted cross-unit update behavior and existing Diklat model invariants.
+- No formula/report/scope service behavior was duplicated beyond the focused controller target pegawai unit check.
+
+Regression guards:
+- tests/Feature/Diklat/DiklatAuthorizationTest.php::test_admin_can_move_existing_diklat_to_pegawai_inside_own_unit
+  - Admin updates existing Diklat to another pegawai in the same unit.
+  - Asserts success redirect/session and persisted pegawai_id/name update.
+- tests/Feature/Diklat/DiklatAuthorizationTest.php::test_superadmin_can_update_diklat_across_units
+  - Superadmin updates existing Diklat to a pegawai in a different unit.
+  - Asserts success redirect/session and persisted pegawai_id update.
+
+Verification:
+- Command: php artisan test tests/Feature/Diklat/DiklatAuthorizationTest.php
+- Result: PASS - 6 passed, 42 assertions, Duration 39.82s.
+
+Status:
+- Acceptance met: admin same-unit update remains allowed; superadmin behavior remains unchanged.

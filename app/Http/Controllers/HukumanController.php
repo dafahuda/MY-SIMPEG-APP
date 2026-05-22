@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Hukuman;
 use App\Models\Pegawai;
 use App\Models\InstansiLembaga;
+use App\Support\FileUploadHelper;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -80,10 +81,16 @@ class HukumanController extends Controller
             DB::beginTransaction();
 
             if($request->hasFile('file_sk_hukuman')) {
-                $file = $request->file('file_sk_hukuman');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['file_sk_hukuman'] = '/storage/' . $path;
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_sk_hukuman'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_sk_hukuman'
+                );
+
+                $validateData['file_sk_hukuman'] = $storedFile['file_path'];
             }
 
             Hukuman::create($validateData);
@@ -143,22 +150,28 @@ class HukumanController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldFile = $hukuman->file_sk_hukuman;
+
             if($request->hasFile('file_sk_hukuman')) {
+                $storedFile = FileUploadHelper::validateAndStore(
+                    $request->file('file_sk_hukuman'),
+                    ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'],
+                    10 * 1024 * 1024,
+                    'public',
+                    'document',
+                    'file_sk_hukuman'
+                );
 
-                if($hukuman->file_sk_hukuman) {
-                    $oldPath = str_replace('/storage/', '', $hukuman->file_sk_hukuman);
-                    Storage::disk('public')->delete($oldPath);
-                }
-
-                $file = $request->file('file_sk_hukuman');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('document', $fileName, 'public');
-                $validateData['file_sk_hukuman'] = '/storage/' . $path;
+                $validateData['file_sk_hukuman'] = $storedFile['file_path'];
             } else {
                 unset($validateData['file_sk_hukuman']);
             }
 
             $hukuman->update($validateData);
+
+            if($request->hasFile('file_sk_hukuman')) {
+                FileUploadHelper::delete($oldFile, 'public');
+            }
 
             DB::commit();
 
@@ -218,7 +231,7 @@ class HukumanController extends Controller
         if($request->cariHukuman) {
             $query->where(function($q) use ($request) {
 
-                // dari tabel izin kawin
+                // dari tabel hukuman
                 $q->where('jenis_hukuman', 'like', '%' . $request->cariHukuman . '%');
 
                 $q->orWhere('tingkat_hukuman', 'like', '%' . $request->cariHukuman . '%')

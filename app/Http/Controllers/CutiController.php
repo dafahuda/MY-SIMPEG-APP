@@ -21,7 +21,13 @@ class CutiController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
+        if ($user->role === 'pegawai') {
+            // Pegawai hanya melihat cuti miliknya sendiri
+            $myPegawai = Pegawai::where('user_id', $user->id)->first();
+            $cuti = Cuti::with('pegawai')
+                ->when($myPegawai, fn($q) => $q->where('pegawai_id', $myPegawai->id))
+                ->paginate(10);
+        } elseif ($user->role === 'admin') {
             $cuti = Cuti::with('pegawai')
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
@@ -179,6 +185,60 @@ class CutiController extends Controller
         $cuti->delete();
 
         return redirect('/kepegawaian/cuti')->with('success', 'Berhasil menghapus data!');
+    }
+
+    /**
+     * Setujui pengajuan cuti (admin/superadmin).
+     */
+    public function approve(Request $request, Cuti $cuti)
+    {
+        $user = Auth::user();
+        abort_unless(in_array($user->role, ['admin', 'superadmin']), 403);
+
+        // Admin hanya boleh menyetujui cuti pegawai di unit kerjanya
+        if ($user->role === 'admin') {
+            $pegawai = $cuti->pegawai;
+            abort_unless($pegawai && $pegawai->unit_kerja_id === $user->unit_kerja_id, 403);
+        }
+
+        $cuti->update([
+            'status' => 'disetujui',
+            'approved_by' => $user->id,
+            'approved_at' => now(),
+            'alasan_penolakan' => null,
+        ]);
+
+        return back()->with('success', 'Pengajuan cuti ' . $cuti->pegawai->nama . ' disetujui.');
+    }
+
+    /**
+     * Tolak pengajuan cuti dengan alasan.
+     */
+    public function reject(Request $request, Cuti $cuti)
+    {
+        $user = Auth::user();
+        abort_unless(in_array($user->role, ['admin', 'superadmin']), 403);
+
+        $request->validate([
+            'alasan_penolakan' => 'required|string|min:5|max:500',
+        ], [
+            'alasan_penolakan.required' => 'Alasan penolakan wajib diisi.',
+            'alasan_penolakan.min' => 'Alasan penolakan minimal 5 karakter.',
+        ]);
+
+        if ($user->role === 'admin') {
+            $pegawai = $cuti->pegawai;
+            abort_unless($pegawai && $pegawai->unit_kerja_id === $user->unit_kerja_id, 403);
+        }
+
+        $cuti->update([
+            'status' => 'ditolak',
+            'alasan_penolakan' => $request->alasan_penolakan,
+            'approved_by' => $user->id,
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'Pengajuan cuti ' . $cuti->pegawai->nama . ' ditolak.');
     }
 
     /**

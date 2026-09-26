@@ -7,7 +7,7 @@
                     <span class="mx-1">/</span>
                     <a href="{{ route('rencana_diklat.index') }}" class="hover:underline">Rencana Diklat</a>
                     <span class="mx-1">/</span>
-                    <span>Edit</span>
+                    <span>Ubah</span>
                 </nav>
                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Edit Rencana Diklat</h1>
             </div>

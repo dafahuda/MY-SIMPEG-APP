@@ -83,7 +83,7 @@
                                 <div class="font-semibold text-right">TPP Diterima</div>
                             </th>
                             <th class="px-3 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-center">Action</div>
+                                <div class="font-semibold text-center">Aksi</div>
                             </th>
                         </tr>
                     </thead>

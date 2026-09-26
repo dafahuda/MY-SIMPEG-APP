@@ -204,16 +204,12 @@
                         <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
                             <path
                                 d="M13.5 0H2.5A2.5 2.5 0 000 2.5v11A2.5 2.5 0 002.5 16h11a2.5 2.5 0 002.5-2.5v-11A2.5 2.5 0 0013.5 0zM8 12a3 3 0 110-6 3 3 0 010 6zm4-8H4V2h8v2z" />
-                        </svg>
-                        Save
-                    </button>
+                        </svg>Simpan</button>
                     <a href="/notifikasi_kgb/data_notifikasi_kgb"
                         class="inline-flex items-center gap-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded shadow-sm">
                         <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
                             <path d="M3.7 7.3L10 1l1.4 1.4L6.8 7l4.6 4.6L10 13 3.7 7.3z" />
-                        </svg>
-                        Cancel
-                    </a>
+                        </svg>Batal</a>
                 </div>
             </form>
         </div>

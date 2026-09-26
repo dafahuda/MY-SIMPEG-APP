@@ -178,8 +178,6 @@
             Simpan Final
         </button>
         <a href="{{ route('rencana_diklat.index') }}"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded shadow-sm">
-            Cancel
-        </a>
+            class="inline-flex items-center gap-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded shadow-sm">Batal</a>
     </div>
 </form>

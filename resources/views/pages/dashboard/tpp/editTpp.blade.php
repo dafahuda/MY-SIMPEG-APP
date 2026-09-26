@@ -9,7 +9,7 @@
                     <span class="mx-1">/</span>
                     <a href="{{ route('tpp.index') }}" class="hover:underline">Tambahan Penghasilan Pegawai / TPP</a>
                     <span class="mx-1">/</span>
-                    <span>Edit</span>
+                    <span>Ubah</span>
                 </nav>
                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Edit Data TPP</h1>
             </div>
@@ -203,9 +203,7 @@
                         class="inline-flex items-center gap-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded shadow-sm">
                         <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
                             <path d="M3.7 7.3L10 1l1.4 1.4L6.8 7l4.6 4.6L10 13 3.7 7.3z" />
-                        </svg>
-                        Cancel
-                    </a>
+                        </svg>Batal</a>
                 </div>
             </form>
         </div>

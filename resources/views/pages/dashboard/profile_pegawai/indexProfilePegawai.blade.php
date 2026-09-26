@@ -71,9 +71,7 @@
                         class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-medium rounded shadow-sm">
                         <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
                             <path d="M15 10h-2V2H3v8H1a1 1 0 00-1 1v3a1 1 0 001 1h14a1 1 0 001-1v-3a1 1 0 00-1-1zM4 3h8v7H4V3zm8 10H4v-2h8v2zm2 0h-1v-2H3v2H2v-2h1V9h10v2h1v2z"/>
-                        </svg>
-                        Print
-                    </a>
+                        </svg>Cetak</a>
                 </div>
             </div>
 

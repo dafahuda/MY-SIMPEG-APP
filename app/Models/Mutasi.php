@@ -9,6 +9,7 @@ class Mutasi extends Model
 {
     /** @use HasFactory<\Database\Factories\MutasiFactory> */
     protected $table = 'tb_mutasi';
+
     protected $primaryKey = 'id';
     protected $fillable = [
         'pegawai_id',

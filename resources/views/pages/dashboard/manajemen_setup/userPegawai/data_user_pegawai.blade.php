@@ -82,9 +82,7 @@
                                         <a href="/manajemen_setup/view_form_edit_user_pegawai/{{ $data->id }}"
                                             class="inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg confirm-edit"
                                             data-title="Edit User Pegawai"
-                                            data-message="Anda akan membuka form edit data user pegawai ini. Lanjutkan?">
-                                            Edit
-                                        </a>
+                                            data-message="Anda akan membuka form edit data user pegawai ini. Lanjutkan?">Ubah</a>
                                         <form action="/manajemen_setup/delete_user_pegawai/{{ $data->id }}"
                                             method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
@@ -92,9 +90,7 @@
                                             <button type="button"
                                                 class="confirm-delete inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg confirm-delete"
                                                 data-title="Konfirmasi hapus"
-                                                data-message="Apakah Anda yakin untuk menghapus data user pegawai ini? Data yang dihapus tidak akan bisa dikembalikan.">
-                                                Delete
-                                            </button>
+                                                data-message="Apakah Anda yakin untuk menghapus data user pegawai ini? Data yang dihapus tidak akan bisa dikembalikan.">Hapus</button>
                                         </form>
                                     </div>
                                 </td>

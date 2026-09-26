@@ -78,9 +78,7 @@
 
                     @if ($reportReady)
                         <a href="{{ route('report.diklat_gap.unit.print', $filterQuery) }}" data-testid="diklat-gap-unit-print-button"
-                            class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-600 hover:bg-slate-700 text-white text-sm font-medium rounded shadow-sm whitespace-nowrap">
-                            Print
-                        </a>
+                            class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-600 hover:bg-slate-700 text-white text-sm font-medium rounded shadow-sm whitespace-nowrap">Cetak</a>
                         <a href="{{ route('report.diklat_gap.unit.export', $filterQuery) }}" data-testid="diklat-gap-unit-export-button"
                             class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded shadow-sm whitespace-nowrap">
                             Export Excel

@@ -107,18 +107,14 @@
                                         <a href="/riwayat_pendidikan/sekolah/view_form_edit_pendidikan_sekolah/{{ $data->id }}"
                                             class="inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg confirm-edit"
                                             data-title="Edit Pendidikan Sekolah"
-                                            data-message="Anda akan membuka form edit data pendidikan sekolah ini. Lanjutkan?">
-                                            Edit
-                                        </a>
+                                            data-message="Anda akan membuka form edit data pendidikan sekolah ini. Lanjutkan?">Ubah</a>
                                         <form
                                             action="/riwayat_pendidikan/sekolah/delete_pendidikan_sekolah/{{ $data->id }}"
                                             method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"
-                                                class="inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg confirm-delete">
-                                                Delete
-                                            </button>
+                                                class="inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg confirm-delete">Hapus</button>
                                         </form>
                                     </div>
                                 </td>

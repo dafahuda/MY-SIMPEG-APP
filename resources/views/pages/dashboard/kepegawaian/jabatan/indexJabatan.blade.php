@@ -98,9 +98,7 @@
                                         <a href="/kepegawaian/jabatan/view_form_edit_jabatan/{{ $data->id }}"
                                             class="inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg confirm-edit"
                                             data-title="Edit Data Jabatan"
-                                            data-message="Anda akan membuka form edit data jabatan ini. Lanjutkan?">
-                                            Edit
-                                        </a>
+                                            data-message="Anda akan membuka form edit data jabatan ini. Lanjutkan?">Ubah</a>
                                         <form action="/kepegawaian/jabatan/delete_data_jabatan/{{ $data->id }}"
                                             method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
@@ -108,9 +106,7 @@
                                             <button type="button"
                                                 class="inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg confirm-delete"
                                                 data-title="Hapus Data Jabatan"
-                                                data-message="Data jabatan yang dihapus tidak dapat dikembalikan. Yakin ingin menghapus?">
-                                                Delete
-                                            </button>
+                                                data-message="Data jabatan yang dihapus tidak dapat dikembalikan. Yakin ingin menghapus?">Hapus</button>
                                         </form>
                                     </div>
                                 </td>

@@ -112,9 +112,7 @@
                                         <a href="/kepegawaian/penugasan_ln/view_form_edit_penugasan/{{ $data->id }}"
                                             class="confirm-edit inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg"
                                             data-title="Konfirmasi Edit"
-                                            data-message="Apakah Anda yakin ingin mengedit data penugasan luar negeri ini?">
-                                            Edit
-                                        </a>
+                                            data-message="Apakah Anda yakin ingin mengedit data penugasan luar negeri ini?">Ubah</a>
                                         <form
                                             action="/kepegawaian/penugasan_ln/delete_data_penghargaan/{{ $data->id }}"
                                             method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
@@ -123,9 +121,7 @@
                                             <button type="button"
                                                 class="confirm-delete inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg"
                                                 data-title="Konfirmasi Hapus"
-                                                data-message="Apakah Anda yakin ingin menghapus data penugasan luar negeri ini? Data yang dihapus tidak dapat dikembalikan.">
-                                                Delete
-                                            </button>
+                                                data-message="Apakah Anda yakin ingin menghapus data penugasan luar negeri ini? Data yang dihapus tidak dapat dikembalikan.">Hapus</button>
                                         </form>
                                     </div>
                                 </td>

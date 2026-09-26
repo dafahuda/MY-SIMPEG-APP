@@ -78,9 +78,7 @@
                                                         placeholder="Masukan nama pangkat">
 
                                                     <button type="button" @click="addPangkat"
-                                                        class="bg-blue-500 text-white px-4 rounded">
-                                                        Save
-                                                    </button>
+                                                        class="bg-blue-500 text-white px-4 rounded">Simpan</button>
                                                 </div>
 
                                                 <!-- LIST DATA -->
@@ -110,23 +108,17 @@
                                                                         <span>
                                                                             <button type="button"
                                                                                 @click="startEdit(item)"
-                                                                                class="inline-block bg-blue-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-blue-600">
-                                                                                Edit
-                                                                            </button>
+                                                                                class="inline-block bg-blue-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-blue-600">Ubah</button>
                                                                             <button type="button"
                                                                                 @click="deletePangkat(item.id)"
-                                                                                class="inline-block bg-red-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-red-700">
-                                                                                Delete
-                                                                            </button>
+                                                                                class="inline-block bg-red-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-red-700">Hapus</button>
                                                                         </span>
                                                                     </template>
                                                                     <template x-if="editId === item.id">
                                                                         <span>
                                                                             <button type="button"
                                                                                 @click="saveEdit(item)"
-                                                                                class="inline-block bg-green-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-green-600">
-                                                                                Save
-                                                                            </button>
+                                                                                class="inline-block bg-green-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-green-600">Simpan</button>
                                                                             <button type="button" @click="cancelEdit()"
                                                                                 class="inline-block bg-gray-400 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-gray-500">
                                                                                 Batal
@@ -188,9 +180,7 @@
                                                         placeholder="Masukan nama eselon">
 
                                                     <button type="button" @click="addGolongan"
-                                                        class="bg-blue-500 text-white px-4 rounded">
-                                                        Save
-                                                    </button>
+                                                        class="bg-blue-500 text-white px-4 rounded">Simpan</button>
                                                 </div>
 
                                                 <!-- LIST DATA -->
@@ -220,23 +210,17 @@
                                                                         <span>
                                                                             <button type="button"
                                                                                 @click="startEdit(item)"
-                                                                                class="inline-block bg-blue-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-blue-600">
-                                                                                Edit
-                                                                            </button>
+                                                                                class="inline-block bg-blue-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-blue-600">Ubah</button>
                                                                             <button type="button"
                                                                                 @click="deleteGolongan(item.id)"
-                                                                                class="inline-block bg-red-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-red-700">
-                                                                                Delete
-                                                                            </button>
+                                                                                class="inline-block bg-red-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-red-700">Hapus</button>
                                                                         </span>
                                                                     </template>
                                                                     <template x-if="editId === item.id">
                                                                         <span>
                                                                             <button type="button"
                                                                                 @click="saveEdit(item)"
-                                                                                class="inline-block bg-green-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-green-600">
-                                                                                Save
-                                                                            </button>
+                                                                                class="inline-block bg-green-500 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-green-600">Simpan</button>
                                                                             <button type="button"
                                                                                 @click="cancelEdit()"
                                                                                 class="inline-block bg-gray-400 text-white rounded-lg shadow-lg py-2 px-3 hover:bg-gray-500">
@@ -297,7 +281,7 @@
                             placeholder="Diterbikan oleh" required />
                     </div>
                     <button type="submit"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Save</button>
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
                 </form>
             </div>
 

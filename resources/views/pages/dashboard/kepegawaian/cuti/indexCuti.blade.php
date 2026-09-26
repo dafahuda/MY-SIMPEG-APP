@@ -58,6 +58,9 @@
                                 <div class="font-semibold text-left">Lama Cuti</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Status</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Form Surat Cuti</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -96,6 +99,30 @@
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @if ($data->status === 'disetujui')
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300">
+                                            ✓ Disetujui
+                                        </span>
+                                        @if ($data->approved_at)
+                                            <div class="text-[11px] text-gray-400 mt-1">{{ $data->approved_at->format('d-m-Y H:i') }}</div>
+                                        @endif
+                                    @elseif ($data->status === 'ditolak')
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300"
+                                              title="{{ $data->alasan_penolakan }}">
+                                            ✗ Ditolak
+                                        </span>
+                                        @if ($data->alasan_penolakan)
+                                            <div class="text-[11px] text-gray-400 mt-1 max-w-[180px] truncate" title="{{ $data->alasan_penolakan }}">
+                                                {{ $data->alasan_penolakan }}
+                                            </div>
+                                        @endif
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300">
+                                            ⏳ Menunggu
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-medium text-gray-800 dark:text-gray-100">
                                         <a href="/kepegawaian/cuti/download_surat_cuti/{{ $data->id }}"
                                             target="_blank" title="Download / Cetak Surat Cuti"
@@ -110,12 +137,31 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="flex items-center justify-center space-x-2">
+                                        @if (in_array(auth()->user()->role, ['admin', 'superadmin']) && ($data->status === 'pending' || !$data->status))
+                                            <form action="/kepegawaian/cuti/approve/{{ $data->id }}" method="POST"
+                                                  onsubmit="return confirm('Setujui pengajuan cuti {{ $data->pegawai->nama ?? '' }}?')">
+                                                @csrf
+                                                <button type="submit"
+                                                        class="inline-block py-2 px-3 text-white bg-emerald-500 hover:bg-emerald-700 rounded-lg shadow-lg"
+                                                        title="Setujui pengajuan cuti">
+                                                    Setujui
+                                                </button>
+                                            </form>
+                                            <form action="/kepegawaian/cuti/reject/{{ $data->id }}" method="POST"
+                                                  onsubmit="var alasan = prompt('Alasan penolakan (wajib):'); if (alasan === null) return false; if (alasan.trim().length < 5) { alert('Alasan minimal 5 karakter.'); return false; } this.alasan_penolakan.value = alasan; return true;">
+                                                @csrf
+                                                <input type="hidden" name="alasan_penolakan" value="">
+                                                <button type="submit"
+                                                        class="inline-block py-2 px-3 text-white bg-orange-500 hover:bg-orange-700 rounded-lg shadow-lg"
+                                                        title="Tolak pengajuan cuti">
+                                                    Tolak
+                                                </button>
+                                            </form>
+                                        @endif
                                         <a href="/kepegawaian/cuti/view_form_edit_cuti/{{ $data->id }}"
                                             class="confirm-edit inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg"
                                             data-title="Konfirmasi Edit"
-                                            data-message="Apakah Anda yakin ingin mengedit data cuti ini?">
-                                            Edit
-                                        </a>
+                                            data-message="Apakah Anda yakin ingin mengedit data cuti ini?">Ubah</a>
                                         <form action="/kepegawaian/cuti/delete_cuti/{{ $data->id }}"
                                             method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
@@ -123,9 +169,7 @@
                                             <button type="button"
                                                 class="confirm-delete inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg"
                                                 data-title="Konfirmasi Hapus"
-                                                data-message="Apakah Anda yakin ingin menghapus data cuti ini? Data yang dihapus tidak dapat dikembalikan.">
-                                                Delete
-                                            </button>
+                                                data-message="Apakah Anda yakin ingin menghapus data cuti ini? Data yang dihapus tidak dapat dikembalikan.">Hapus</button>
                                         </form>
                                     </div>
                                 </td>

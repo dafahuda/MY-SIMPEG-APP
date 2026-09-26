@@ -28,7 +28,7 @@
                 @csrf
                 <input type="text" name="cariLatihanJabatan" id="cariLatihanJabatan"
                     aria-label="Cari Latihan Jabatan" value="{{ request('cariLatihanJabatan') }}"
-                    placeholder="Search..." class="rounded-lg">
+                    placeholder="Cari..." class="rounded-lg">
                 <button type="submit"
                     class="inline-block text-white rounded-lg shadow-lg px-3 py-2 bg-blue-500 hover:bg-blue-700">
                     Cari
@@ -123,9 +123,7 @@
                                         <a href="/kepegawaian/latihan_jabatan/view_form_edit_latihan_jabatan/{{ $data->id }}"
                                             class="confirm-edit inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg"
                                             data-title="Konfirmasi Edit"
-                                            data-message="Apakah Anda yakin ingin mengedit data latihan jabatan ini?">
-                                            Edit
-                                        </a>
+                                            data-message="Apakah Anda yakin ingin mengedit data latihan jabatan ini?">Ubah</a>
                                         <form
                                             action="/kepegawaian/latihan_jabatan/delete_latihan_jabatan/{{ $data->id }}"
                                             method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
@@ -134,9 +132,7 @@
                                             <button type="button"
                                                 class="confirm-delete inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg"
                                                 data-title="Konfirmasi Hapus"
-                                                data-message="Apakah Anda yakin ingin menghapus data latihan jabatan ini? Data yang dihapus tidak dapat dikembalikan.">
-                                                Delete
-                                            </button>
+                                                data-message="Apakah Anda yakin ingin menghapus data latihan jabatan ini? Data yang dihapus tidak dapat dikembalikan.">Hapus</button>
                                         </form>
                                     </div>
                                 </td>

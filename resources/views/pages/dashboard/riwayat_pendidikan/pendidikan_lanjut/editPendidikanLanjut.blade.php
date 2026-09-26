@@ -126,7 +126,7 @@
                     <button type="button"
                         class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none confirm-save"
                         data-title="Simpan Perubahan"
-                        data-message="Apakah Anda yakin ingin menyimpan perubahan data pendidikan lanjut ini?">Save</button>
+                        data-message="Apakah Anda yakin ingin menyimpan perubahan data pendidikan lanjut ini?">Simpan</button>
                 </form>
             </div>
 

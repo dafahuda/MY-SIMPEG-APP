@@ -17,9 +17,7 @@
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M11 0H5v4H1v8h4v4h6v-4h4V4h-4V0zm-1 1v3H6V1h4zm1 10H5v-1h6v1zm0-2H5v-1h6v1zm2-2H3V5h10v2z" />
-                    </svg>
-                    Print
-                </button>
+                    </svg>Cetak</button>
             </div>
         </div>
 

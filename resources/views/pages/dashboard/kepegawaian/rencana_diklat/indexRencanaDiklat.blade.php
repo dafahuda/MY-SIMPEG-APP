@@ -156,11 +156,11 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     @if ($canMutate)
                                         <div class="flex items-center justify-center space-x-2">
-                                            <a href="{{ route('rencana_diklat.edit', $data->id) }}" class="inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg">Edit</a>
+                                            <a href="{{ route('rencana_diklat.edit', $data->id) }}" class="inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg">Ubah</a>
                                             <form action="{{ route('rencana_diklat.destroy', $data->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg">Delete</button>
+                                                <button type="submit" class="inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg">Hapus</button>
                                             </form>
                                         </div>
                                     @else

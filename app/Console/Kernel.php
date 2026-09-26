@@ -12,7 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // Reminder KGB jatuh tempo (setiap hari jam 07:00) ke admin & superadmin
+        $schedule->command('kgb:reminder')->dailyAt('07:00');
     }
 
     /**

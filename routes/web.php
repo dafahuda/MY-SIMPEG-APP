@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataFeedController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AktivitasLogController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\InstansiLembagaController;
 use App\Http\Controllers\SekretariatController;
@@ -296,6 +297,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/cuti/view_form_edit_cuti/{cuti}', [CutiController::class, 'edit']);
         Route::put('/cuti/edit_riwayat_cuti/{cuti}', [CutiController::class, 'update']);
         Route::delete('/cuti/delete_cuti/{cuti}', [CutiController::class, 'destroy']);
+        Route::post('/cuti/approve/{cuti}', [CutiController::class, 'approve'])->name('cuti.approve');
+        Route::post('/cuti/reject/{cuti}', [CutiController::class, 'reject'])->name('cuti.reject');
+        Route::get('/audit_trail/riwayat_aktivitas', [AktivitasLogController::class, 'index'])->name('audit_trail.index');
         Route::get('/cuti/download_surat_cuti/{cuti}', [CutiController::class, 'downloadSuratCuti']);
         Route::post('/cuti/cariCuti', [CutiController::class, 'cariCuti']);
 

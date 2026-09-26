@@ -26,9 +26,7 @@
                 <input type="text" name="cariSeminar" id="cariSeminar" aria-label="Cari Seminar"
                     placeholder="Cari seminar..." value="{{ request('cariSeminar') }}" class="rounded-lg">
                 <button type="submit"
-                    class="inline-block text-white rounded-lg shadow-lg px-3 py-2 bg-blue-500 hover:bg-blue-700">
-                    Save
-                </button>
+                    class="inline-block text-white rounded-lg shadow-lg px-3 py-2 bg-blue-500 hover:bg-blue-700">Simpan</button>
             </form>
         </div>
 
@@ -116,9 +114,7 @@
                                         <a href="/kepegawaian/seminar/view_form_edit_seminar/{{ $data->id }}"
                                             class="confirm-edit inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg"
                                             data-title="Konfirmasi Edit"
-                                            data-message="Apakah Anda yakin ingin mengedit data seminar ini?">
-                                            Edit
-                                        </a>
+                                            data-message="Apakah Anda yakin ingin mengedit data seminar ini?">Ubah</a>
                                         <form action="/kepegawaian/seminar/delete_seminar/{{ $data->id }}"
                                             method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
@@ -126,9 +122,7 @@
                                             <button type="button"
                                                 class="confirm-delete inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg"
                                                 data-title="Konfirmasi Hapus"
-                                                data-message="Apakah Anda yakin ingin menghapus data seminar ini? Data yang dihapus tidak dapat dikembalikan.">
-                                                Delete
-                                            </button>
+                                                data-message="Apakah Anda yakin ingin menghapus data seminar ini? Data yang dihapus tidak dapat dikembalikan.">Hapus</button>
                                         </form>
                                     </div>
                                 </td>

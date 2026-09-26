@@ -77,9 +77,7 @@
                                         <a href="/manajemen_setup/view_form_edit_unitkerja/{{ $data->id }}"
                                             class="inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg confirm-edit"
                                             data-title="Edit Unit Kerja"
-                                            data-message="Anda akan membuka form edit data ini. Lanjutkan?">
-                                            Edit
-                                        </a>
+                                            data-message="Anda akan membuka form edit data ini. Lanjutkan?">Ubah</a>
                                         <form
                                             action="/manajemen_setup/opd_skpd_unit_kerja/delete_unitkerja/{{ $data->id }}"
                                             method="POST" class="confirm-delete-form" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
@@ -88,9 +86,7 @@
                                             <button type="button"
                                                 class="confirm-delete inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg confirm-delete"
                                                 data-title="Konfirmasi hapus"
-                                                data-message="Apakah Anda yakin ingin menghapus data unit kerja ini? Data yang dihapus tidak dapat dikembalikan.">
-                                                Delete
-                                            </button>
+                                                data-message="Apakah Anda yakin ingin menghapus data unit kerja ini? Data yang dihapus tidak dapat dikembalikan.">Hapus</button>
                                         </form>
                                     </div>
                                 </td>

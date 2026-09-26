@@ -20,7 +20,7 @@
                         <div class="grow flex justify-between">
                             <div class="self-center"><a class="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Nick Mark</a> mentioned <a class="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Sara Smith</a> in a new post</div>
                             <div class="shrink-0 self-end ml-2">
-                                <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span class="hidden sm:inline"> -&gt;</span></a>
+                                <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">Lihat<span class="hidden sm:inline"> -&gt;</span></a>
                             </div>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                         <div class="grow flex justify-between">
                             <div class="self-center">The post <a class="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Post Name</a> was removed by <a class="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Nick Mark</a></div>
                             <div class="shrink-0 self-end ml-2">
-                                <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span class="hidden sm:inline"> -&gt;</span></a>
+                                <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">Lihat<span class="hidden sm:inline"> -&gt;</span></a>
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                         <div class="grow flex justify-between">
                             <div class="self-center"><a class="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Patrick Sullivan</a> published a new <a class="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">post</a></div>
                             <div class="shrink-0 self-end ml-2">
-                                <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span class="hidden sm:inline"> -&gt;</span></a>
+                                <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">Lihat<span class="hidden sm:inline"> -&gt;</span></a>
                             </div>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                         <div class="grow flex justify-between">
                             <div class="self-center"><a class="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">240+</a> users have subscribed to <a class="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Newsletter #1</a></div>
                             <div class="shrink-0 self-end ml-2">
-                                <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span class="hidden sm:inline"> -&gt;</span></a>
+                                <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">Lihat<span class="hidden sm:inline"> -&gt;</span></a>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                         <div class="grow flex justify-between">
                             <div class="self-center">The post <a class="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Post Name</a> was suspended by <a class="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Nick Mark</a></div>
                             <div class="shrink-0 self-end ml-2">
-                                <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span class="hidden sm:inline"> -&gt;</span></a>
+                                <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">Lihat<span class="hidden sm:inline"> -&gt;</span></a>
                             </div>
                         </div>
                     </div>

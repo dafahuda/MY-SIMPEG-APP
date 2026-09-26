@@ -25,7 +25,7 @@
                         <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
                             <path d="M15 10h-2V2H3v8H1a1 1 0 00-1 1v3a1 1 0 001 1h14a1 1 0 001-1v-3a1 1 0 00-1-1zM4 3h8v7H4V3zm8 10H4v-2h8v2zm2 0h-1v-2H3v2H2v-2h1V9h10v2h1v2z"/>
                         </svg>
-                        <span class="ml-2">Print</span>
+                        <span class="ml-2">Cetak</span>
                     </a>
                 </div>
             @endif

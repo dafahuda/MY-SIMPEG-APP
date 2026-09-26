@@ -98,18 +98,14 @@
                                         <a href="/riwayat_keluarga/suami_istri/view_edit_data_suami_istri/{{ $data->id }}"
                                             class="inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg confirm-edit"
                                             data-title="Edit Data Suami / Istri"
-                                            data-message="Anda akan membuka form edit data suami / istri ini. Lanjutkan?">
-                                            Edit
-                                        </a>
+                                            data-message="Anda akan membuka form edit data suami / istri ini. Lanjutkan?">Ubah</a>
                                         <form
                                             action="/riwayat_keluarga/suami_istri/delete_data_suami_istri/{{ $data->id }}"
                                             method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"
-                                                class="inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg confirm-delete">
-                                                Delete
-                                            </button>
+                                                class="inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg confirm-delete">Hapus</button>
                                         </form>
                                     </div>
                                 </td>

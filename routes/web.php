@@ -74,6 +74,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/view_form_tambah_data_pegawai', [PegawaiController::class, 'create']);
         Route::post('/tambah_data_pegawai', [PegawaiController::class, 'store']);
         Route::get('/view_form_edit_data_pegawai/{pegawai}', [PegawaiController::class, 'edit']);
+        Route::get('/detail_data_pegawai/{pegawai}', [PegawaiController::class, 'show'])->name('pegawai.show');
         Route::put('/ubah_data_pegawai/{pegawai}', [PegawaiController::class, 'update']);
         Route::delete('/delete_data_pegawai/{pegawai}', [PegawaiController::class, 'destroy']);
         Route::post('/cariPegawai', [PegawaiController::class, 'cariPegawai']);

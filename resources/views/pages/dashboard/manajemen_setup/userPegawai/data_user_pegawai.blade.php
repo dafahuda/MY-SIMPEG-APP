@@ -86,7 +86,7 @@
                                             Edit
                                         </a>
                                         <form action="/manajemen_setup/delete_user_pegawai/{{ $data->id }}"
-                                            method="POST">
+                                            method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"

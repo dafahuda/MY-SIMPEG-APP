@@ -25,14 +25,14 @@ class PegawaiController extends Controller
             // Pegawai hanya boleh melihat data dirinya sendiri
             $pegawai = Pegawai::with('unit_kerja')
                 ->where('user_id', $user->id)
-                ->paginate(5);
+                ->paginate(10);
         } elseif ($user->role === 'admin') {
             $pegawai = Pegawai::with('unit_kerja')
                 ->where('unit_kerja_id', $user->unit_kerja_id)
-                ->paginate(5);
+                ->paginate(10);
         } else {
             // superadmin bisa lihat semua
-            $pegawai = Pegawai::with('unit_kerja')->paginate(5);
+            $pegawai = Pegawai::with('unit_kerja')->paginate(10);
         }
 
         return view("pages.dashboard.data_pegawai.indexPegawai", [
@@ -126,6 +126,17 @@ class PegawaiController extends Controller
      */
     public function show(Pegawai $pegawai)
     {
+        $user = Auth::user();
+
+        // Pegawai hanya boleh melihat detail dirinya sendiri
+        if ($user->role === 'pegawai') {
+            abort_unless($pegawai->user_id === $user->id, 403);
+        } elseif ($user->role === 'admin') {
+            abort_unless($pegawai->unit_kerja_id === $user->unit_kerja_id, 403);
+        }
+
+        $pegawai->load('unit_kerja');
+
         return view("pages.dashboard.data_pegawai.detailPegawai", [
             'pegawai' => $pegawai
         ]);
@@ -245,7 +256,7 @@ class PegawaiController extends Controller
             $query->where('unit_kerja_id', $user->unit_kerja_id);
         }
 
-        $pegawai = $query->paginate(5);
+        $pegawai = $query->paginate(10);
 
         return view("pages.dashboard.data_pegawai.indexPegawai", [
             'pegawai' => $pegawai

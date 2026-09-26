@@ -82,7 +82,7 @@
                                         </a>
                                         <form
                                             action="/manajemen_setup/opd_skpd_unit_kerja/delete_unitkerja/{{ $data->id }}"
-                                            method="POST" class="confirm-delete-form">
+                                            method="POST" class="confirm-delete-form" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"

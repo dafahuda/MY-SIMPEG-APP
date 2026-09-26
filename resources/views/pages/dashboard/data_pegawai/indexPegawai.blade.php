@@ -100,6 +100,11 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="flex items-center justify-center space-x-2">
+                                        <a href="/data_pegawai/detail_data_pegawai/{{ $data->id }}"
+                                           class="inline-block py-2 px-3 text-white bg-emerald-500 hover:bg-emerald-700 rounded-lg shadow-lg"
+                                           title="Lihat detail pegawai">
+                                            Detail
+                                        </a>
                                         <a href="/data_pegawai/view_form_edit_data_pegawai/{{ $data->id }}"
                                             class="confirm-edit inline-block py-2 px-3 text-white bg-blue-500 hover:bg-blue-700 rounded-lg shadow-lg confirm-edit"
                                             data-title="Edit Data Pegawai"
@@ -107,7 +112,7 @@
                                             Edit
                                         </a>
                                         <form action="/data_pegawai/delete_data_pegawai/{{ $data->id }}"
-                                            method="POST">
+                                            method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"

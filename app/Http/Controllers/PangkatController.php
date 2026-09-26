@@ -26,16 +26,16 @@ class PangkatController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(5);
+                ->paginate(10);
         } elseif ($user->role === 'pegawai') {
             $pegawai = Pegawai::where('user_id', $user->id)->first();
             $pangkat = $pegawai
                 ? Pangkat::with(['master_pangkat', 'master_golongan', 'pegawai'])
                     ->where('pegawai_id', $pegawai->id)
-                    ->paginate(5)
-                : collect()->paginate(5);
+                    ->paginate(10)
+                : collect()->paginate(10);
         } else {
-            $pangkat = Pangkat::with(['master_pangkat', 'master_golongan'])->paginate(5);
+            $pangkat = Pangkat::with(['master_pangkat', 'master_golongan'])->paginate(10);
         }
 
         return view("pages.dashboard.kepegawaian.pangkat.indexPangkat", [
@@ -249,7 +249,7 @@ class PangkatController extends Controller
             });
         }
 
-        $pangkat = $query->paginate(5);
+        $pangkat = $query->paginate(10);
 
         return view('pages.dashboard.kepegawaian.pangkat.indexPangkat', [
             'pangkat' => $pangkat

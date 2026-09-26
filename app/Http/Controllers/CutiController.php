@@ -26,9 +26,9 @@ class CutiController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(5);
+                ->paginate(10);
         } else {
-            $cuti = Cuti::with('pegawai')->paginate(5);
+            $cuti = Cuti::with('pegawai')->paginate(10);
         }
 
         return view("pages.dashboard.kepegawaian.cuti.indexCuti", [
@@ -213,7 +213,7 @@ class CutiController extends Controller
                   ->orWhere('durasi_cuti', 'like', '%' . $request->cariCuti . '%');
         }
 
-        $cuti = $query->paginate(5);
+        $cuti = $query->paginate(10);
 
         return view("pages.dashboard.kepegawaian.cuti.indexCuti", [
             'cuti' => $cuti

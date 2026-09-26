@@ -25,9 +25,9 @@ class MutasiController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(5);
+                ->paginate(10);
         } else {
-            $mutasi = Mutasi::with('pegawai')->paginate(5);
+            $mutasi = Mutasi::with('pegawai')->paginate(10);
         }
 
         return view("pages.dashboard.kepegawaian.mutasi.indexMutasi", [
@@ -208,7 +208,7 @@ class MutasiController extends Controller
             });
         }
 
-        $mutasi = $query->paginate(5);
+        $mutasi = $query->paginate(10);
 
         return view("pages.dashboard.kepegawaian.mutasi.indexMutasi", [
             'mutasi' => $mutasi

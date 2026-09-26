@@ -26,16 +26,16 @@ class JabatanController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(5);
+                ->paginate(10);
         } elseif ($user->role === 'pegawai') {
             $pegawai = Pegawai::where('user_id', $user->id)->first();
             $jabatan = $pegawai
                 ? Jabatan::with(['master_jabatan', 'master_eselon', 'pegawai'])
                     ->where('pegawai_id', $pegawai->id)
-                    ->paginate(5)
-                : collect()->paginate(5);
+                    ->paginate(10)
+                : collect()->paginate(10);
         } else {
-            $jabatan = Jabatan::with(['master_jabatan', 'master_eselon'])->paginate(5);
+            $jabatan = Jabatan::with(['master_jabatan', 'master_eselon'])->paginate(10);
         }
 
         return view("pages.dashboard.kepegawaian.jabatan.indexJabatan", [
@@ -253,7 +253,7 @@ class JabatanController extends Controller
             });
         }
 
-        $jabatan = $query->paginate(5);
+        $jabatan = $query->paginate(10);
 
         return view("pages.dashboard.kepegawaian.jabatan.indexJabatan", [
             'jabatan' => $jabatan

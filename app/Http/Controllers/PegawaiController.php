@@ -21,12 +21,17 @@ class PegawaiController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
+        if ($user->role === 'pegawai') {
+            // Pegawai hanya boleh melihat data dirinya sendiri
+            $pegawai = Pegawai::with('unit_kerja')
+                ->where('user_id', $user->id)
+                ->paginate(5);
+        } elseif ($user->role === 'admin') {
             $pegawai = Pegawai::with('unit_kerja')
                 ->where('unit_kerja_id', $user->unit_kerja_id)
                 ->paginate(5);
         } else {
-            // super admin / lainnya bisa lihat semua
+            // superadmin bisa lihat semua
             $pegawai = Pegawai::with('unit_kerja')->paginate(5);
         }
 
@@ -233,7 +238,10 @@ class PegawaiController extends Controller
         $query = Pegawai::with('unit_kerja')
                     ->where('nama', 'like', '%' . $cariPegawai . '%');
 
-        if ($user->role === 'admin') {
+        if ($user->role === 'pegawai') {
+            // Pegawai hanya boleh mencari data dirinya sendiri
+            $query->where('user_id', $user->id);
+        } elseif ($user->role === 'admin') {
             $query->where('unit_kerja_id', $user->unit_kerja_id);
         }
 

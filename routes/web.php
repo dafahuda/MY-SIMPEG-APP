@@ -401,7 +401,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/pensiun', [ReportController::class, 'reportPensiun'])->name('report.pensiun');
     });
 
-    Route::get('/backup_data', [BackupDatabaseController::class, 'BackupDatabasePages']);
-    Route::get('/backup_data/download', [BackupDatabaseController::class, 'download'])->name('backup_data.download');
+    Route::middleware('role:superadmin')->group(function () {
+        Route::get('/backup_data', [BackupDatabaseController::class, 'BackupDatabasePages']);
+        Route::get('/backup_data/download', [BackupDatabaseController::class, 'download'])->name('backup_data.download');
+    });
 
 });

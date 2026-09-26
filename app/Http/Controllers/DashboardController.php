@@ -73,8 +73,12 @@ class DashboardController extends Controller
         // Berkala Gaji 1 Bulan Kedepan - dari data pegawai berdasarkan tmt_pns
         $now = now();
         $oneMonthLater = now()->addMonth();
+        $isDriverMysql = Pegawai::query()->getConnection()->getDriverName() === 'mysql';
+        $mdFormat = $isDriverMysql
+            ? "DATE_FORMAT(tmt_pns, '%%m-%%d') BETWEEN DATE_FORMAT(?, '%%m-%%d') AND DATE_FORMAT(?, '%%m-%%d')"
+            : "strftime('%m-%d', tmt_pns) BETWEEN strftime('%m-%d', ?) AND strftime('%m-%d', ?)";
         $gajiMendatangDb = Pegawai::whereNotNull('tmt_pns')
-            ->whereRaw("DATE_FORMAT(tmt_pns, '%m-%d') BETWEEN DATE_FORMAT(?, '%m-%d') AND DATE_FORMAT(?, '%m-%d')", [$now, $oneMonthLater])
+            ->whereRaw($mdFormat, [$now, $oneMonthLater])
             ->get(['nip', 'nama', 'tmpt_lahir', 'tgl_lahir', 'tmt_pns']);
 
         $gajiMendatang = $gajiMendatangDb->map(function($p) {

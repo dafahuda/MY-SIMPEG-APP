@@ -10,6 +10,12 @@
             </div>
 
             <div>
+                <x-label for="username">{{ __('Username') }} <span class="text-red-500">*</span></x-label>
+                <x-input id="username" type="text" name="username" :value="old('username')" required autocomplete="username" />
+                <x-input-error for="username" class="mt-2" />
+            </div>
+
+            <div>
                 <x-label for="email">{{ __('Email Address') }} <span class="text-red-500">*</span></x-label>
                 <x-input id="email" type="email" name="email" :value="old('email')" required />
             </div>

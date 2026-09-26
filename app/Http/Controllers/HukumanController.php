@@ -199,7 +199,7 @@ class HukumanController extends Controller
             abort(404, 'File tidak ditemukan');
         }
 
-        return response()->download(storage_path('app/public/' . $filePath));
+        return Storage::disk('public')->download($filePath);
     }
 
     public function cariHukuman(Request $request)

@@ -214,13 +214,13 @@ class DiklatController extends Controller
         $user = Auth::user();
         $this->ensureAccessible($diklat, $user);
 
-        $filePath = str_replace('/storage/', '', trim($diklat->file_sertifikat_diklat));
+        $filePath = ltrim(str_replace('/storage/', '', trim($diklat->file_sertifikat_diklat)), '/');
 
         if (!Storage::disk('public')->exists($filePath)) {
             abort(404, 'File tidak ditemukan');
         }
 
-        return response()->download(storage_path('app/public/' . $filePath));
+        return Storage::disk('public')->download($filePath);
     }
 
     public function cariDiklat(Request $request)

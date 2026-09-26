@@ -391,7 +391,7 @@
                     this.editId = null;
                     this.editNama = '';
                 } else {
-                    alert('Gagal mengubah data');
+                    $dispatch('toast', { type: 'error', message: 'Gagal mengubah data' });
                 }
             },
 
@@ -414,7 +414,7 @@
                         if (res.ok) {
                             this.listJabatan = this.listJabatan.filter(item => item.id !== id);
                         } else {
-                            alert('Gagal menghapus data');
+                            $dispatch('toast', { type: 'error', message: 'Gagal menghapus data' });
                         }
                     }
                 });
@@ -481,7 +481,7 @@
                     this.editId = null;
                     this.editNama = '';
                 } else {
-                    alert('Gagal mengubah data');
+                    $dispatch('toast', { type: 'error', message: 'Gagal mengubah data' });
                 }
             },
 
@@ -503,7 +503,7 @@
                         if (res.ok) {
                             this.listEselon = this.listEselon.filter(item => item.id !== id);
                         } else {
-                            alert('Gagal menghapus data');
+                            $dispatch('toast', { type: 'error', message: 'Gagal menghapus data' });
                         }
                     }
                 });

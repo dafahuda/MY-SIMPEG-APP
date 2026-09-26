@@ -26,9 +26,9 @@ class PenugasanLuarNegeriController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(5);
+                ->paginate(10);
         } else {
-            $penugasaLuarNegeri = PenugasanLuarNegeri::with('pegawai')->paginate(5);
+            $penugasaLuarNegeri = PenugasanLuarNegeri::with('pegawai')->paginate(10);
         }
 
         return view("pages.dashboard.kepegawaian.penugasanln.indexPenugasan_luar_negri", [
@@ -211,7 +211,7 @@ class PenugasanLuarNegeriController extends Controller
             });
         }
 
-        $penugasanLuarNegeri = $query->paginate(5);
+        $penugasanLuarNegeri = $query->paginate(10);
 
         return view("pages.dashboard.kepegawaian.penugasanln.indexPenugasan_luar_negri", [
             'penugasanLuarNegeri' => $penugasanLuarNegeri

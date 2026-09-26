@@ -103,7 +103,7 @@
                                         </a>
                                         <form
                                             action="/riwayat_keluarga/suami_istri/delete_data_suami_istri/{{ $data->id }}"
-                                            method="POST">
+                                            method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"

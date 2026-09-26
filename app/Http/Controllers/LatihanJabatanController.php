@@ -26,9 +26,9 @@ class LatihanJabatanController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(5);
+                ->paginate(10);
         } else {
-            $latihaJabatan = LatihanJabatan::with('pegawai')->paginate(5);
+            $latihaJabatan = LatihanJabatan::with('pegawai')->paginate(10);
         }
 
         return view("pages.dashboard.kepegawaian.latihanJabatan.indexLatihanJabatan", [
@@ -210,7 +210,7 @@ class LatihanJabatanController extends Controller
             });
         }
 
-        $latihanJabatan = $query->paginate(5);
+        $latihanJabatan = $query->paginate(10);
 
         return view("pages.dashboard.kepegawaian.latihaJabatan.indexLatihanJabatan", [
             'latihanJabatan' => $latihanJabatan

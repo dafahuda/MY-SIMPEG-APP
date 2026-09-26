@@ -24,14 +24,14 @@ class RiwayatKeluargaOrangTuaController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(5);
+                ->paginate(10);
         } elseif ($user->role === 'pegawai') {
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $riwayatKeluargaOrangTua = $myPegawai
-                ? RiwayatKeluargaOrangtua::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(5)
-                : RiwayatKeluargaOrangtua::whereRaw('1=0')->paginate(5);
+                ? RiwayatKeluargaOrangtua::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(10)
+                : RiwayatKeluargaOrangtua::whereRaw('1=0')->paginate(10);
         } else {
-            $riwayatKeluargaOrangTua = RiwayatKeluargaOrangtua::with('pegawai')->paginate(5);
+            $riwayatKeluargaOrangTua = RiwayatKeluargaOrangtua::with('pegawai')->paginate(10);
         }
 
         return view("pages.dashboard.riwayat_keluarga.orang_tua.IndexKeluargaOrangtua", [
@@ -227,7 +227,7 @@ class RiwayatKeluargaOrangTuaController extends Controller
             });
         }
 
-        $riwayatKeluargaOrangTua = $query->paginate(5);
+        $riwayatKeluargaOrangTua = $query->paginate(10);
 
         return view("pages.dashboard.riwayat_keluarga.orang_tua.IndexKeluargaOrangtua", [
             'riwayatKeluargaOrangTua' => $riwayatKeluargaOrangTua

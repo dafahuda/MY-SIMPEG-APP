@@ -194,7 +194,7 @@
                                                 Edit
                                             </a>
                                             <form action="/kepegawaian/diklat/delete_data_diklat/{{ $data->id }}"
-                                                method="POST">
+                                                method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"

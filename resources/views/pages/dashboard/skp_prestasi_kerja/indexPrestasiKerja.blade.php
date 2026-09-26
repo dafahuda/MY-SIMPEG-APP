@@ -98,7 +98,7 @@
                                         </a>
                                         <form
                                             action="/skp_prestasi_kerja/delete_data_prestasi_kerja/{{ $data->id }}"
-                                            method="POST">
+                                            method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"

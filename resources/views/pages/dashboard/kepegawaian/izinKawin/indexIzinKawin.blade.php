@@ -111,7 +111,7 @@
                                             Edit
                                         </a>
                                         <form action="/kepegawaian/izin_kawin/delete_izin_kawin/{{ $data->id }}"
-                                            method="POST">
+                                            method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"

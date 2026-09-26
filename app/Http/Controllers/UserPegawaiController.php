@@ -131,7 +131,7 @@ class UserPegawaiController extends Controller
                        $q->where('username', 'like', '%' . $cariUserPegawai . '%')
                          ->orWhere('name', 'like', '%' . $cariUserPegawai . '%');
                    })
-                   ->paginate(5);
+                   ->paginate(10);
 
         return view("pages.dashboard.manajemen_setup.userPegawai.data_user_pegawai", [
             'user' => $user

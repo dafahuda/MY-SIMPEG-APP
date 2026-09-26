@@ -24,14 +24,14 @@ class RiwayatPendidikanBahasaController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(5);
+                ->paginate(10);
         } elseif ($user->role === 'pegawai') {
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $riwayatPendidikanBahasa = $myPegawai
-                ? RiwayatPendidikanBahasa::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(5)
-                : RiwayatPendidikanBahasa::whereRaw('1=0')->paginate(5);
+                ? RiwayatPendidikanBahasa::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(10)
+                : RiwayatPendidikanBahasa::whereRaw('1=0')->paginate(10);
         } else {
-            $riwayatPendidikanBahasa = RiwayatPendidikanBahasa::with('pegawai')->paginate(5);
+            $riwayatPendidikanBahasa = RiwayatPendidikanBahasa::with('pegawai')->paginate(10);
         }
 
         return view("pages.dashboard.riwayat_pendidikan.pendidikan_bahasa.indexPendidikanBahasa", [
@@ -224,7 +224,7 @@ class RiwayatPendidikanBahasaController extends Controller
             });
         }
 
-        $riwayatPendidikanBahasa = $query->paginate(5);
+        $riwayatPendidikanBahasa = $query->paginate(10);
 
         return view("pages.dashboard.riwayat_pendidikan.pendidikan_bahasa.indexPendidikanBahasa", [
             'riwayatPendidikanBahasa' => $riwayatPendidikanBahasa

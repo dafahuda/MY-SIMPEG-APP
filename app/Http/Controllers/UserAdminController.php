@@ -139,7 +139,7 @@ class UserAdminController extends Controller
                          ->orWhere('name', 'like', '%' . $cariUserAdmin . '%');
                    })
                    ->with('unit_kerja')
-                   ->paginate(5);
+                   ->paginate(10);
 
         return view("pages.dashboard.manajemen_setup.userAdmin.data_user_admin", [
             'user' => $user

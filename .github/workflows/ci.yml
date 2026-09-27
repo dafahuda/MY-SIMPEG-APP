@@ -36,8 +36,20 @@ jobs:
           extensions: mbstring, pdo, pdo_mysql, sqlite, pdo_sqlite, gd
           coverage: none
 
-      - name: Install dependencies
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist
+
+      - name: Install Node dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build frontend assets (Vite)
+        run: npm run build
 
       - name: Copy .env
         run: |
@@ -57,5 +69,4 @@ jobs:
           name: test-results
           path: |
             storage/logs/
-            tests/Reports/
           if-no-files-found: ignore

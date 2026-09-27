@@ -24,14 +24,14 @@ class PrestasiKerjaController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } elseif ($user->role === 'pegawai') {
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $prestasiKerja = $myPegawai
-                ? PrestasiKerja::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(10)
-                : collect()->paginate(10);
+                ? PrestasiKerja::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(simpeg_per_page())
+                : collect()->paginate(simpeg_per_page());
         } else {
-            $prestasiKerja = PrestasiKerja::with('pegawai')->paginate(10);
+            $prestasiKerja = PrestasiKerja::with('pegawai')->paginate(simpeg_per_page());
         }
 
         return view("pages.dashboard.skp_prestasi_kerja.indexPrestasiKerja", [
@@ -269,7 +269,7 @@ class PrestasiKerjaController extends Controller
             });
         }
 
-        $prestasiKerja = $query->paginate(10);
+        $prestasiKerja = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.skp_prestasi_kerja.indexPrestasiKerja", [
             'prestasiKerja' => $prestasiKerja

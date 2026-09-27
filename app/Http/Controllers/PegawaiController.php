@@ -25,14 +25,14 @@ class PegawaiController extends Controller
             // Pegawai hanya boleh melihat data dirinya sendiri
             $pegawai = Pegawai::with('unit_kerja')
                 ->where('user_id', $user->id)
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } elseif ($user->role === 'admin') {
             $pegawai = Pegawai::with('unit_kerja')
                 ->where('unit_kerja_id', $user->unit_kerja_id)
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } else {
             // superadmin bisa lihat semua
-            $pegawai = Pegawai::with('unit_kerja')->paginate(10);
+            $pegawai = Pegawai::with('unit_kerja')->paginate(simpeg_per_page());
         }
 
         return view("pages.dashboard.data_pegawai.indexPegawai", [
@@ -256,7 +256,7 @@ class PegawaiController extends Controller
             $query->where('unit_kerja_id', $user->unit_kerja_id);
         }
 
-        $pegawai = $query->paginate(10);
+        $pegawai = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.data_pegawai.indexPegawai", [
             'pegawai' => $pegawai

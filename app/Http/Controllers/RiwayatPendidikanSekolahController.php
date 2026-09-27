@@ -24,14 +24,14 @@ class RiwayatPendidikanSekolahController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } elseif ($user->role === 'pegawai') {
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $riwayanPendidikanSekolah = $myPegawai
-                ? RiwayatPendidikanSekolah::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(10)
-                : RiwayatPendidikanSekolah::whereRaw('1=0')->paginate(10);
+                ? RiwayatPendidikanSekolah::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(simpeg_per_page())
+                : RiwayatPendidikanSekolah::whereRaw('1=0')->paginate(simpeg_per_page());
         } else {
-            $riwayanPendidikanSekolah = RiwayatPendidikanSekolah::with('pegawai')->paginate(10);
+            $riwayanPendidikanSekolah = RiwayatPendidikanSekolah::with('pegawai')->paginate(simpeg_per_page());
         }
 
         return view("pages.dashboard.riwayat_pendidikan.pendidikan_sekolah.indexPendidikanSekolah", [
@@ -230,7 +230,7 @@ class RiwayatPendidikanSekolahController extends Controller
             });
         }
 
-        $riwayanPendidikanSekolah = $query->paginate(10);
+        $riwayanPendidikanSekolah = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.riwayat_pendidikan.pendidikan_sekolah.indexPendidikanSekolah", [
             'riwayatPendidikanSekolah' => $riwayanPendidikanSekolah

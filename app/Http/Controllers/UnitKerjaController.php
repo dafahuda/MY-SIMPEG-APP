@@ -16,7 +16,7 @@ class UnitKerjaController extends Controller
      */
     public function index()
     {
-        $unitkerja = UnitKerja::paginate(10);
+        $unitkerja = UnitKerja::paginate(simpeg_per_page());
 
         return view("pages.dashboard.manajemen_setup.OPD_SKD_UnitKerja.opd_skpd_unitkerja", [
             'unitkerja' => $unitkerja
@@ -118,7 +118,7 @@ class UnitKerjaController extends Controller
         $unitkerja = UnitKerja::query()
                    ->where('nama_unit', 'like', '%' . $cariPegawai . '%')
                    ->orWhere('alamat', 'like', '%' . $cariPegawai . '%')
-                   ->paginate(10);
+                   ->paginate(simpeg_per_page());
 
         return view("pages.dashboard.manajemen_setup.OPD_SKD_UnitKerja.opd_skpd_unitkerja", [
             'unitkerja' => $unitkerja

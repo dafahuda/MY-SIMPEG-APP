@@ -32,7 +32,7 @@ class DiklatController extends Controller
         $diklat = $this->scopeService->scopeDiklatQuery(
             Diklat::with(['pegawai', 'rencanaDiklat']),
             $user
-        )->paginate(10);
+        )->paginate(simpeg_per_page());
 
         return view('pages.dashboard.kepegawaian.diklat.indexDiklat', [
             'diklat' => $diklat,
@@ -243,7 +243,7 @@ class DiklatController extends Controller
             });
         }
 
-        $diklat = $query->paginate(10);
+        $diklat = $query->paginate(simpeg_per_page());
 
         return view('pages.dashboard.kepegawaian.diklat.indexDiklat', [
             'diklat' => $diklat,

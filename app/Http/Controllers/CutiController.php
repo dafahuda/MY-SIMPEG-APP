@@ -26,15 +26,15 @@ class CutiController extends Controller
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $cuti = Cuti::with('pegawai')
                 ->when($myPegawai, fn($q) => $q->where('pegawai_id', $myPegawai->id))
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } elseif ($user->role === 'admin') {
             $cuti = Cuti::with('pegawai')
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } else {
-            $cuti = Cuti::with('pegawai')->paginate(10);
+            $cuti = Cuti::with('pegawai')->paginate(simpeg_per_page());
         }
 
         return view("pages.dashboard.kepegawaian.cuti.indexCuti", [
@@ -273,7 +273,7 @@ class CutiController extends Controller
                   ->orWhere('durasi_cuti', 'like', '%' . $request->cariCuti . '%');
         }
 
-        $cuti = $query->paginate(10);
+        $cuti = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.cuti.indexCuti", [
             'cuti' => $cuti

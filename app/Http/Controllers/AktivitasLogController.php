@@ -37,7 +37,7 @@ class AktivitasLogController extends Controller
             $query->where('modul', $modul);
         }
 
-        $logs = $query->paginate(10)->withQueryString();
+        $logs = $query->paginate(simpeg_per_page())->withQueryString();
         $daftarModul = AktivitasLog::select('modul')->distinct()->orderBy('modul')->pluck('modul');
 
         return view('pages.dashboard.audit_trail.indexAktivitasLog', [

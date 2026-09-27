@@ -11,6 +11,28 @@ Repository ini sudah dilengkapi dengan:
 
 ---
 
+## Panduan AI Coding Agent
+
+Jika Anda AI coding agent (Claude Code, Codex, Cursor, dll) yang bekerja di
+repo ini, taruh pointer berikut di file entry-point Anda (`AGENTS.md`,
+`CLAUDE.md`, `GEMINI.md`):
+
+```md
+## Design & UI
+Jika tugas berhubungan dengan membuat atau mengedit UI/UX, baca
+`DESIGN.md` (arah gaya) lalu `ANTISLOP.md` (filter anti-slop) sebelum
+membuat apa pun. Ikuti pola komponen yang sudah ada di aplikasi.
+```
+
+- **`DESIGN.md`** — arah desain SIMPEG (identitas, palet, tipografi, pola
+  komponen yang sudah ada, nada copy Bahasa Indonesia). Milik repo ini.
+- **`ANTISLOP.md`** — filter anti "AI slop" dari
+  [miqdadbadjuber/anti-slop](https://github.com/miqdadbadjuber/anti-slop)
+  (MIT). Mencegah UI generik ala AI (gradien biru-ungu, buzzword, tombol
+  tidak berfungsi, dll) tanpa memaksakan gaya tertentu.
+
+---
+
 ## 1. Fitur utama
 
 ### Superadmin

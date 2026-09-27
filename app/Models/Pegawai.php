@@ -46,6 +46,11 @@ class Pegawai extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function dokumen()
+    {
+        return $this->hasMany(DokumenPegawai::class, 'pegawai_id');
+    }
+
     public function unit_kerja()
     {
         return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');

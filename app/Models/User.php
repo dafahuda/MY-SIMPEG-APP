@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
     }
+
+    public function pegawai()
+    {
+        return $this->hasOne(Pegawai::class, 'user_id');
+    }
 }

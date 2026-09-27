@@ -9,6 +9,7 @@ use App\Http\Controllers\InstansiLembagaController;
 use App\Http\Controllers\SekretariatController;
 use App\Http\Controllers\MasterJabatanController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\DokumenPegawaiController;
 use App\Http\Controllers\RiwayatKeluargaAnakController;
 use App\Http\Controllers\RiwayatKeluargaOrangTuaController;
 use App\Http\Controllers\RiwayatKeluargaSuamiIstriController;
@@ -67,6 +68,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Route for the getting the data feed
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
+
+    // Dokumen digital pegawai
+    Route::get('/data_pegawai/{pegawai}/dokumen', [DokumenPegawaiController::class, 'index'])->name('dokumen-pegawai.index');
+    Route::post('/data_pegawai/{pegawai}/dokumen', [DokumenPegawaiController::class, 'store'])->name('dokumen-pegawai.store');
+    Route::get('/dokumen_pegawai/{dokumen}', [DokumenPegawaiController::class, 'show'])->name('dokumen-pegawai.show');
+    Route::get('/dokumen_pegawai/{dokumen}/download', [DokumenPegawaiController::class, 'download'])->name('dokumen-pegawai.download');
+    Route::delete('/dokumen_pegawai/{dokumen}', [DokumenPegawaiController::class, 'destroy'])->name('dokumen-pegawai.destroy');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

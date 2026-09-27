@@ -40,6 +40,7 @@ use App\Http\Controllers\RekapitulasiPdfController;
 use App\Http\Controllers\TppController;
 use App\Http\Controllers\DiklatGapReportController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReportPdfController;
 use App\Http\Controllers\ProfilePegawaiController;
 use App\Http\Controllers\BackupDatabaseController;
 use App\Http\Controllers\KGBController;
@@ -425,6 +426,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/keadaan_pegawai', [ReportController::class, 'reportKeadaanPegawai'])->name('report.keadaan_pegawai');
         Route::get('/keadaan_pegawai/print', [ReportController::class, 'printKeadaanPegawai'])->name('report.keadaan_pegawai.print');
         Route::get('/pensiun', [ReportController::class, 'reportPensiun'])->name('report.pensiun');
+        Route::get('/pdf/{jenis}', [ReportPdfController::class, 'unduh'])
+            ->whereIn('jenis', ['nominatif', 'duk', 'keadaan_pegawai', 'bezetting', 'pensiun'])
+            ->name('report.pdf');
     });
 
     Route::middleware('role:superadmin')->group(function () {

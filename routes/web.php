@@ -36,6 +36,7 @@ use App\Http\Controllers\MasterGolonganController;
 use App\Http\Controllers\PangkatController;
 use App\Http\Controllers\PrestasiKerjaController;
 use App\Http\Controllers\RekapitulasiController;
+use App\Http\Controllers\RekapitulasiPdfController;
 use App\Http\Controllers\TppController;
 use App\Http\Controllers\DiklatGapReportController;
 use App\Http\Controllers\ReportController;
@@ -402,6 +403,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/jenis_kelamin', [RekapitulasiController::class, 'rekapJenisKelamin']);
         Route::get('/status_pernikahan', [RekapitulasiController::class, 'rekapStatusPernikahan']);
         Route::get('/pendidikan_terakhir', [RekapitulasiController::class, 'rekapPendidikanAkhir']);
+        Route::get('/pdf/{jenis}', [RekapitulasiPdfController::class, 'unduh'])
+            ->whereIn('jenis', ['opd_skpd_unit_kerja', 'golongan', 'pangkat', 'jabatan', 'eselon',
+                                'status_kepegawaian', 'agama', 'jenis_kelamin', 'status_pernikahan',
+                                'pendidikan_terakhir'])
+            ->name('rekapitulasi.pdf');
     });
 
     // Report

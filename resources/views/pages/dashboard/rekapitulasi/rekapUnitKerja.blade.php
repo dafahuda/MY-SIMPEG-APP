@@ -19,6 +19,13 @@
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 0H5v4H1v8h4v4h6v-4h4V4h-4V0zm-1 1v3H6V1h4zm1 10H5v-1h6v1zm0-2H5v-1h6v1zm2-2H3V5h10v2z"/>
                     </svg>Cetak</button>
+                <a href="{{ route('rekapitulasi.pdf', 'opd_skpd_unit_kerja') }}"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded shadow-sm transition-colors duration-150"
+                    title="Unduh laporan ini sebagai file PDF berkop">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 11a1 1 0 0 1-1-1V4a1 1 0 0 1 2 0v6a1 1 0 0 1-1 1zm0 2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM1.7 4.6 3.1 3.2 8 8.1l4.9-4.9 1.4 1.4L8 11 1.7 4.6z" transform="rotate(180 8 8)"/>
+                    </svg>Unduh PDF</a>
+                
             </div>
         </div>
 

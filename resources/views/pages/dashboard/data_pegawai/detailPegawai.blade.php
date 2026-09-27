@@ -44,6 +44,8 @@
                 @endif
             </div>
             <div class="sm:ml-auto flex gap-2">
+                <a href="{{ route('pegawai.biodata.pdf', $pegawai->id) }}"
+                   class="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400">📄 Unduh PDF</a>
                 <a href="{{ route('dokumen-pegawai.index', $pegawai->id) }}"
                    class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">📁 Dokumen</a>
                 <a href="{{ url('/data_pegawai/view_form_edit_data_pegawai/' . $pegawai->id) }}"

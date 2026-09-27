@@ -72,6 +72,11 @@
                         <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
                             <path d="M15 10h-2V2H3v8H1a1 1 0 00-1 1v3a1 1 0 001 1h14a1 1 0 001-1v-3a1 1 0 00-1-1zM4 3h8v7H4V3zm8 10H4v-2h8v2zm2 0h-1v-2H3v2H2v-2h1V9h10v2h1v2z"/>
                         </svg>Cetak</a>
+                    <a href="{{ route('profile.pegawai.pdf') }}"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded shadow-sm">
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
+                            <path d="M8 0a8 8 0 100 16A8 8 0 008 0zm0 1.5a6.5 6.5 0 110 13 6.5 6.5 0 010-13zM8 3a.75.75 0 00-.75.75v4.5c0 .2.08.39.22.53l2.5 2.5a.75.75 0 101.06-1.06l-2.28-2.28V3.75A.75.75 0 008 3z"/>
+                        </svg>Unduh PDF</a>
                 </div>
             </div>
 

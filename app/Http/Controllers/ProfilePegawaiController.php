@@ -129,6 +129,71 @@ class ProfilePegawaiController extends Controller
             return redirect('/profile_saya')->with('error', 'Data pegawai tidak ditemukan!');
         }
 
+        $data = $this->buildBiodataData($pegawai, $diklatGapAnalyticsService);
+
+        return view('pages.dashboard.profile_pegawai.printBiodataPegawai', $data);
+    }
+
+    /**
+     * Unduh PDF biodata milik pegawai yang login (route /profile_saya/unduh_pdf).
+     */
+    public function unduhPdfSendiri(DiklatGapAnalyticsService $diklatGapAnalyticsService)
+    {
+        $user = Auth::user();
+        $pegawai = Pegawai::where('user_id', $user->id)->first();
+
+        if (! $pegawai) {
+            return redirect('/profile_saya')->with('error', 'Data pegawai tidak ditemukan!');
+        }
+
+        return $this->unduhPdf($diklatGapAnalyticsService, $pegawai);
+    }
+
+    /**
+     * Unduh biodata pegawai (B. Profil ASN) sebagai PDF.
+     * Pegawai hanya bisa unduh biodatanya sendiri;
+     * admin/superadmin bisa unduh biodata pegawai mana pun.
+     */
+    public function unduhPdf(DiklatGapAnalyticsService $diklatGapAnalyticsService, Pegawai $pegawai)
+    {
+        $user = Auth::user();
+
+        if ($user->role === 'pegawai') {
+            $pegawaiSendiri = Pegawai::where('user_id', $user->id)->first();
+            if (! $pegawaiSendiri || $pegawaiSendiri->id !== $pegawai->id) {
+                abort(403, 'Anda hanya bisa mengunduh biodata Anda sendiri.');
+            }
+        }
+
+        $data = $this->buildBiodataData($pegawai, $diklatGapAnalyticsService);
+        $html = view('pages.dashboard.profile_pegawai.printBiodataPegawai', $data)->render();
+
+        // Sembunyikan tombol Print/Kembali (tidak relevan di PDF)
+        $html = preg_replace('/<div class="no-print">.*?<\/div>/s', '', $html);
+
+        // Foto: dompdf tidak bisa memuat asset() via http — ganti dengan data URI dari disk publik
+        if ($pegawai->foto && ! str_starts_with($pegawai->foto, 'http')) {
+            $path = public_path(trim($pegawai->foto, '/'));
+            if (is_file($path)) {
+                $ext  = pathinfo($path, PATHINFO_EXTENSION) ?: 'jpg';
+                $html = preg_replace(
+                    '/src="' . preg_quote(asset($pegawai->foto), '/') . '"/',
+                    'src="data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($path)) . '"',
+                    $html
+                );
+            }
+        }
+
+        $pdf = app('dompdf.wrapper')->loadHTML($html);
+        $pdf->setPaper('a4', 'portrait');
+
+        $namaFile = 'biodata-' . \Illuminate\Support\Str::slug($pegawai->nama) . '-' . now()->format('Ymd') . '.pdf';
+
+        return $pdf->download($namaFile);
+    }
+
+    private function buildBiodataData(Pegawai $pegawai, DiklatGapAnalyticsService $diklatGapAnalyticsService): array
+    {
         // Pangkat terakhir
         $pangkat = Pangkat::with(['master_pangkat', 'master_golongan'])
             ->where('pegawai_id', $pegawai->id)
@@ -173,13 +238,13 @@ class ProfilePegawaiController extends Controller
 
         $diklatData = $this->buildDiklatProfileData($pegawai, $diklatGapAnalyticsService);
 
-        return view('pages.dashboard.profile_pegawai.printBiodataPegawai', compact(
+        return compact(
             'pegawai', 'pangkat', 'jabatan', 'allJabatan', 'allPangkat',
             'pendidikanSekolah', 'pendidikanLanjut', 'pendidikanBahasa',
             'suamiIstri', 'anak', 'orangTua',
             'hukuman', 'penghargaan', 'penugasanLN',
             'instansi'
-        ) + $diklatData);
+        ) + $diklatData;
     }
 
     private function buildDiklatProfileData(Pegawai $pegawai, DiklatGapAnalyticsService $diklatGapAnalyticsService): array

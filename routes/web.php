@@ -86,6 +86,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::put('/profile_saya/update', [ProfilePegawaiController::class, 'update'])->name('profile.pegawai.update');
     Route::post('/profile_saya/upload_foto', [ProfilePegawaiController::class, 'uploadFoto'])->name('profile.pegawai.upload_foto');
     Route::get('/profile_saya/print', [ProfilePegawaiController::class, 'print'])->name('profile.pegawai.print');
+    Route::get('/profile_saya/unduh_pdf', [ProfilePegawaiController::class, 'unduhPdfSendiri'])->name('profile.pegawai.pdf');
 
     Route::prefix('data_pegawai')->group(function() {
         Route::get('/pegawai', [PegawaiController::class, 'index']);
@@ -93,6 +94,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::post('/tambah_data_pegawai', [PegawaiController::class, 'store']);
         Route::get('/view_form_edit_data_pegawai/{pegawai}', [PegawaiController::class, 'edit']);
         Route::get('/detail_data_pegawai/{pegawai}', [PegawaiController::class, 'show'])->name('pegawai.show');
+        Route::get('/biodata_pdf/{pegawai}', [ProfilePegawaiController::class, 'unduhPdf'])->name('pegawai.biodata.pdf');
         Route::put('/ubah_data_pegawai/{pegawai}', [PegawaiController::class, 'update']);
         Route::delete('/delete_data_pegawai/{pegawai}', [PegawaiController::class, 'destroy']);
         Route::post('/cariPegawai', [PegawaiController::class, 'cariPegawai']);

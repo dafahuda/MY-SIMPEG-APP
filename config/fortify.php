@@ -145,7 +145,9 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Registrasi publik dimatikan: SIMPEG adalah sistem internal,
+        // akun dibuat oleh admin/superadmin lewat menu Manajemen User.
+        // Features::registration(),
         Features::resetPasswords(),
         // Features::emailVerification(),
         Features::updateProfileInformation(),

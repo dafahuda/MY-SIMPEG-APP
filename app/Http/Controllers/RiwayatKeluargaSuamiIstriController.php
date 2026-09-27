@@ -24,14 +24,14 @@ class RiwayatKeluargaSuamiIstriController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } elseif ($user->role === 'pegawai') {
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $riwayatkeluargaSuamiIstri = $myPegawai
-                ? RiwayatKeluargaSuamiIstri::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(10)
-                : RiwayatKeluargaSuamiIstri::whereRaw('1=0')->paginate(10);
+                ? RiwayatKeluargaSuamiIstri::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(simpeg_per_page())
+                : RiwayatKeluargaSuamiIstri::whereRaw('1=0')->paginate(simpeg_per_page());
         } else {
-            $riwayatkeluargaSuamiIstri = RiwayatKeluargaSuamiIstri::with('pegawai')->paginate(10);
+            $riwayatkeluargaSuamiIstri = RiwayatKeluargaSuamiIstri::with('pegawai')->paginate(simpeg_per_page());
         }
 
         return view('pages.dashboard.riwayat_keluarga.suami_istri.indexKeluargaSuami_Istri', [
@@ -229,7 +229,7 @@ class RiwayatKeluargaSuamiIstriController extends Controller
             });
         }
 
-        $riwayatkeluargaSuamiIstri = $query->paginate(10);
+        $riwayatkeluargaSuamiIstri = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.riwayat_keluarga.suami_istri.indexKeluargaSuami_Istri", [
             'riwayatkeluargaSuamiIstri' => $riwayatkeluargaSuamiIstri

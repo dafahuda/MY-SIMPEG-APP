@@ -24,9 +24,9 @@ class IzinKawinController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } else {
-            $izinKawin = IzinKawin::with('pegawai')->paginate(10);
+            $izinKawin = IzinKawin::with('pegawai')->paginate(simpeg_per_page());
         }
 
         return view("pages.dashboard.kepegawaian.izinKawin.indexIzinKawin", [
@@ -220,7 +220,7 @@ class IzinKawinController extends Controller
             });
         }
 
-        $izinKawin = $query->paginate(10);
+        $izinKawin = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.izinKawin.indexIzinKawin", [
             'izinKawin' => $izinKawin

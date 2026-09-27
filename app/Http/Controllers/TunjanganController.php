@@ -24,9 +24,9 @@ class TunjanganController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } else {
-            $tunjangan = Tunjangan::with('pegawai')->paginate(10);
+            $tunjangan = Tunjangan::with('pegawai')->paginate(simpeg_per_page());
         }
 
         return view("pages.dashboard.kepegawaian.tunjangan.indexTunjangan", [
@@ -187,7 +187,7 @@ class TunjanganController extends Controller
 
         });
 
-        $tunjangan = $query->paginate(10);
+        $tunjangan = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.tunjangan.indexTunjangan", [
             'tunjangan' => $tunjangan

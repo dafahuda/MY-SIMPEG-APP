@@ -24,7 +24,7 @@ class RencanaDiklatController extends Controller
         $user = Auth::user();
 
         $rencanaDiklat = $this->filteredQuery($request, $user)
-            ->paginate(10)
+            ->paginate(simpeg_per_page())
             ->withQueryString();
 
         return view('pages.dashboard.kepegawaian.rencana_diklat.indexRencanaDiklat', [

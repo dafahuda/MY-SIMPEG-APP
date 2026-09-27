@@ -25,14 +25,14 @@ class RiwayatPendidikanLanjutController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } elseif ($user->role === 'pegawai') {
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $riwayatPendidikanLanjut = $myPegawai
-                ? RiwayatPendidikanLanjut::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(10)
-                : RiwayatPendidikanLanjut::whereRaw('1=0')->paginate(10);
+                ? RiwayatPendidikanLanjut::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(simpeg_per_page())
+                : RiwayatPendidikanLanjut::whereRaw('1=0')->paginate(simpeg_per_page());
         } else {
-            $riwayatPendidikanLanjut = RiwayatPendidikanLanjut::with('pegawai')->paginate(10);
+            $riwayatPendidikanLanjut = RiwayatPendidikanLanjut::with('pegawai')->paginate(simpeg_per_page());
         }
 
         return view("pages.dashboard.riwayat_pendidikan.pendidikan_lanjut.indexPendidikanLanjut", [
@@ -227,7 +227,7 @@ class RiwayatPendidikanLanjutController extends Controller
             });
         }
 
-        $riwayatPendidikanLanjut = $query->paginate(10);
+        $riwayatPendidikanLanjut = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.riwayat_pendidikan.pendidikan_lanjut.indexPendidikanLanjut", [
             'riwayatPendidikanLanjut' => $riwayatPendidikanLanjut

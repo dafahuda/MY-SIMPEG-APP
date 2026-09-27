@@ -27,14 +27,14 @@ class TppController extends Controller
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
                 ->orderBy('created_at', 'desc')
-                ->paginate(10);
+                ->paginate(simpeg_per_page());
         } elseif ($user->role === 'pegawai') {
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $tpp = $myPegawai
-                ? Tpp::with('pegawai')->where('pegawai_id', $myPegawai->id)->orderBy('created_at', 'desc')->paginate(10)
-                : collect()->paginate(10);
+                ? Tpp::with('pegawai')->where('pegawai_id', $myPegawai->id)->orderBy('created_at', 'desc')->paginate(simpeg_per_page())
+                : collect()->paginate(simpeg_per_page());
         } else {
-            $tpp = Tpp::with('pegawai')->orderBy('created_at', 'desc')->paginate(10);
+            $tpp = Tpp::with('pegawai')->orderBy('created_at', 'desc')->paginate(simpeg_per_page());
         }
 
         return view('pages.dashboard.tpp.indexTpp', [
@@ -335,7 +335,7 @@ class TppController extends Controller
             });
         }
 
-        $tpp = $query->orderBy('created_at', 'desc')->paginate(10);
+        $tpp = $query->orderBy('created_at', 'desc')->paginate(simpeg_per_page());
 
         return view('pages.dashboard.tpp.indexTpp', [
             'tpp' => $tpp,

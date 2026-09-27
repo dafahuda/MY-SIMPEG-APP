@@ -28,10 +28,10 @@ class RiwayatKeluargaAnakController extends Controller
         } elseif ($user->role === 'pegawai') {
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $riwayatKeluargaAnak = $myPegawai
-                ? RiwayatKeluargaAnak::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(10)
-                : collect()->paginate(10);
+                ? RiwayatKeluargaAnak::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(simpeg_per_page())
+                : collect()->paginate(simpeg_per_page());
         } else {
-            $riwayatKeluargaAnak = RiwayatKeluargaAnak::with('pegawai')->paginate(10);
+            $riwayatKeluargaAnak = RiwayatKeluargaAnak::with('pegawai')->paginate(simpeg_per_page());
         }
 
         return view("pages.dashboard.riwayat_keluarga.anak.IndexRiwayatKeluargaAnak", [
@@ -229,7 +229,7 @@ class RiwayatKeluargaAnakController extends Controller
             });
         }
 
-        $riwayatKeluargaAnak = $query->paginate(10);
+        $riwayatKeluargaAnak = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.riwayat_keluarga.anak.indexKeluargaAnak", [
             'riwayatKeluargaAnak' => $riwayatKeluargaAnak

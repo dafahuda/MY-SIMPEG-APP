@@ -27,6 +27,13 @@
                         </svg>
                         <span class="ml-2">Cetak</span>
                     </a>
+                    <a href="{{ route('report.pdf', ['jenis' => 'nominatif', 'unit_kerja_id' => $selectedUnitKerja->id]) }}"
+                       class="btn bg-red-600 hover:bg-red-700 text-white">
+                        <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                            <path d="M8 0a8 8 0 100 16A8 8 0 008 0zm0 1.5a6.5 6.5 0 110 13 6.5 6.5 0 010-13zM8 3a.75.75 0 00-.75.75v4.5c0 .2.08.39.22.53l2.5 2.5a.75.75 0 101.06-1.06l-2.28-2.28V3.75A.75.75 0 008 3z"/>
+                        </svg>
+                        <span class="ml-2">Unduh PDF</span>
+                    </a>
                 </div>
             @endif
         </div>

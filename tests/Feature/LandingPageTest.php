@@ -71,9 +71,45 @@ class LandingPageTest extends TestCase
             ->assertSee('data-theme-toggle', false);
     }
 
+    public function test_landing_lingkungan_demo_menampilkan_akun_demo(): void
+    {
+        config(['app.env' => 'staging']);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('data-testid="demo-accounts"', false)
+            ->assertSee('superadmin.demo')
+            ->assertSee('admin.bkpsdm')
+            ->assertSee('admin.dinkes')
+            ->assertSee('pegawai.andi')
+            ->assertSee('pegawai.bela')
+            ->assertSee('pegawai.citra')
+            ->assertSee('demo123')
+            ->assertSee('Hanya tersedia di lingkungan demo');
+    }
+
+    public function test_landing_lingkungan_produksi_menyembunyikan_akun_demo(): void
+    {
+        // APP_ENV='testing' saat suite berjalan; paksa environment produksi hanya untuk render view ini.
+        $app = app();
+        $app->detectEnvironment(fn () => 'production');
+        try {
+            $rendered = view('landing')->render();
+        } finally {
+            $app->detectEnvironment(fn () => 'testing');
+        }
+
+        $this->assertStringNotContainsString('demo123', $rendered);
+        $this->assertStringNotContainsString('superadmin.demo', $rendered);
+    }
+
     public function test_halaman_login_tetap_dapat_dibuka_tamu(): void
     {
-        $this->get(route('login'))->assertOk();
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSee('href="'.route('landing').'"', false)
+            ->assertSee('data-testid="back-to-landing-link"', false)
+            ->assertSee('Kembali ke halaman utama');
     }
 
     public function test_rute_internal_tetap_memerlukan_login(): void

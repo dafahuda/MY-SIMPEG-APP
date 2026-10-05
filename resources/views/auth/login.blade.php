@@ -1,6 +1,10 @@
 <x-authentication-layout>
     <h1 class="text-3xl text-gray-800 dark:text-gray-100 font-bold mb-6">{{ __('Simpeg App') }}</h1>
     <p class="text-slate-400 font-semibold mb-4">Sistem Kepegawaian ASN berbasis website</p>
+    <a href="{{ route('landing') }}" class="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 mb-6" data-testid="back-to-landing-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m5 12 4 4" /><path d="m5 12 4-4" /></svg>
+        Kembali ke halaman utama
+    </a>
     @if (session('status'))
         <div class="mb-4 font-medium text-sm text-green-600">
             {{ session('status') }}

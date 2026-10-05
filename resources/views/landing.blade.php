@@ -50,6 +50,24 @@
                     <li><span>03</span><div><strong>Jaga kerahasiaan akun</strong><p>Keluar dari aplikasi setelah selesai, terutama pada perangkat bersama.</p></div></li>
                 </ol>
                 <p class="help-note">Belum memiliki akun atau mengalami kendala? Hubungi administrator kepegawaian instansi Anda.</p>
+                @if (app()->environment('local', 'staging', 'development', 'testing'))
+                <div class="demo-accounts" data-testid="demo-accounts">
+                    <p class="demo-accounts-title">Akun demo</p>
+                    <p class="demo-accounts-note">Hanya tersedia di lingkungan demo, bukan produksi.</p>
+                    <table>
+                        <caption class="sr-only">Daftar akun demo beserta peran dan kata sandi</caption>
+                        <thead><tr><th scope="col">Peran</th><th scope="col">Username</th><th scope="col">Kata sandi</th></tr></thead>
+                        <tbody>
+                            <tr><td>Superadmin</td><td>superadmin.demo</td><td>demo123</td></tr>
+                            <tr><td>Admin BKPSDM</td><td>admin.bkpsdm</td><td>demo123</td></tr>
+                            <tr><td>Admin Dinkes</td><td>admin.dinkes</td><td>demo123</td></tr>
+                            <tr><td>Pegawai</td><td>pegawai.andi</td><td>demo123</td></tr>
+                            <tr><td>Pegawai</td><td>pegawai.bela</td><td>demo123</td></tr>
+                            <tr><td>Pegawai</td><td>pegawai.citra</td><td>demo123</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                @endif
             </aside>
         </section>
         <section id="layanan" class="services container" aria-labelledby="layanan-title">

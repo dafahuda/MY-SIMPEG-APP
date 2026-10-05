@@ -14,12 +14,6 @@
         </nav>
     </div>
 
-    @if (session('success'))
-        <div class="mb-4 p-4 rounded-lg bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
         <div class="p-6 flex flex-col sm:flex-row items-center gap-4">
             <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-2xl">

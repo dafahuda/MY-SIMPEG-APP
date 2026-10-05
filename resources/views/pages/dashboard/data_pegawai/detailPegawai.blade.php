@@ -12,12 +12,6 @@
         </nav>
     </div>
 
-    @if (session('success'))
-        <div class="mb-4 p-4 rounded-lg bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
         <!-- Header: foto + identitas dasar -->
         <div class="p-6 flex flex-col sm:flex-row items-center gap-6 border-b border-gray-200 dark:border-gray-700">

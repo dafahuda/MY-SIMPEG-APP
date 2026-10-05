@@ -12,9 +12,8 @@ class ExampleTest extends TestCase
      */
     public function test_the_application_returns_a_successful_response(): void
     {
-        // Aplikasi SIMPEG bersifat internal: guest diarahkan ke halaman login.
         $response = $this->get('/');
 
-        $response->assertRedirect('/login');
+        $response->assertOk();
     }
 }

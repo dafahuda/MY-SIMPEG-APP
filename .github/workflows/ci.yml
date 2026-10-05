@@ -48,6 +48,9 @@ jobs:
       - name: Install Node dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Test UI interactions
+        run: npm run test:ui
+
       - name: Build frontend assets (Vite)
         run: npm run build
 

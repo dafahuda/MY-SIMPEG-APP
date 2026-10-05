@@ -3,6 +3,8 @@ import { Livewire } from '../../vendor/livewire/livewire/dist/livewire.esm';
 Livewire.start()
 
 import './bootstrap';
+import { installUiFeedback } from './ui-feedback';
+document.addEventListener('DOMContentLoaded', () => installUiFeedback(document));
 
 
 // Import Chart.js

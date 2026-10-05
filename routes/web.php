@@ -57,7 +57,7 @@ use App\Http\Controllers\KGBController;
 |
 */
 
-Route::redirect('/', 'login');
+Route::view('/', 'landing')->name('landing');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 

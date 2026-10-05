@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './additional-styles/flatpickr.css';
+@import './ui-feedback.css';
 @import './additional-styles/utility-patterns.css' layer(components);
 
 @plugin "@tailwindcss/forms" {

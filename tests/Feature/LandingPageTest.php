@@ -74,6 +74,7 @@ class LandingPageTest extends TestCase
     public function test_landing_lingkungan_demo_menampilkan_akun_demo(): void
     {
         config(['app.env' => 'staging']);
+        config(['simpeg.show_demo_accounts' => true]);
 
         $this->get('/')
             ->assertOk()
@@ -94,6 +95,7 @@ class LandingPageTest extends TestCase
         $app = app();
         $app->detectEnvironment(fn () => 'production');
         try {
+            config(['simpeg.show_demo_accounts' => false]);
             $rendered = view('landing')->render();
         } finally {
             $app->detectEnvironment(fn () => 'testing');

@@ -6,7 +6,7 @@
     <title>DUK - {{ $unitKerja->nama_unit }}</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; font-size: 9px; color: #111; background: #fff; }
+        body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif, sans-serif; font-size: 9px; color: #111; background: #fff; }
         .page { padding: 14mm 10mm; }
 
         /* Kop */

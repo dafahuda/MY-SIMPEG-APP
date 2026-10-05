@@ -46,7 +46,7 @@
                     <div x-data="{ open: false, selected: '{{ $periode === 'tahun_depan' ? 'Tahun Depan' : 'Tahun Ini' }}' }" class="relative">
                         <button type="button"
                             @click="open = !open"
-                            class="flex items-center justify-between w-48 px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            class="flex items-center justify-between w-48 px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <span x-text="selected"></span>
                             <svg class="w-4 h-4 ml-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -56,12 +56,12 @@
                             class="absolute z-10 mt-1 w-48 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg">
                             <button type="button"
                                 @click="selected = 'Tahun Ini'; open = false; $refs.periodeInput.value = 'tahun_ini'; $refs.periodeForm.submit()"
-                                class="block w-full text-left px-4 py-2 text-sm {{ $periode !== 'tahun_depan' ? 'bg-indigo-500 text-white' : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600' }}">
+                                class="block w-full text-left px-4 py-2 text-sm {{ $periode !== 'tahun_depan' ? 'bg-indigo-500 text-white' : 'text-white hover:bg-gray-100 dark:hover:bg-gray-600' }}">
                                 Tahun Ini
                             </button>
                             <button type="button"
                                 @click="selected = 'Tahun Depan'; open = false; $refs.periodeInput.value = 'tahun_depan'; $refs.periodeForm.submit()"
-                                class="block w-full text-left px-4 py-2 text-sm {{ $periode === 'tahun_depan' ? 'bg-indigo-500 text-white' : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600' }}">
+                                class="block w-full text-left px-4 py-2 text-sm {{ $periode === 'tahun_depan' ? 'bg-indigo-500 text-white' : 'text-white hover:bg-gray-100 dark:hover:bg-gray-600' }}">
                                 Tahun Depan
                             </button>
                         </div>
@@ -85,7 +85,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700 gap-3">
                 <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                     <span>Show</span>
-                    <select class="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+                    <select class="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-700 text-white">
                         <option>10</option>
                         <option>25</option>
                         <option>50</option>
@@ -95,7 +95,7 @@
                 <div class="flex items-center gap-2 text-sm">
                     <label class="text-gray-500 dark:text-gray-400">Search:</label>
                     <input type="text" x-model="search" placeholder="Cari nama atau NIP..."
-                        class="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 w-48" />
+                        class="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-700 text-white w-48" />
                 </div>
             </div>
 

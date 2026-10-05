@@ -30,7 +30,7 @@
                     @if($pegawai->gelar_depan) {{ $pegawai->gelar_depan }} @endif
                     {{ $pegawai->nama }}@if($pegawai->gelar), {{ $pegawai->gelar }}@endif
                 </h3>
-                <p class="text-gray-600 dark:text-gray-400 font-mono text-sm">{{ $pegawai->nip }}</p>
+                <p class="text-blue-800 dark:text-blue-300 font-mono text-sm">{{ $pegawai->nip }}</p>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ $dokumen->count() }} dokumen tersimpan</p>
             </div>
             <div class="sm:ml-auto">
@@ -72,7 +72,7 @@
             <div>
                 <label for="file" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">File *</label>
                 <input type="file" id="file" name="file" required accept=".pdf,.jpg,.jpeg,.png"
-                       class="w-full text-sm text-gray-600 dark:text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 @error('file') border-red-500 @enderror">
+                       class="w-full text-sm text-blue-800 dark:text-blue-300 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 @error('file') border-red-500 @enderror">
                 @error('file') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
@@ -123,7 +123,7 @@
                         <p class="text-gray-700 dark:text-gray-300">{{ $d->file_name }}</p>
                         <p class="text-xs text-gray-500 dark:text-gray-400">{{ $d->ukuran_label }} · {{ strtoupper(str_replace('/', ' / ', $d->mime_type)) }}</p>
                     </td>
-                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                    <td class="px-6 py-4 text-blue-800 dark:text-blue-300">
                         {{ $d->created_at->translatedFormat('d M Y, H:i') }}
                         @if ($d->uploader)
                             <p class="text-xs">oleh {{ $d->uploader->name }}</p>

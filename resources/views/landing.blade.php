@@ -50,7 +50,7 @@
                     <li><span>03</span><div><strong>Jaga kerahasiaan akun</strong><p>Keluar dari aplikasi setelah selesai, terutama pada perangkat bersama.</p></div></li>
                 </ol>
                 <p class="help-note">Belum memiliki akun atau mengalami kendala? Hubungi administrator kepegawaian instansi Anda.</p>
-                @if (app()->environment('local', 'staging', 'development', 'testing'))
+                @if (!app()->isProduction())
                 <div class="demo-accounts" data-testid="demo-accounts">
                     <p class="demo-accounts-title">Akun demo</p>
                     <p class="demo-accounts-note">Hanya tersedia di lingkungan demo, bukan produksi.</p>

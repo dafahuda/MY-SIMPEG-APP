@@ -31,7 +31,7 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
-            font-family: Arial, sans-serif;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif, sans-serif;
         }
         .btn-back {
             padding: 8px 20px;
@@ -41,7 +41,7 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
-            font-family: Arial, sans-serif;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif, sans-serif;
         }
 
         /* Sertifikat */

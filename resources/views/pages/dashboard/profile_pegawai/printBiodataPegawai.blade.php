@@ -6,7 +6,7 @@
     <title>Biodata Pegawai - {{ $pegawai->nama }}</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; font-size: 10px; color: #111; background: #fff; }
+        body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif, sans-serif; font-size: 10px; color: #111; background: #fff; }
         .page { padding: 15mm 20mm; }
 
         /* Kop */

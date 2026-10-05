@@ -83,7 +83,7 @@
                             <img src="{{ asset($sekretariat->gambar_logo) }}" alt="" width="300px"
                                 height="200px">
                         @else
-                            <img alt="" class="img-preview img-fluid mb-3 col-sm-5">
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" style="display:none" class="img-preview img-fluid mb-3 col-sm-5">
                         @endif
                         <div class="img-preview">
                             <label for="gambar_logo" class="block mb-2.5 text-sm font-medium text-heading">Logo

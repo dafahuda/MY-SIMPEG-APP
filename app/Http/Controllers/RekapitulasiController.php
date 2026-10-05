@@ -131,111 +131,66 @@ class RekapitulasiController extends Controller
         ]);
     }
 
-    public function rekapStatusKepegawaian()
+        /**
+     * Rekap generik: hitung jumlah pegawai per nilai kolom sederhana
+     * (status_kepegawaian, agama, jenis_kelamin, status_pernikahan).
+     */
+    private function rekapKolomSederhana(string $kolom, string $labelData, string $namaView, string $namaVar)
     {
-        $statusKepegawaian = Pegawai::selectRaw("status_kepegawaian, count(*) as jumlah")
-                                     ->groupBy('status_kepegawaian')
-                                     ->get();
+        $rekap = Pegawai::selectRaw("{$kolom}, count(*) as jumlah")
+                        ->groupBy($kolom)
+                        ->get();
 
-        $chartCategories = $statusKepegawaian->pluck("status_kepegawaian")->toArray();
-        $chartData = $statusKepegawaian->pluck('jumlah')->toArray();
+        $chartCategories = $rekap->pluck($kolom)->toArray();
+        $chartData       = $rekap->pluck('jumlah')->toArray();
 
-        // Pegawai yang belum memiliki status kepegawaian
-        $pegawaiTanpaData = Pegawai::where(function ($q) {
-            $q->whereNull('status_kepegawaian')->orWhere('status_kepegawaian', '');
+        $pegawaiTanpaData = Pegawai::where(function ($q) use ($kolom) {
+            $q->whereNull($kolom)->orWhere($kolom, '');
         })->count();
 
-        $instansi = InstansiLembaga::first();
-
-        return view("pages.dashboard.rekapitulasi.rekapStatusKepegawaian", [
-            'statusKepegawaian' => $statusKepegawaian,
-            'chartCategories'   => $chartCategories,
-            'chartData'         => $chartData,
-            'pegawaiTanpaData'  => $pegawaiTanpaData,
-            'labelData'         => 'data status kepegawaian',
-            'instansi' => $instansi
+        return view($namaView, [
+            $namaVar           => $rekap,
+            'chartCategories'  => $chartCategories,
+            'chartData'        => $chartData,
+            'pegawaiTanpaData' => $pegawaiTanpaData,
+            'labelData'        => $labelData,
+            'instansi'         => InstansiLembaga::first(),
         ]);
+    }
+
+    public function rekapStatusKepegawaian()
+    {
+        return $this->rekapKolomSederhana(
+            'status_kepegawaian', 'data status kepegawaian',
+            'pages.dashboard.rekapitulasi.rekapStatusKepegawaian', 'statusKepegawaian'
+        );
     }
 
     public function rekapAgama()
     {
-        $agama = Pegawai::selectRaw("agama, count(*) as jumlah")
-                         ->groupBy("agama")
-                         ->get();
-
-        $chartCategories = $agama->pluck("agama")->toArray();
-        $chartData = $agama->pluck("jumlah")->toArray();
-
-        // Pegawai yang belum mengisi agama
-        $pegawaiTanpaData = Pegawai::where(function ($q) {
-            $q->whereNull('agama')->orWhere('agama', '');
-        })->count();
-
-        $instansi = InstansiLembaga::first();
-
-        return view("pages.dashboard.rekapitulasi.rekapAgama", [
-            'agama'            => $agama,
-            'chartCategories'  => $chartCategories,
-            'chartData'        => $chartData,
-            'pegawaiTanpaData' => $pegawaiTanpaData,
-            'labelData'        => 'data agama',
-            'instansi' => $instansi
-        ]);
+        return $this->rekapKolomSederhana(
+            'agama', 'data agama',
+            'pages.dashboard.rekapitulasi.rekapAgama', 'agama'
+        );
     }
 
     public function rekapJenisKelamin()
     {
-        $jenisKelamin = Pegawai::selectRaw("jenis_kelamin, count(*) as jumlah")
-                                ->groupBy("jenis_kelamin")
-                                ->get();
-
-        $chartCategories = $jenisKelamin->pluck("jenis_kelamin")->toArray();
-        $chartData = $jenisKelamin->pluck("jumlah")->toArray();
-
-        // Pegawai yang belum mengisi jenis kelamin
-        $pegawaiTanpaData = Pegawai::where(function ($q) {
-            $q->whereNull('jenis_kelamin')->orWhere('jenis_kelamin', '');
-        })->count();
-
-        $instansi = InstansiLembaga::first();
-
-        return view("pages.dashboard.rekapitulasi.rekapJenisKelamin", [
-            'jenisKelamin'     => $jenisKelamin,
-            'chartCategories'  => $chartCategories,
-            'chartData'        => $chartData,
-            'pegawaiTanpaData' => $pegawaiTanpaData,
-            'labelData'        => 'data jenis kelamin',
-            'instansi' => $instansi
-        ]);
+        return $this->rekapKolomSederhana(
+            'jenis_kelamin', 'data jenis kelamin',
+            'pages.dashboard.rekapitulasi.rekapJenisKelamin', 'jenisKelamin'
+        );
     }
 
     public function rekapStatusPernikahan()
     {
-        $statusPernikahan = Pegawai::selectRaw("status_pernikahan, count(*) as jumlah")
-                                   ->groupBy("status_pernikahan")
-                                   ->get();
-
-        $chartCategories = $statusPernikahan->pluck("status_pernikahan")->toArray();
-        $chartData = $statusPernikahan->pluck("jumlah")->toArray();
-
-        // Pegawai yang belum mengisi status pernikahan
-        $pegawaiTanpaData = Pegawai::where(function ($q) {
-            $q->whereNull('status_pernikahan')->orWhere('status_pernikahan', '');
-        })->count();
-
-        $instansi = InstansiLembaga::first();
-
-        return view("pages.dashboard.rekapitulasi.rekapStatusNikah", [
-            'statusPernikahan' => $statusPernikahan,
-            'chartCategories'  => $chartCategories,
-            'chartData'        => $chartData,
-            'pegawaiTanpaData' => $pegawaiTanpaData,
-            'labelData'        => 'data status pernikahan',
-            'instansi' => $instansi
-        ]);
+        return $this->rekapKolomSederhana(
+            'status_pernikahan', 'data status pernikahan',
+            'pages.dashboard.rekapitulasi.rekapStatusNikah', 'statusPernikahan'
+        );
     }
 
-    public function rekapPendidikanAkhir()
+public function rekapPendidikanAkhir()
     {
         $jenjangOrder = ['SD', 'SMP', 'SMA', 'SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'];
 

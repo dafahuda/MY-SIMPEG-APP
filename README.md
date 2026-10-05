@@ -430,6 +430,151 @@ php artisan queue:listen --tries=1 --timeout=0
 
 ---
 
+## 17. Deployment ke server produksi
+
+### 17.1 Prasyarat server
+
+- PHP 8.3+ dengan ekstensi: `mbstring`, `pdo_mysql`, `gd`, `sqlite3`, `bcmath`
+- Composer 2, Node 20+ (hanya saat build asset)
+- MySQL 8 / MariaDB
+- Nginx atau Apache
+- Supervisor (untuk queue worker) — opsional
+
+### 17.2 Langkah deployment
+
+```bash
+# 1. Ambil kode
+git clone https://github.com/dafahuda/MY-SIMPEG-APP.git simpeg
+cd simpeg
+
+# 2. Dependency backend (tanpa dev)
+composer install --no-dev --optimize-autoloader --no-interaction
+
+# 3. Dependency frontend + build asset sekali saja
+npm install
+npm run build
+
+# 4. Environment
+cp .env.example .env
+php artisan key:generate
+
+# 5. Edit .env untuk produksi — PENTING:
+#    APP_ENV=production
+#    APP_DEBUG=false              (jangan pernah true di produksi)
+#    APP_URL=https://simpeg.domain-anda.go.id
+#    DB_DATABASE / DB_USERNAME / DB_PASSWORD  (MySQL produksi)
+#    SESSION_SECURE_COOKIE=true   (jika sudah HTTPS)
+npm run build  # skip jika sudah
+```
+
+Edit `.env`:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://simpeg.domain-anda.go.id
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=simpeg
+DB_USERNAME=simpeg
+DB_PASSWORD=xxxxxxxx
+
+LOG_CHANNEL=daily
+LOG_LEVEL=error
+
+SESSION_SECURE_COOKIE=true
+```
+
+Lalu selesaikan:
+
+```bash
+# 6. Migrasi + data awal (akun superadmin, data instansi, dll)
+php artisan migrate --seed --force
+
+# 7. Storage link (foto pegawai, dokumen)
+php artisan storage:link
+
+# 8. Optimasi
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+### 17.3 Cron scheduler — WAJIB dipasang
+
+Aplikasi punya 3 tugas terjadwal yang hanya jalan lewat cron:
+
+| Tugas | Jadwal | Fungsi |
+|---|---|---|
+| `kgb:reminder` | harian 07:00 WIB | notifikasi KGB jatuh tempo |
+| `backup:database` | harian 02:00 WIB | backup SQL otomatis ke `storage/app/backups`, retensi 30 hari |
+| `notifikasi:prune` | mingguan Minggu 03:00 | bersihkan notifikasi > 90 hari |
+
+Pasang cron (user yang menjalankan web server):
+
+```bash
+crontab -e
+```
+
+```cron
+* * * * * cd /path/ke/simpeg && php artisan schedule:run >> /dev/null 2>&1
+```
+
+### 17.4 Nginx contoh
+
+```nginx
+server {
+    listen 80;
+    server_name simpeg.domain-anda.go.id;
+    root /var/www/simpeg/public;
+    index index.php;
+
+    charset utf-8;
+    client_max_body_size 10M;   # upload dokumen pegawai maks 5MB + margin
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+```
+
+### 17.5 Setelah deployment — verifikasi
+
+1. Login dengan akun superadmin, ganti password default **segera**
+2. Isi data instansi (Menu Manajemen Setup) — dipakai untuk kop laporan PDF
+3. Cek `php artisan schedule:list` — 3 tugas harus terdaftar
+4. Tes unduh satu PDF rekapitulasi (butuh ekstensi `gd` + dompdf)
+5. Pastikan folder `storage/` dan `bootstrap/cache` writable oleh web server
+
+### 17.6 Update aplikasi (versi baru)
+
+```bash
+cd /path/ke/simpeg
+php artisan down              # matikan sementara
+git pull
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+npm install && npm run build
+php artisan config:cache && php artisan route:cache && php artisan view:cache
+php artisan up                # hidupkan kembali
+```
+
+> CI GitHub Actions (`.github/workflows/ci.yml`) otomatis menjalankan seluruh
+> test suite di setiap PR dan push ke `main` — pastikan hijau sebelum deploy.
+
+---
+
 ## 16. Ringkasan cepat setup developer baru
 
 Kalau ingin cepat langsung jalan:

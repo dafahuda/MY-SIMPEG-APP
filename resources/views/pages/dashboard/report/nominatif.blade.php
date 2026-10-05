@@ -196,9 +196,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="11" class="border border-gray-300 dark:border-gray-600 px-4 py-8 text-center text-gray-400 dark:text-gray-500">
-                                        Tidak ada data pegawai untuk unit kerja ini.
-                                    </td>
+                                    <x-empty-state colspan="11" icon="chart" title="Tidak ada data" message="Data akan muncul di sini setelah tersedia." />
                                 </tr>
                             @endforelse
                         </tbody>

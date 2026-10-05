@@ -169,11 +169,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="9" class="px-4 py-10 text-center text-gray-500 dark:text-gray-400">
-                                    Belum ada data rencana diklat yang sesuai dengan filter.
-                                </td>
-                            </tr>
+                            <x-empty-state colspan="9" icon="chart" title="Belum ada data" message="Belum ada data rencana diklat yang sesuai dengan filter." />
                         @endforelse
                     </tbody>
                 </table>

@@ -191,7 +191,7 @@
             <div x-show="tab === 'suami_istri'" class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                 <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Data Suami / Istri</h3>
                 @if ($suamiIstri->isEmpty())
-                    <p class="text-sm text-gray-400 italic">Belum ada data suami / istri.</p>
+                    <x-empty-state title="Belum ada data" message="Belum ada data suami / istri." />
                 @else
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs">
@@ -228,7 +228,7 @@
             <div x-show="tab === 'anak'" class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                 <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Data Anak</h3>
                 @if ($anak->isEmpty())
-                    <p class="text-sm text-gray-400 italic">Belum ada data anak.</p>
+                    <x-empty-state title="Belum ada data" message="Belum ada data anak." />
                 @else
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs">
@@ -267,7 +267,7 @@
             <div x-show="tab === 'ortu'" class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                 <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Data Orang Tua</h3>
                 @if ($orangTua->isEmpty())
-                    <p class="text-sm text-gray-400 italic">Belum ada data orang tua.</p>
+                    <x-empty-state title="Belum ada data" message="Belum ada data orang tua." />
                 @else
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs">
@@ -308,7 +308,7 @@
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                     <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-3">Pendidikan Sekolah</h3>
                     @if ($pendidikanSekolah->isEmpty())
-                        <p class="text-sm text-gray-400">Belum ada data.</p>
+                        <x-empty-state title="Belum ada data" message="Belum ada data." />
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs">
@@ -340,7 +340,7 @@
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                     <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-3">Pendidikan Lanjut</h3>
                     @if ($pendidikanLanjut->isEmpty())
-                        <p class="text-sm text-gray-400">Belum ada data.</p>
+                        <x-empty-state title="Belum ada data" message="Belum ada data." />
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs">
@@ -374,7 +374,7 @@
             <div x-show="tab === 'skp'" class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                 <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Data SKP / Prestasi Kerja</h3>
                 @if ($skp->isEmpty())
-                    <p class="text-sm text-gray-400 italic">Belum ada data SKP / Prestasi Kerja.</p>
+                    <x-empty-state title="Belum ada data" message="Belum ada data SKP / Prestasi Kerja." />
                 @else
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs">
@@ -417,7 +417,7 @@
             <div x-show="tab === 'tpp'" class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                 <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Data TPP (Tambahan Penghasilan Pegawai)</h3>
                 @if ($tpp->isEmpty())
-                    <p class="text-sm text-gray-400 italic">Belum ada data TPP.</p>
+                    <x-empty-state title="Belum ada data" message="Belum ada data TPP." />
                 @else
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs">
@@ -457,7 +457,7 @@
             <div x-show="tab === 'kgb'" class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                 <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Riwayat Pangkat / KGB</h3>
                 @if ($allPangkat->isEmpty())
-                    <p class="text-sm text-gray-400 italic">Belum ada data riwayat pangkat / KGB.</p>
+                    <x-empty-state title="Belum ada data" message="Belum ada data riwayat pangkat / KGB." />
                 @else
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs">
@@ -578,7 +578,7 @@
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                     <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-3">Diklat</h3>
                     @if ($diklat->isEmpty())
-                        <p class="text-sm text-gray-400 italic">Belum ada data diklat.</p>
+                        <x-empty-state title="Belum ada data" message="Belum ada data diklat." />
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs">
@@ -616,7 +616,7 @@
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                     <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-3">Seminar / Workshop</h3>
                     @if ($seminar->isEmpty())
-                        <p class="text-sm text-gray-400 italic">Belum ada data seminar.</p>
+                        <x-empty-state title="Belum ada data" message="Belum ada data seminar." />
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs">
@@ -652,7 +652,7 @@
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-5">
                     <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-3">Latihan Jabatan</h3>
                     @if ($latihanJab->isEmpty())
-                        <p class="text-sm text-gray-400 italic">Belum ada data latihan jabatan.</p>
+                        <x-empty-state title="Belum ada data" message="Belum ada data latihan jabatan." />
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs">

@@ -181,9 +181,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-5 py-8 text-center text-gray-400 dark:text-gray-500">
-                                    Belum ada data TPP.
-                                </td>
+                                <x-empty-state colspan="8" icon="chart" title="Tidak ada data" message="Data akan muncul di sini setelah tersedia." />
                             </tr>
                         @endforelse
                     </tbody>

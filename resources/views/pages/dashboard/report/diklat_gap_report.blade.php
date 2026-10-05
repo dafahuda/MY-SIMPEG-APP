@@ -152,7 +152,7 @@
                                         <td class="px-3 py-3">{{ $row['realisasi'] }}</td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="7" class="px-3 py-6 text-center text-gray-400">Tidak ada data planned.</td></tr>
+                                    <x-empty-state colspan="7" icon="chart" title="Tidak ada data" message="Tidak ada data planned." />
                                 @endforelse
                             </tbody>
                         </table>
@@ -192,7 +192,7 @@
                                         <td class="px-3 py-3 text-right">{{ number_format($row['gap_jam']) }}</td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="7" class="px-3 py-6 text-center text-gray-400">Tidak ada data realized.</td></tr>
+                                    <x-empty-state colspan="7" icon="chart" title="Tidak ada data" message="Tidak ada data realized." />
                                 @endforelse
                             </tbody>
                         </table>
@@ -230,7 +230,7 @@
                                         <td class="px-3 py-3 text-right">{{ number_format($row['target_jam']) }}</td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="6" class="px-3 py-6 text-center text-gray-400">Tidak ada data not realized.</td></tr>
+                                    <x-empty-state colspan="6" icon="chart" title="Tidak ada data" message="Tidak ada data not realized." />
                                 @endforelse
                             </tbody>
                         </table>
@@ -268,7 +268,7 @@
                                         <td class="px-3 py-3">{{ $row['penyelenggara'] }}</td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="6" class="px-3 py-6 text-center text-gray-400">Tidak ada data out of plan.</td></tr>
+                                    <x-empty-state colspan="6" icon="chart" title="Tidak ada data" message="Tidak ada data out of plan." />
                                 @endforelse
                             </tbody>
                         </table>
@@ -308,7 +308,7 @@
                                         <td class="px-3 py-3 text-right">{{ number_format($row['gap_jam']) }}</td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="7" class="px-3 py-6 text-center text-gray-400">Tidak ada data cross year realized.</td></tr>
+                                    <x-empty-state colspan="7" icon="chart" title="Tidak ada data" message="Tidak ada data cross year realized." />
                                 @endforelse
                             </tbody>
                         </table>

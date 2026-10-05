@@ -155,7 +155,7 @@
             @empty
                 <tr>
                     <td colspan="12" class="text-center" style="padding:16px; color:#9ca3af;">
-                        Tidak ada data pegawai.
+                        Belum ada data pegawai untuk periode/unit kerja ini.
                     </td>
                 </tr>
             @endforelse

@@ -45,6 +45,8 @@ class PegawaiController extends Controller
      */
     public function create()
     {
+        $this->authorizePegawaiManagement();
+
         $unitKerja   = UnitKerja::all();
         $userPegawai = User::where('role', 'pegawai')
             ->whereNotIn('id', \App\Models\Pegawai::whereNotNull('user_id')->pluck('user_id'))
@@ -62,6 +64,8 @@ class PegawaiController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorizePegawaiManagement();
+
         $validateData = $request->validate([
             'user_id' => 'required|exists:users,id',
             'nip' => 'required|string',
@@ -126,14 +130,7 @@ class PegawaiController extends Controller
      */
     public function show(Pegawai $pegawai)
     {
-        $user = Auth::user();
-
-        // Pegawai hanya boleh melihat detail dirinya sendiri
-        if ($user->role === 'pegawai') {
-            abort_unless($pegawai->user_id === $user->id, 403);
-        } elseif ($user->role === 'admin') {
-            abort_unless($pegawai->unit_kerja_id === $user->unit_kerja_id, 403);
-        }
+        $this->authorizePegawaiAccess($pegawai);
 
         $pegawai->load('unit_kerja');
 
@@ -147,6 +144,8 @@ class PegawaiController extends Controller
      */
     public function edit(Pegawai $pegawai)
     {
+        $this->authorizePegawaiAccess($pegawai);
+
         $unitKerja   = UnitKerja::all();
         $userPegawai = User::where('role', 'pegawai')
             ->where(function ($q) use ($pegawai) {
@@ -169,6 +168,8 @@ class PegawaiController extends Controller
      */
     public function update(Request $request, Pegawai $pegawai)
     {
+        $this->authorizePegawaiAccess($pegawai);
+
         $validateData = $request->validate([
             'nip' => 'required|string',
             'nama' => 'required|string',
@@ -236,9 +237,33 @@ class PegawaiController extends Controller
      */
     public function destroy(Pegawai $pegawai)
     {
+        $this->authorizePegawaiManagement($pegawai);
+
         $pegawai->delete();
 
         return redirect('/data_pegawai/pegawai')->with('success', 'Berhasil menghapus data!');
+    }
+
+    private function authorizePegawaiAccess(Pegawai $pegawai): void
+    {
+        $user = Auth::user();
+
+        if ($user->role === 'pegawai') {
+            abort_unless($pegawai->user_id === $user->id, 403);
+        } elseif ($user->role === 'admin') {
+            abort_unless($pegawai->unit_kerja_id === $user->unit_kerja_id, 403);
+        }
+    }
+
+    private function authorizePegawaiManagement(?Pegawai $pegawai = null): void
+    {
+        $user = Auth::user();
+
+        abort_if($user->role === 'pegawai', 403);
+
+        if ($pegawai !== null && $user->role === 'admin') {
+            abort_unless($pegawai->unit_kerja_id === $user->unit_kerja_id, 403);
+        }
     }
 
     public function cariPegawai(Request $request)

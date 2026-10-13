@@ -90,8 +90,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::prefix('data_pegawai')->group(function() {
         Route::get('/pegawai', [PegawaiController::class, 'index']);
-        Route::get('/view_form_tambah_data_pegawai', [PegawaiController::class, 'create']);
-        Route::post('/tambah_data_pegawai', [PegawaiController::class, 'store']);
+        Route::middleware('role:admin,superadmin')->group(function () {
+            Route::get('/view_form_tambah_data_pegawai', [PegawaiController::class, 'create']);
+            Route::post('/tambah_data_pegawai', [PegawaiController::class, 'store']);
+        });
         Route::get('/view_form_edit_data_pegawai/{pegawai}', [PegawaiController::class, 'edit']);
         Route::get('/detail_data_pegawai/{pegawai}', [PegawaiController::class, 'show'])->name('pegawai.show');
         Route::get('/biodata_pdf/{pegawai}', [ProfilePegawaiController::class, 'unduhPdf'])->name('pegawai.biodata.pdf');
@@ -129,7 +131,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('/data_user_admin', [UserAdminController::class, 'index']);
             Route::get('/view_form_tambah_user_admin', [UserAdminController::class, 'create']);
             Route::post('/tambah_user_admin', [UserAdminController::class, 'store']);
-            Route::get('/data_user_pegawai', [UserPegawaiController::class, 'index']);
             Route::get('/view_form_edit_user_admin/{user}', [UserAdminController::class, 'edit']);
             Route::put('/edit_data_user_admin/{user}', [UserAdminController::class, 'update']);
             Route::delete('/delete_user_admin/{user}', [UserAdminController::class, 'destroy']);
@@ -137,13 +138,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         });
 
         // URL buat data user pegawai
-        Route::get('/data_user_pegawai', [UserPegawaiController::class, 'index']);
-        Route::get('/view_form_tambah_user_pegawai', [UserPegawaiController::class, 'create']);
-        Route::get('/view_form_edit_user_pegawai/{user}', [UserPegawaiController::class, 'edit']);
-        Route::post('/tambah_user_pegawai', [UserPegawaiController::class, 'store']);
-        Route::put('/edit_data_user_pegawai/{user}', [UserPegawaiController::class, 'update']);
-        Route::delete('/delete_user_pegawai/{user}', [UserPegawaiController::class, 'destroy']);
-        Route::post('/data_user_pegawai/cariUserPegawai', [UserPegawaiController::class, 'cariUserPegawai']);
+        Route::middleware('role:admin,superadmin')->group(function () {
+            Route::get('/data_user_pegawai', [UserPegawaiController::class, 'index']);
+            Route::get('/view_form_tambah_user_pegawai', [UserPegawaiController::class, 'create']);
+            Route::get('/view_form_edit_user_pegawai/{user}', [UserPegawaiController::class, 'edit']);
+            Route::post('/tambah_user_pegawai', [UserPegawaiController::class, 'store']);
+            Route::put('/edit_data_user_pegawai/{user}', [UserPegawaiController::class, 'update']);
+            Route::delete('/delete_user_pegawai/{user}', [UserPegawaiController::class, 'destroy']);
+            Route::post('/data_user_pegawai/cariUserPegawai', [UserPegawaiController::class, 'cariUserPegawai']);
+        });
     });
 
     Route::prefix('riwayat_keluarga')->group(function() {

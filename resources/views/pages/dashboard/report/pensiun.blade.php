@@ -30,7 +30,7 @@
         {{-- Filter Card --}}
 
         {{-- Filter Card --}}
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <form method="GET" action="{{ route('report.pensiun') }}"
                 class="flex flex-col sm:flex-row items-end gap-3">
                 <div class="flex flex-col gap-1 flex-1">
@@ -38,7 +38,7 @@
                         Pilih Periode
                     </label>
                     <select name="periode" id="periodeSelect"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                         <option value="">Pilih Periode</option>
                         @foreach ($periodeOptions as $val => $label)
                             <option value="{{ $val }}" {{ $selectedPeriode === $val ? 'selected' : '' }}>
@@ -59,7 +59,7 @@
 
         {{-- Table Card (selalu tampil setelah filter) --}}
         @if ($selectedPeriode !== '')
-            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
 
                 {{-- Table controls --}}
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700 gap-3">
@@ -136,7 +136,7 @@
                                             {{ $pegawai->nama }}{{ $pegawai->gelar ? ', ' . $pegawai->gelar : '' }}
                                         </div>
                                         @if ($pegawai->unit_kerja)
-                                            <div class="text-xs text-gray-400 mt-0.5">{{ $pegawai->unit_kerja->nama_unit }}</div>
+                                            <div class="text-xs text-gray-500 mt-0.5">{{ $pegawai->unit_kerja->nama_unit }}</div>
                                         @endif
                                     </td>
                                     <td class="px-3 py-3 whitespace-nowrap text-gray-700 dark:text-gray-300">
@@ -157,7 +157,7 @@
                                 </tr>
                             @empty
                                 <tr id="emptyRow">
-                                    <td colspan="7" class="px-5 py-8 text-center text-gray-400 dark:text-gray-500">
+                                    <td colspan="7" class="px-5 py-8 text-center text-gray-500 dark:text-gray-400">
                                         No data available in table
                                     </td>
                                 </tr>
@@ -243,13 +243,13 @@
                     if (p === '...') {
                         const s = document.createElement('span');
                         s.textContent = '...';
-                        s.className = 'px-2 py-1 text-gray-400';
+                        s.className = 'px-2 py-1 text-gray-500';
                         pageNums.appendChild(s);
                     } else {
                         const btn = document.createElement('button');
                         btn.textContent = p;
                         btn.className = p === currentPage
-                            ? 'px-3 py-1 rounded bg-indigo-500 text-white text-sm font-medium'
+                            ? 'px-3 py-1 rounded bg-blue-500 text-white text-sm font-medium'
                             : 'px-3 py-1 rounded border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm';
                         btn.addEventListener('click', () => { currentPage = p; render(); });
                         pageNums.appendChild(btn);

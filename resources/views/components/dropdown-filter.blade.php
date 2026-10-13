@@ -4,7 +4,7 @@
 
 <div class="relative inline-flex" x-data="{ open: false }">
     <button
-        class="btn px-2.5 bg-white dark:bg-gray-800 border-gray-200 hover:border-gray-300 dark:border-gray-700/60 dark:hover:border-gray-600 text-gray-400 dark:text-gray-500"
+        class="btn px-2.5 bg-white dark:bg-gray-800 border-gray-200 hover:border-gray-300 dark:border-gray-700/60 dark:hover:border-gray-600 text-gray-500 dark:text-gray-400"
         aria-haspopup="true"
         @click.prevent="open = !open"
         :aria-expanded="open"
@@ -27,7 +27,7 @@
         x-transition:leave-end="opacity-0"
         x-cloak                
     >
-        <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase pt-1.5 pb-2 px-3">Filters</div>
+        <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase pt-1.5 pb-2 px-3">Filters</div>
         <ul class="mb-4">
             <li class="py-1 px-3">
                 <label class="flex items-center">

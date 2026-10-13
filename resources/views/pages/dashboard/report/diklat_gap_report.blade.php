@@ -24,13 +24,13 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <form method="GET" action="{{ route('report.diklat_gap') }}" data-testid="diklat-gap-filter-form"
                 class="grid grid-cols-1 gap-4 lg:grid-cols-4">
                 <div class="flex flex-col gap-1">
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Tahun Rencana</label>
                     <select name="tahun_rencana" required data-testid="diklat-gap-tahun-rencana-select" data-selected="{{ $selectedTahunRencana ?? '' }}"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                         <option value="">Pilih Tahun</option>
                         @for ($year = date('Y'); $year >= 2020; $year--)
                             <option value="{{ $year }}" {{ (string) $selectedTahunRencana === (string) $year ? 'selected' : '' }}>
@@ -43,7 +43,7 @@
                 <div class="flex flex-col gap-1">
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Tahun Realisasi</label>
                     <select name="tahun_realisasi" data-testid="diklat-gap-tahun-realisasi-select" data-selected="{{ $selectedTahunRealisasi ?? '' }}"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                         <option value="">Default ke Tahun Rencana</option>
                         @for ($year = date('Y'); $year >= 2020; $year--)
                             <option value="{{ $year }}" {{ (string) $selectedTahunRealisasi === (string) $year ? 'selected' : '' }}>
@@ -57,7 +57,7 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Unit Kerja</label>
                         <select name="unit_kerja_id" data-testid="diklat-gap-unit-select" data-selected="{{ $selectedUnitKerjaId ?? '' }}"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                             <option value="">Semua Unit</option>
                             @foreach ($unitKerjaOptions as $unitKerja)
                                 <option value="{{ $unitKerja->id }}" {{ (string) $selectedUnitKerjaId === (string) $unitKerja->id ? 'selected' : '' }}>
@@ -74,7 +74,7 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Pegawai</label>
                         <select name="pegawai_id" data-testid="diklat-gap-pegawai-select" data-selected="{{ $selectedPegawaiId ?? '' }}"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                             <option value="">Semua Pegawai</option>
                             @foreach ($pegawaiOptions as $pegawai)
                                 <option value="{{ $pegawai->id }}" {{ (string) $selectedPegawaiId === (string) $pegawai->id ? 'selected' : '' }}>
@@ -111,7 +111,7 @@
                     'realized_linked_hours' => ['label' => 'Realized Hours', 'value' => $summary['realized_linked_hours']],
                     'hour_gap' => ['label' => 'Hour Gap', 'value' => $summary['hour_gap']],
                 ] as $key => $metric)
-                    <div data-testid="diklat-gap-summary-card-{{ $key }}" class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+                    <div data-testid="diklat-gap-summary-card-{{ $key }}" class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-4">
                         <div class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ $metric['label'] }}</div>
                         <div class="mt-2 text-2xl font-bold text-gray-800 dark:text-gray-100" data-testid="diklat-gap-summary-value-{{ $key }}" data-value="{{ $metric['value'] }}">{{ number_format($metric['value']) }}</div>
                     </div>
@@ -119,7 +119,7 @@
             </div>
 
             <div class="space-y-6">
-                <section data-testid="diklat-gap-section-planned" class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5">
+                <section data-testid="diklat-gap-section-planned" class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5">
                     <div class="flex items-center justify-between gap-3 mb-4">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Planned</h2>
@@ -159,7 +159,7 @@
                     </div>
                 </section>
 
-                <section data-testid="diklat-gap-section-realized" class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5">
+                <section data-testid="diklat-gap-section-realized" class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5">
                     <div class="flex items-center justify-between gap-3 mb-4">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Linked Realized</h2>
@@ -199,7 +199,7 @@
                     </div>
                 </section>
 
-                <section data-testid="diklat-gap-section-not-realized" class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5">
+                <section data-testid="diklat-gap-section-not-realized" class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5">
                     <div class="flex items-center justify-between gap-3 mb-4">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Not Realized</h2>
@@ -237,7 +237,7 @@
                     </div>
                 </section>
 
-                <section data-testid="diklat-gap-section-out-of-plan" class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5">
+                <section data-testid="diklat-gap-section-out-of-plan" class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5">
                     <div class="flex items-center justify-between gap-3 mb-4">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Out of Plan</h2>
@@ -275,7 +275,7 @@
                     </div>
                 </section>
 
-                <section data-testid="diklat-gap-section-cross-year-realized" class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5">
+                <section data-testid="diklat-gap-section-cross-year-realized" class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5">
                     <div class="flex items-center justify-between gap-3 mb-4">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Cross Year Realized</h2>
@@ -316,7 +316,7 @@
                 </section>
             </div>
         @else
-            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-6 text-sm text-gray-500 dark:text-gray-400">
+            <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-6 text-sm text-gray-500 dark:text-gray-400">
                 Pilih tahun rencana untuk menampilkan report gap diklat.
             </div>
         @endif

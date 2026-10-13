@@ -20,7 +20,7 @@
                 </svg>
             </button>
             <!-- Logo -->
-            <a class="block" href="/               <svg class="fill-violet-500" xmlns="http://www.w3.org/2000/svg"
+            <a class="block" href="/               <svg class="fill-blue-500" xmlns="http://www.w3.org/2000/svg"
                 width="32" height="32">
                 <path
                     d="M31.956 14.8C31.372 6.92 25.08.628 17.2.044V5.76a9.04 9.04 0 0 0 9.04 9.04h5.716ZM14.8 26.24v5.716C6.92 31.372.63 25.08.044 17.2H5.76a9.04 9.04 0 0 1 9.04 9.04Zm11.44-9.04h5.716c-.584 7.88-6.876 14.172-14.756 14.756V26.24a9.04 9.04 0 0 1 9.04-9.04ZM.044 14.8C.63 6.92 6.92.628 14.8.044V5.76a9.04 9.04 0 0 1-9.04 9.04H.044Z" />
@@ -32,7 +32,7 @@
         <div class="space-y-8">
             <!-- Pages group -->
             <div>
-                <h3 class="text-xs uppercase text-gray-400 dark:text-gray-500 font-semibold pl-3">
+                <h3 class="text-xs uppercase text-gray-500 dark:text-gray-400 font-semibold pl-3">
                     <span class="hidden lg:block lg:sidebar-expanded:hidden 2xl:hidden text-center w-6"
                         aria-hidden="true">•••</span>
                     <span class="lg:hidden lg:sidebar-expanded:block 2xl:block">Simpeg App</span>
@@ -81,7 +81,7 @@
             {{-- ===== MENU KHUSUS ROLE PEGAWAI ===== --}}
             @if (auth()->user()->role === 'pegawai')
                 <div>
-                    <h3 class="text-xs uppercase text-gray-400 dark:text-gray-500 font-semibold pl-3">
+                    <h3 class="text-xs uppercase text-gray-500 dark:text-gray-400 font-semibold pl-3">
                         <span class="hidden lg:block lg:sidebar-expanded:hidden 2xl:hidden text-center w-6"
                             aria-hidden="true">•••</span>
                         <span class="lg:hidden lg:sidebar-expanded:block 2xl:block">Navigation</span>
@@ -107,10 +107,10 @@
         <div class="pt-3 hidden lg:inline-flex 2xl:hidden justify-end mt-auto">
             <div class="w-12 pl-4 pr-3 py-2">
                 <button
-                    class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors"
+                    class="text-gray-500 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors"
                     @click="sidebarExpanded = !sidebarExpanded">
                     <span class="sr-only">Expand / collapse sidebar</span>
-                    <svg class="shrink-0 fill-current text-gray-400 dark:text-gray-500 sidebar-expanded:rotate-180"
+                    <svg class="shrink-0 fill-current text-gray-500 dark:text-gray-400 sidebar-expanded:rotate-180"
                         xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                         <path
                             d="M15 16a1 1 0 0 1-1-1V1a1 1 0 1 1 2 0v14a1 1 0 0 1-1 1ZM8.586 7H1a1 1 0 1 0 0 2h7.586l-2.793 2.793a1 1 0 1 0 1.414 1.414l4.5-4.5A.997.997 0 0 0 12 8.01M11.924 7.617a.997.997 0 0 0-.217-.324l-4.5-4.5a1 1 0 0 0-1.414 1.414L8.586 7M12 7.99a.996.996 0 0 0-.076-.373Z" />

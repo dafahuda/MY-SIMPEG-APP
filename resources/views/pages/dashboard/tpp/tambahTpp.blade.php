@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
 
             <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Form master data Perhitungan Pembayaran TPP</p>
 
@@ -40,7 +40,7 @@
                     </label>
                     <div class="flex-1">
                         <select name="pegawai_id" id="pegawai_id"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('pegawai_id') border-red-500 @enderror">
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('pegawai_id') border-red-500 @enderror">
                             <option value="">Pilih Pegawai</option>
                             @foreach ($pegawai as $item)
                                 <option value="{{ $item->id }}"
@@ -60,14 +60,14 @@
                     </label>
                     <div class="flex flex-1 gap-3">
                         <select name="periode" id="periode"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('periode') border-red-500 @enderror">
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('periode') border-red-500 @enderror">
                             @foreach (['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'] as $bulan)
                                 <option value="{{ $bulan }}" {{ old('periode') == $bulan ? 'selected' : '' }}>
                                     {{ $bulan }}</option>
                             @endforeach
                         </select>
                         <select name="tahun" id="tahun"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('tahun') border-red-500 @enderror">
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('tahun') border-red-500 @enderror">
                             @for ($y = date('Y'); $y >= 2020; $y--)
                                 <option value="{{ $y }}"
                                     {{ old('tahun', date('Y')) == $y ? 'selected' : '' }}>{{ $y }}</option>
@@ -85,7 +85,7 @@
                     <div class="flex flex-1 items-center gap-2">
                         <input type="number" id="jml_hari_kerja" name="jml_hari_kerja"
                             value="{{ old('jml_hari_kerja', 0) }}" min="0"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('jml_hari_kerja') border-red-500 @enderror" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('jml_hari_kerja') border-red-500 @enderror" />
                         <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">* Hari</span>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                     <div class="flex flex-1 items-center gap-2">
                         <input type="number" id="tidak_ada_produktifitas" name="tidak_ada_produktifitas"
                             value="{{ old('tidak_ada_produktifitas', 0) }}" min="0"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('tidak_ada_produktifitas') border-red-500 @enderror" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('tidak_ada_produktifitas') border-red-500 @enderror" />
                         <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">* Hari</span>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
                         <div class="flex flex-1 items-center gap-2">
                             <input type="number" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
                                 value="{{ old($field['name'], 0) }}" min="0"
-                                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error($field['name']) border-red-500 @enderror" />
+                                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error($field['name']) border-red-500 @enderror" />
                             <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">* Hari</span>
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                         <div class="flex flex-1 items-center gap-2">
                             <input type="number" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
                                 value="{{ old($field['name'], 0) }}" min="0"
-                                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error($field['name']) border-red-500 @enderror" />
+                                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error($field['name']) border-red-500 @enderror" />
                             <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">* Hari</span>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
                     <div class="flex flex-1 items-center gap-2">
                         <input type="number" id="tidak_masuk_kerja" name="tidak_masuk_kerja"
                             value="{{ old('tidak_masuk_kerja', 0) }}" min="0"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('tidak_masuk_kerja') border-red-500 @enderror" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('tidak_masuk_kerja') border-red-500 @enderror" />
                         <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">* Hari</span>
                     </div>
                 </div>

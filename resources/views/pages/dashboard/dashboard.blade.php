@@ -30,8 +30,8 @@
                 <p class='text-3xl font-bold text-gray-800 dark:text-gray-100 mb-1'>{{ $totalOPD }}</p>
                 <p class='text-sm text-gray-500 dark:text-gray-400'>Total Data OPD / SKPD / Unit Kerja</p>
             </div>
-            <div class='w-14 h-14 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center shrink-0'>
-                <svg class='w-7 h-7 text-pink-500' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z' clip-rule='evenodd'/></svg>
+            <div class='w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0'>
+                <svg class='w-7 h-7 text-blue-500' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z' clip-rule='evenodd'/></svg>
             </div>
         </div>
 
@@ -68,8 +68,8 @@
                 'label' => 'Rencana Aktif',
                 'description' => 'Target diklat aktif tahun berjalan.',
                 'value' => $diklatDashboardAnalytics['summary']['planned_count'],
-                'icon_bg' => 'bg-sky-100 dark:bg-sky-900/30',
-                'icon_text' => 'text-sky-600 dark:text-sky-300',
+                'icon_bg' => 'bg-blue-100 dark:bg-blue-900/30',
+                'icon_text' => 'text-blue-600 dark:text-blue-300',
             ],
             'realized' => [
                 'testid' => 'dashboard-diklat-realized',
@@ -104,7 +104,7 @@
             <div class='flex flex-col gap-3 px-5 py-4 border-b border-gray-200 dark:border-gray-700 sm:flex-row sm:items-center sm:justify-between'>
                 <div>
                     <div class='flex items-center gap-2'>
-                        <svg class='w-4 h-4 text-sky-500' fill='currentColor' viewBox='0 0 20 20'><path d='M10 2a1 1 0 01.894.553l1.382 2.794 3.084.448a1 1 0 01.554 1.706l-2.233 2.177.527 3.071a1 1 0 01-1.451 1.054L10 12.347l-2.757 1.456a1 1 0 01-1.45-1.054l.526-3.071L4.086 7.5a1 1 0 01.555-1.706l3.083-.448 1.382-2.794A1 1 0 0110 2z'/></svg>
+                        <svg class='w-4 h-4 text-blue-500' fill='currentColor' viewBox='0 0 20 20'><path d='M10 2a1 1 0 01.894.553l1.382 2.794 3.084.448a1 1 0 01.554 1.706l-2.233 2.177.527 3.071a1 1 0 01-1.451 1.054L10 12.347l-2.757 1.456a1 1 0 01-1.45-1.054l.526-3.071L4.086 7.5a1 1 0 01.555-1.706l3.083-.448 1.382-2.794A1 1 0 0110 2z'/></svg>
                         <span class='font-semibold text-gray-700 dark:text-gray-200 text-sm'>Analitik Diklat Tahun {{ $diklatDashboardAnalytics['year'] }}</span>
                     </div>
                     <p class='mt-1 text-sm text-gray-500 dark:text-gray-400'>Ringkasan plan vs realisasi untuk {{ $diklatDashboardAnalytics['scope_label'] }}.</p>
@@ -132,7 +132,7 @@
 
         <div class='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700'>
             <div class='flex items-center gap-2 px-5 py-4 border-b border-gray-200 dark:border-gray-700'>
-                <svg class='w-4 h-4 text-violet-500' fill='currentColor' viewBox='0 0 20 20'><path d='M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z'/></svg>
+                <svg class='w-4 h-4 text-blue-500' fill='currentColor' viewBox='0 0 20 20'><path d='M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z'/></svg>
                 <span class='font-semibold text-gray-700 dark:text-gray-200 text-sm'>Status Plan vs Realisasi</span>
             </div>
             <div class='p-5'>
@@ -210,7 +210,7 @@
                             <td class='px-4 py-3 text-gray-700 dark:text-gray-300 font-mono text-xs'>{{ $item['nip'] }}</td>
                             <td class='px-4 py-3 text-gray-800 dark:text-gray-200'>{{ $item['nama'] }}</td>
                             <td class='px-4 py-3 text-gray-600 dark:text-gray-400 text-xs'>{{ $item['ttl'] }}</td>
-                            <td class='px-4 py-3'><span class='inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300'>{{ $item['periode'] }}</span></td>
+                            <td class='px-4 py-3'><span class='inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'>{{ $item['periode'] }}</span></td>
                         </tr>
                         @empty
                         <x-empty-state colspan="4" icon="default" title="Tidak ada data" message="Tidak ada data" />
@@ -252,7 +252,7 @@
 
         <div class='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700'>
             <div class='flex items-center gap-2 px-5 py-4 border-b border-gray-200 dark:border-gray-700'>
-                <svg class='w-4 h-4 text-cyan-500' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z' clip-rule='evenodd'/></svg>
+                <svg class='w-4 h-4 text-blue-500' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z' clip-rule='evenodd'/></svg>
                 <span class='font-semibold text-gray-700 dark:text-gray-200 text-sm'>Statistik Jenis Kelamin</span>
             </div>
             <div class='p-5 flex justify-center'>
@@ -262,7 +262,7 @@
 
         <div class='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700'>
             <div class='flex items-center gap-2 px-5 py-4 border-b border-gray-200 dark:border-gray-700'>
-                <svg class='w-4 h-4 text-cyan-500' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z' clip-rule='evenodd'/></svg>
+                <svg class='w-4 h-4 text-blue-500' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z' clip-rule='evenodd'/></svg>
                 <span class='font-semibold text-gray-700 dark:text-gray-200 text-sm'>Statistik Status Kepegawaian</span>
             </div>
             <div class='p-5 flex justify-center'>
@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const diklatChartData = @json(collect($diklatDashboardAnalytics['chart'])->pluck('value'));
     const chartTheme = getComputedStyle(document.documentElement);
     const diklatChartColors = [
-        chartTheme.getPropertyValue('--color-sky-500').trim() || '#67bfff',
+        chartTheme.getPropertyValue('--color-blue-500').trim() || '#67bfff',
         chartTheme.getPropertyValue('--color-green-500').trim() || '#3ec972',
         chartTheme.getPropertyValue('--color-yellow-500').trim() || '#f0bb33',
         chartTheme.getPropertyValue('--color-red-500').trim() || '#ff5656',

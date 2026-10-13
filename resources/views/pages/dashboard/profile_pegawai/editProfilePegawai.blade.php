@@ -30,7 +30,7 @@
             </div>
         @endif
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
             <div class="p-6">
                 <form action="{{ route('profile.pegawai.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -44,7 +44,7 @@
                                 @if ($pegawai->foto)
                                     <img id="preview-foto" src="{{ asset($pegawai->foto) }}" alt="Foto" class="w-full h-full object-cover">
                                 @else
-                                    <div id="preview-foto" class="w-full h-full flex items-center justify-center text-gray-400">
+                                    <div id="preview-foto" class="w-full h-full flex items-center justify-center text-gray-500">
                                         <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
                                         </svg>
@@ -60,9 +60,9 @@
                                     file:mr-4 file:py-2 file:px-4
                                     file:rounded file:border-0
                                     file:text-sm file:font-semibold
-                                    file:bg-indigo-50 file:text-indigo-700
-                                    hover:file:bg-indigo-100
-                                    dark:file:bg-indigo-900/30 dark:file:text-indigo-300"
+                                    file:bg-blue-50 file:text-blue-700
+                                    hover:file:bg-blue-100
+                                    dark:file:bg-blue-900/30 dark:file:text-blue-300"
                                     onchange="previewImage(event)">
                                 <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Format: JPG, JPEG, PNG, GIF. Max: 2MB</p>
                             </div>
@@ -332,7 +332,7 @@
                         <a href="/profile_saya" class="btn bg-gray-500 hover:bg-gray-600 text-white">
                             Batal
                         </a>
-                        <button type="submit" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                        <button type="submit" class="btn bg-blue-500 hover:bg-blue-600 text-white">
                             <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                                 <path d="M14.3 2.3L5 11.6 1.7 8.3c-.4-.4-1-.4-1.4 0-.4.4-.4 1 0 1.4l4 4c.2.2.4.3.7.3.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4-.4-.4-1-.4-1.4 0z" />
                             </svg>

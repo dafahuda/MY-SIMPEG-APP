@@ -29,7 +29,7 @@
             </form>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left rtl:text-right text-body">
                     <thead class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 dark:bg-opacity-50 border-t border-b border-gray-200 dark:border-gray-700">
@@ -65,7 +65,7 @@
                                         {{ $log->username_snapshot ?? 'Sistem' }}
                                     </div>
                                     @if ($log->user?->role)
-                                        <div class="text-[11px] uppercase text-gray-400">{{ $log->user->role }}</div>
+                                        <div class="text-[11px] uppercase text-gray-500">{{ $log->user->role }}</div>
                                     @endif
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

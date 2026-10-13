@@ -11,7 +11,7 @@
 
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5">
             <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <form action="/manajemen_setup/opd_skd_unitkerja/tambah_unit_kerja" method="POST">
                     @csrf

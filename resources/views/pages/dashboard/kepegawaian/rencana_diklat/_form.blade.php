@@ -21,7 +21,7 @@
         </label>
         <div class="flex-1">
             <select name="pegawai_id" id="pegawai_id"
-                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('pegawai_id') border-red-500 @enderror">
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('pegawai_id') border-red-500 @enderror">
                 <option value="">Pilih Pegawai</option>
                 @foreach ($pegawaiList as $pegawai)
                     <option value="{{ $pegawai->id }}" {{ old('pegawai_id', $rencanaDiklat->pegawai_id ?? '') == $pegawai->id ? 'selected' : '' }}>
@@ -38,7 +38,7 @@
         </label>
         <div class="flex-1">
             <select name="tahun_rencana" id="tahun_rencana"
-                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('tahun_rencana') border-red-500 @enderror">
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('tahun_rencana') border-red-500 @enderror">
                 <option value="">Pilih Tahun</option>
                 @foreach ($daftarTahun as $tahun)
                     <option value="{{ $tahun }}" {{ old('tahun_rencana', $rencanaDiklat->tahun_rencana ?? date('Y')) == $tahun ? 'selected' : '' }}>
@@ -56,7 +56,7 @@
         <div class="flex-1">
             <input type="text" id="nama_diklat_rencana" name="nama_diklat_rencana"
                 value="{{ old('nama_diklat_rencana', $rencanaDiklat->nama_diklat_rencana ?? '') }}"
-                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('nama_diklat_rencana') border-red-500 @enderror" />
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('nama_diklat_rencana') border-red-500 @enderror" />
         </div>
     </div>
 
@@ -67,7 +67,7 @@
         <div class="flex-1">
             <input type="text" id="target_kompetensi" name="target_kompetensi"
                 value="{{ old('target_kompetensi', $rencanaDiklat->target_kompetensi ?? '') }}"
-                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('target_kompetensi') border-red-500 @enderror" />
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('target_kompetensi') border-red-500 @enderror" />
         </div>
     </div>
 
@@ -77,7 +77,7 @@
         </label>
         <div class="flex-1">
             <select name="kategori_diklat" id="kategori_diklat"
-                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('kategori_diklat') border-red-500 @enderror">
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('kategori_diklat') border-red-500 @enderror">
                 <option value="">Pilih Kategori</option>
                 @foreach ($kategoriOptions as $kategori)
                     <option value="{{ $kategori }}" {{ old('kategori_diklat', $rencanaDiklat->kategori_diklat ?? '') == $kategori ? 'selected' : '' }}>
@@ -94,7 +94,7 @@
         </label>
         <div class="flex-1">
             <select name="prioritas" id="prioritas"
-                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('prioritas') border-red-500 @enderror">
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('prioritas') border-red-500 @enderror">
                 <option value="">Pilih Prioritas</option>
                 @foreach ($prioritasOptions as $prioritas)
                     <option value="{{ $prioritas }}" {{ old('prioritas', $rencanaDiklat->prioritas ?? '') == $prioritas ? 'selected' : '' }}>
@@ -112,7 +112,7 @@
         <div class="flex-1">
             <input type="number" id="target_jam" name="target_jam" min="0"
                 value="{{ old('target_jam', $rencanaDiklat->target_jam ?? 0) }}"
-                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('target_jam') border-red-500 @enderror" />
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('target_jam') border-red-500 @enderror" />
         </div>
     </div>
 
@@ -123,7 +123,7 @@
         <div class="flex-1">
             <input type="text" id="target_penyelenggara" name="target_penyelenggara"
                 value="{{ old('target_penyelenggara', $rencanaDiklat->target_penyelenggara ?? '') }}"
-                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('target_penyelenggara') border-red-500 @enderror" />
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('target_penyelenggara') border-red-500 @enderror" />
         </div>
     </div>
 
@@ -133,7 +133,7 @@
         </label>
         <div class="flex-1">
             <textarea id="alasan_kebutuhan" name="alasan_kebutuhan" rows="4"
-                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('alasan_kebutuhan') border-red-500 @enderror">{{ old('alasan_kebutuhan', $rencanaDiklat->alasan_kebutuhan ?? '') }}</textarea>
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('alasan_kebutuhan') border-red-500 @enderror">{{ old('alasan_kebutuhan', $rencanaDiklat->alasan_kebutuhan ?? '') }}</textarea>
         </div>
     </div>
 
@@ -143,7 +143,7 @@
         </label>
         <div class="flex-1">
             <textarea id="catatan" name="catatan" rows="4"
-                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('catatan') border-red-500 @enderror">{{ old('catatan', $rencanaDiklat->catatan ?? '') }}</textarea>
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('catatan') border-red-500 @enderror">{{ old('catatan', $rencanaDiklat->catatan ?? '') }}</textarea>
         </div>
     </div>
 
@@ -160,7 +160,7 @@
                 <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Status terkunci karena rencana ini sudah terhubung ke realisasi diklat.</p>
             @else
                 <select name="status" id="status"
-                    class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('status') border-red-500 @enderror">
+                    class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 @error('status') border-red-500 @enderror">
                     <option value="draft" {{ $selectedStatus === 'draft' ? 'selected' : '' }}>Draft</option>
                     <option value="planned" {{ $selectedStatus === 'planned' ? 'selected' : '' }}>Planned</option>
                 </select>

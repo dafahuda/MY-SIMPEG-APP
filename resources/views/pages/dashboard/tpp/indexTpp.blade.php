@@ -13,7 +13,7 @@
             </div>
             <div>
                 <a href="{{ route('tpp.create') }}"
-                    class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    class="btn bg-blue-500 hover:bg-blue-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                     </svg>
@@ -23,7 +23,7 @@
         </div>
 
         <!-- Table Card -->
-        <div x-data="tppDetail()" class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+        <div x-data="tppDetail()" class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
 
             <!-- Table controls -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700 gap-3">
@@ -49,7 +49,7 @@
                                 placeholder="Cari nama pegawai atau periode..."
                                 class="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200" />
                             <button type="submit"
-                                class="px-3 py-1 bg-indigo-500 hover:bg-indigo-600 text-white text-sm rounded">
+                                class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded">
                                 Cari
                             </button>
                         </form>
@@ -211,7 +211,7 @@
                     <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg">
                         <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                             <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">Detail Rincian TPP</h3>
-                            <button @click="open = false" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+                            <button @click="open = false" class="text-gray-500 hover:text-gray-600 text-2xl leading-none">&times;</button>
                         </div>
                         <div class="p-5 space-y-3 text-sm text-gray-700 dark:text-gray-300">
                             <div class="flex justify-between border-b pb-2">

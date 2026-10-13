@@ -39,7 +39,7 @@
         </div>
 
         {{-- Filter Card --}}
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <form method="GET" action="{{ url('/report/duk') }}"
                 class="flex flex-col sm:flex-row items-end gap-3">
                 <div class="flex flex-col gap-1 flex-1">
@@ -47,7 +47,7 @@
                         Pilih OPD / SKPD / Unit Kerja
                     </label>
                     <select name="unit_kerja_id"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                         <option value="">Pilih Unit Kerja</option>
                         @foreach ($unitKerjaList as $uk)
                             <option value="{{ $uk->id }}"
@@ -68,7 +68,7 @@
         </div>
 
         @if ($selectedUnitKerja)
-            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-6">
 
                 {{-- Kop --}}
                 <div class="text-center mb-4">
@@ -108,7 +108,7 @@
                                 <th class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center text-xs">ASAL / TK</th>
                                 <th class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center text-xs">TLS</th>
                             </tr>
-                            <tr class="bg-gray-50 dark:bg-gray-700/50 text-gray-400 dark:text-gray-500">
+                            <tr class="bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400">
                                 @foreach (range(1, 12) as $n)
                                     <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center text-xs font-medium">{{ $n }}</td>
                                 @endforeach
@@ -142,7 +142,7 @@
                                             <div>{{ $pangkat->master_pangkat->nama_pangkat ?? '-' }}</div>
                                             <div class="text-gray-500">({{ $pangkat->master_golongan->nama_golongan ?? '-' }})</div>
                                         @else
-                                            <span class="text-gray-400">-</span>
+                                            <span class="text-gray-500">-</span>
                                         @endif
                                     </td>
                                     {{-- TMT Pangkat --}}
@@ -175,7 +175,7 @@
                                             <div>{{ $pendidikan->nama_sekolah_universitas ?? '-' }}</div>
                                             <div class="text-gray-500">{{ $pendidikan->jenjang_pendidikan }}</div>
                                         @else
-                                            <span class="text-gray-400">-</span>
+                                            <span class="text-gray-500">-</span>
                                         @endif
                                     </td>
                                     {{-- Pend Akhir Tls (Tahun Lulus) --}}
@@ -191,7 +191,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="12" class="border border-gray-300 dark:border-gray-600 px-4 py-8 text-center text-gray-400 dark:text-gray-500">
+                                    <td colspan="12" class="border border-gray-300 dark:border-gray-600 px-4 py-8 text-center text-gray-500 dark:text-gray-400">
                                         Tidak ada data pegawai untuk unit kerja ini.
                                     </td>
                                 </tr>

@@ -29,15 +29,15 @@
             <div class="flex flex-wrap gap-1 mb-4 border-b border-gray-200 dark:border-gray-700">
                 @php
                     $tabs = [
-                        ['id' => 'profil',      'label' => 'Profile',     'color' => 'bg-blue-500'],
-                        ['id' => 'suami_istri', 'label' => 'Suami/Istri', 'color' => 'bg-green-500'],
-                        ['id' => 'anak',        'label' => 'Anak',        'color' => 'bg-teal-500'],
-                        ['id' => 'ortu',        'label' => 'Or.Tu',       'color' => 'bg-cyan-500'],
-                        ['id' => 'pendidikan',  'label' => 'Pendidikan',  'color' => 'bg-indigo-500'],
-                        ['id' => 'skp',         'label' => 'SKP',         'color' => 'bg-purple-500'],
-                        ['id' => 'tpp',         'label' => 'TPP',         'color' => 'bg-pink-500'],
-                        ['id' => 'kgb',         'label' => 'KGB',         'color' => 'bg-rose-500'],
-                        ['id' => 'artis',       'label' => 'Artis',       'color' => 'bg-orange-500'],
+                        ['id' => 'profil',      'label' => 'Profile',     'color' => 'bg-blue-600'],
+                        ['id' => 'suami_istri', 'label' => 'Suami/Istri', 'color' => 'bg-blue-600'],
+                        ['id' => 'anak',        'label' => 'Anak',        'color' => 'bg-blue-600'],
+                        ['id' => 'ortu',        'label' => 'Or.Tu',       'color' => 'bg-blue-600'],
+                        ['id' => 'pendidikan',  'label' => 'Pendidikan',  'color' => 'bg-blue-600'],
+                        ['id' => 'skp',         'label' => 'SKP',         'color' => 'bg-blue-600'],
+                        ['id' => 'tpp',         'label' => 'TPP',         'color' => 'bg-blue-600'],
+                        ['id' => 'kgb',         'label' => 'KGB',         'color' => 'bg-blue-600'],
+                        ['id' => 'artis',       'label' => 'Artis',       'color' => 'bg-blue-600'],
                     ];
                 @endphp
                 @foreach ($tabs as $t)
@@ -51,7 +51,7 @@
                 {{-- Print button + Edit button --}}
                 <div class="ml-auto flex gap-2">
                     <a href="{{ route('profile.pegawai.edit') }}"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-medium rounded shadow-sm">
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded shadow-sm">
                         <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
                             <path d="M11.7.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM4.6 14H2v-2.6l6-6L10.6 8l-6 6zM12 6.6L9.4 4 11 2.4 13.6 5 12 6.6z"/>
                         </svg>
@@ -83,7 +83,7 @@
                                 @if ($pegawai->foto)
                                     <img src="{{ asset($pegawai->foto) }}" alt="Foto" class="w-full h-full object-cover">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                    <div class="w-full h-full flex items-center justify-center text-gray-500">
                                         <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
                                         </svg>
@@ -143,25 +143,25 @@
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4">
                     <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3 flex items-center justify-between">
                         Kepegawaian
-                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 16 16">
+                        <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M9 6.855A3.502 3.502 0 0 0 8 0a3.5 3.5 0 0 0-1 6.855v1.656L5.534 9.65a3.5 3.5 0 1 0 1.229 1.578L8 10.267l1.238.962a3.5 3.5 0 1 0 1.229-1.578L9 8.511V6.855Z"/>
                         </svg>
                     </h3>
                     @php
                         $kepLinks = [
-                            ['label' => 'Periode Pangkat', 'color' => 'bg-blue-500',   'count' => $pangkat ? 1 : 0],
-                            ['label' => 'Jabatan',         'color' => 'bg-yellow-500', 'count' => $jabatan ? 1 : 0],
-                            ['label' => 'Periode KGB',     'color' => 'bg-green-500',  'count' => 0],
-                            ['label' => 'Kepangkatan',     'color' => 'bg-teal-500',   'count' => 0],
-                            ['label' => 'Hukuman',         'color' => 'bg-red-500',    'count' => $hukuman->count()],
-                            ['label' => 'Penghargaan',     'color' => 'bg-purple-500', 'count' => $penghargaan->count()],
-                            ['label' => 'Seminar',         'color' => 'bg-indigo-500', 'count' => $seminar->count()],
-                            ['label' => 'Penugasan LN',    'color' => 'bg-pink-500',   'count' => 0],
-                            ['label' => 'Latihan Jabatan', 'color' => 'bg-orange-500', 'count' => $latihanJab->count()],
-                            ['label' => 'Cuti',            'color' => 'bg-cyan-500',   'count' => $cuti->count()],
-                            ['label' => 'IKI Tunjangan',   'color' => 'bg-lime-500',   'count' => $tunjangan->count()],
-                            ['label' => 'Mutasi',          'color' => 'bg-amber-500',  'count' => $mutasi->count()],
-                            ['label' => 'Izin Perkawinan', 'color' => 'bg-rose-500',   'count' => $izinKawin->count()],
+                            ['label' => 'Periode Pangkat', 'color' => 'bg-blue-600',   'count' => $pangkat ? 1 : 0],
+                            ['label' => 'Jabatan',         'color' => 'bg-blue-600', 'count' => $jabatan ? 1 : 0],
+                            ['label' => 'Periode KGB',     'color' => 'bg-blue-600',  'count' => 0],
+                            ['label' => 'Kepangkatan',     'color' => 'bg-blue-600',   'count' => 0],
+                            ['label' => 'Hukuman',         'color' => 'bg-blue-600',    'count' => $hukuman->count()],
+                            ['label' => 'Penghargaan',     'color' => 'bg-blue-600', 'count' => $penghargaan->count()],
+                            ['label' => 'Seminar',         'color' => 'bg-blue-600', 'count' => $seminar->count()],
+                            ['label' => 'Penugasan LN',    'color' => 'bg-blue-600',   'count' => 0],
+                            ['label' => 'Latihan Jabatan', 'color' => 'bg-blue-600', 'count' => $latihanJab->count()],
+                            ['label' => 'Cuti',            'color' => 'bg-blue-600',   'count' => $cuti->count()],
+                            ['label' => 'IKI Tunjangan',   'color' => 'bg-blue-600',   'count' => $tunjangan->count()],
+                            ['label' => 'Mutasi',          'color' => 'bg-blue-600',  'count' => $mutasi->count()],
+                            ['label' => 'Izin Perkawinan', 'color' => 'bg-blue-600',   'count' => $izinKawin->count()],
                         ];
                     @endphp
                     <div class="grid grid-cols-2 gap-2">
@@ -556,7 +556,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="px-3 py-4 text-center text-gray-400 italic">Belum ada rencana diklat.</td>
+                                        <td colspan="8" class="px-3 py-4 text-center text-gray-500 italic">Belum ada rencana diklat.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

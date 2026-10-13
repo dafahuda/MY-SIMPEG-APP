@@ -57,7 +57,7 @@
         <div class="no-print grid grid-cols-12 gap-6">
 
             <div
-                class="col-span-full xl:col-span-5 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+                class="col-span-full xl:col-span-5 bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
                 <header class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
                     <h2 class="font-semibold text-gray-800 dark:text-gray-100">Daftar Jenis Kelamin</h2>
                 </header>
@@ -92,7 +92,7 @@
             </div>
 
             <div
-                class="col-span-full xl:col-span-7 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+                class="col-span-full xl:col-span-7 bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
                 <header class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
                     <h2 class="font-semibold text-gray-800 dark:text-gray-100">Statistik Jenis Kelamin</h2>
                 </header>

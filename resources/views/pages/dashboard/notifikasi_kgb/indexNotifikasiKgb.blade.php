@@ -27,7 +27,7 @@
 
 
         <!-- Filter Periode -->
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-5">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-5">
             <form action="/notifikasi_kgb/data_notifikasi_kgb" method="GET" class="flex flex-wrap items-end gap-3">
                 <div class="flex items-center gap-3">
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
@@ -36,9 +36,9 @@
                     <div x-data="{ open: false, selected: '{{ $periode === 'tahun_depan' ? 'Tahun Depan' : 'Tahun Ini' }}' }" class="relative">
                         <button type="button"
                             @click="open = !open"
-                            class="flex items-center justify-between w-48 px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            class="flex items-center justify-between w-48 px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <span x-text="selected"></span>
-                            <svg class="w-4 h-4 ml-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 ml-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -46,12 +46,12 @@
                             class="absolute z-10 mt-1 w-48 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg">
                             <button type="button"
                                 @click="selected = 'Tahun Ini'; open = false; $refs.periodeInput.value = 'tahun_ini'; $refs.periodeForm.submit()"
-                                class="block w-full text-left px-4 py-2 text-sm {{ $periode !== 'tahun_depan' ? 'bg-indigo-500 text-white' : 'text-white hover:bg-gray-100 dark:hover:bg-gray-600' }}">
+                                class="block w-full text-left px-4 py-2 text-sm {{ $periode !== 'tahun_depan' ? 'bg-blue-500 text-white' : 'text-white hover:bg-gray-100 dark:hover:bg-gray-600' }}">
                                 Tahun Ini
                             </button>
                             <button type="button"
                                 @click="selected = 'Tahun Depan'; open = false; $refs.periodeInput.value = 'tahun_depan'; $refs.periodeForm.submit()"
-                                class="block w-full text-left px-4 py-2 text-sm {{ $periode === 'tahun_depan' ? 'bg-indigo-500 text-white' : 'text-white hover:bg-gray-100 dark:hover:bg-gray-600' }}">
+                                class="block w-full text-left px-4 py-2 text-sm {{ $periode === 'tahun_depan' ? 'bg-blue-500 text-white' : 'text-white hover:bg-gray-100 dark:hover:bg-gray-600' }}">
                                 Tahun Depan
                             </button>
                         </div>
@@ -69,7 +69,7 @@
         </div>
 
         <!-- Table Card -->
-        <div x-data="{ search: '' }" class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+        <div x-data="{ search: '' }" class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
 
             <!-- Table controls -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700 gap-3">
@@ -166,7 +166,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-5 py-8 text-center text-gray-400 dark:text-gray-500">
+                                <td colspan="8" class="px-5 py-8 text-center text-gray-500 dark:text-gray-400">
                                     Tidak ada pegawai yang mendapat KGB pada periode
                                     {{ $periode === 'tahun_depan' ? 'Tahun Depan' : 'Tahun Ini' }}
                                     ({{ $tahunTarget }}).

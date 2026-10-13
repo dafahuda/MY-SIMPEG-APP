@@ -46,10 +46,10 @@
         @endphp
 
         <div class="flex items-center justify-between pt-1.5 pb-2 px-4">
-            <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase">Notifikasi</div>
+            <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Notifikasi</div>
             @if (auth()->user() && auth()->user()->unreadNotifications()->count() > 0)
                 <button type="button"
-                        class="text-xs font-medium text-violet-500 hover:text-violet-600 dark:text-violet-400"
+                        class="text-xs font-medium text-blue-500 hover:text-blue-600 dark:text-blue-400"
                         @click="fetch('{{ route('notifications.readAll') }}', {method: 'POST', headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}', 'X-Requested-With': 'XMLHttpRequest'}}).then(() => window.location.reload())">
                     Tandai semua dibaca
                 </button>
@@ -57,7 +57,7 @@
         </div>
 
         @if ($semuaNotifikasi->isEmpty())
-            <div class="py-6 px-4 text-center text-sm text-gray-400 dark:text-gray-500">
+            <div class="py-6 px-4 text-center text-sm text-gray-500 dark:text-gray-400">
                 Belum ada notifikasi.
             </div>
         @else
@@ -74,11 +74,11 @@
                             <span class="flex items-start gap-2">
                                 <span class="flex-1 min-w-0">
                                     @if (empty($notif->read_at))
-                                        <span class="inline-block w-2 h-2 rounded-full bg-violet-500 mt-1 mr-1 shrink-0" title="Belum dibaca"></span>
+                                        <span class="inline-block w-2 h-2 rounded-full bg-blue-500 mt-1 mr-1 shrink-0" title="Belum dibaca"></span>
                                     @endif
                                     <span class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{ $data['judul'] ?? 'Notifikasi' }}</span>
                                     <span class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5 break-words">{{ $data['pesan'] ?? '' }}</span>
-                                    <span class="block text-xs font-medium text-gray-400 dark:text-gray-500 mt-1">{{ \Illuminate\Support\Carbon::parse($notif->created_at)->translatedFormat('d M Y, H:i') }}</span>
+                                    <span class="block text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">{{ \Illuminate\Support\Carbon::parse($notif->created_at)->translatedFormat('d M Y, H:i') }}</span>
                                 </span>
                             </span>
                         </a>

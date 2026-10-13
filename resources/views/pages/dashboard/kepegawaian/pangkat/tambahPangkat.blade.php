@@ -12,7 +12,7 @@
         </div>
 
         <div x-data="{}"
-            class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5">
+            class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5">
             <div class="grid gap-6 mb-6 md:grid-cols-2">
                 @if ($errors->any())
                     <div class="bg-red-500 text-white p-4 mb-5">
@@ -48,7 +48,7 @@
                                 </select>
 
                                 <button type="button" @click="openPangkat = true"
-                                    class="bg-orange-500 text-white px-3 py-1 rounded shadow hover:bg-orange-600 transition shrink-0">
+                                    class="bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600 transition shrink-0">
                                     + ADD PAN
                                 </button>
 
@@ -149,7 +149,7 @@
                                     @endforeach
                                 </select>
                                 <button type="button" @click="openGolongan = true"
-                                    class="bg-orange-500 text-white px-3 py-1 rounded shadow hover:bg-orange-600 transition shrink-0">
+                                    class="bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600 transition shrink-0">
                                     + ADD GOL
                                 </button>
 

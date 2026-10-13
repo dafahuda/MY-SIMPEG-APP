@@ -34,14 +34,14 @@
 
         <!-- Filter Card -->
         <div
-            class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
+            class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <form method="GET" action="{{ route('tpp.laporan_bulanan') }}"
                 class="flex flex-col sm:flex-row items-end gap-3">
                 <div class="flex flex-col gap-1 flex-1">
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Pilih Periode</label>
                     <div class="flex gap-3">
                         <select name="periode"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                             <option value="">Bulan</option>
                             @foreach ($bulanList as $bulan)
                                 <option value="{{ $bulan }}" {{ $selectedBulan === $bulan ? 'selected' : '' }}>
@@ -50,7 +50,7 @@
                             @endforeach
                         </select>
                         <select name="tahun"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                             <option value="">Tahun</option>
                             @for ($y = date('Y'); $y >= 2020; $y--)
                                 <option value="{{ $y }}" {{ $selectedTahun == $y ? 'selected' : '' }}>
@@ -72,7 +72,7 @@
 
         @if ($selectedBulan && $selectedTahun)
             <!-- Result Card -->
-            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
 
                 <!-- Table top controls -->
                 <div
@@ -171,7 +171,7 @@
                                             {{ $row->pegawai->nama ?? '-' }}
                                         </div>
                                         @if ($row->pegawai && $row->pegawai->nip)
-                                            <div class="text-xs text-gray-400">{{ $row->pegawai->nip }}</div>
+                                            <div class="text-xs text-gray-500">{{ $row->pegawai->nip }}</div>
                                         @endif
                                     </td>
                                     <td class="px-3 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -202,7 +202,7 @@
                                 </tr>
                             @empty
                                 <tr id="emptyRow">
-                                    <td colspan="7" class="px-5 py-8 text-center text-gray-400 dark:text-gray-500">
+                                    <td colspan="7" class="px-5 py-8 text-center text-gray-500 dark:text-gray-400">
                                         No data available in table
                                     </td>
                                 </tr>
@@ -298,13 +298,13 @@
                             if (p === '...') {
                                 const span = document.createElement('span');
                                 span.textContent = '...';
-                                span.className = 'px-2 py-1 text-gray-400';
+                                span.className = 'px-2 py-1 text-gray-500';
                                 pageNums.appendChild(span);
                             } else {
                                 const btn = document.createElement('button');
                                 btn.textContent = p;
                                 btn.className = p === currentPage ?
-                                    'px-3 py-1 rounded bg-indigo-500 text-white text-sm font-medium' :
+                                    'px-3 py-1 rounded bg-blue-500 text-white text-sm font-medium' :
                                     'px-3 py-1 rounded border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm';
                                 btn.addEventListener('click', () => {
                                     currentPage = p;

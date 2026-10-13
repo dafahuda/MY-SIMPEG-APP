@@ -19,7 +19,7 @@
 
             @if ($canMutate)
                 <a href="{{ route('rencana_diklat.create') }}" data-testid="rencana-diklat-create-button"
-                    class="btn bg-indigo-500 hover:bg-indigo-600 text-white shrink-0">
+                    class="btn bg-blue-500 hover:bg-blue-600 text-white shrink-0">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                     </svg>
@@ -28,7 +28,7 @@
             @endif
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <form action="{{ route('rencana_diklat.index') }}" method="GET" data-testid="rencana-diklat-filter-form"
                 class="grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1.1fr)_180px_180px_auto] xl:items-end">
                 <div class="flex flex-col gap-1">
@@ -36,13 +36,13 @@
                     <input id="rencana_search" type="text" name="search" value="{{ $filters['search'] ?? '' }}"
                         data-testid="rencana-diklat-filter-search" aria-label="Cari Rencana Diklat"
                         placeholder="Nama diklat, pegawai, kompetensi, atau penyelenggara"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                 </div>
 
                 <div class="flex flex-col gap-1">
                     <label for="pegawai_filter" class="text-sm font-medium text-gray-700 dark:text-gray-300">Pegawai</label>
                     <select id="pegawai_filter" name="pegawai_id" data-testid="rencana-diklat-filter-pegawai"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                         <option value="">Semua pegawai</option>
                         @foreach ($pegawaiFilterOptions as $pegawai)
                             <option value="{{ $pegawai->id }}" {{ (string) ($filters['pegawai_id'] ?? '') === (string) $pegawai->id ? 'selected' : '' }}>
@@ -55,7 +55,7 @@
                 <div class="flex flex-col gap-1">
                     <label for="tahun_filter" class="text-sm font-medium text-gray-700 dark:text-gray-300">Tahun</label>
                     <select id="tahun_filter" name="tahun_rencana" data-testid="rencana-diklat-filter-tahun"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                         <option value="">Semua tahun</option>
                         @foreach ($tahunFilterOptions as $tahun)
                             <option value="{{ $tahun }}" {{ (string) ($filters['tahun_rencana'] ?? '') === (string) $tahun ? 'selected' : '' }}>
@@ -68,7 +68,7 @@
                 <div class="flex flex-col gap-1">
                     <label for="status_filter" class="text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
                     <select id="status_filter" name="status" data-testid="rencana-diklat-filter-status"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                         <option value="">Semua status</option>
                         <option value="draft" {{ ($filters['status'] ?? '') === 'draft' ? 'selected' : '' }}>Draft</option>
                         <option value="planned" {{ ($filters['status'] ?? '') === 'planned' ? 'selected' : '' }}>Planned</option>
@@ -101,7 +101,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700 gap-3">
                 <div>
                     <p class="text-sm font-medium text-gray-800 dark:text-gray-100">
@@ -111,7 +111,7 @@
                 </div>
 
                 @if ($activeFilterCount > 0)
-                    <span class="inline-flex items-center rounded-full bg-violet-100 text-violet-700 dark:bg-violet-500/10 dark:text-violet-300 px-3 py-1 text-xs font-semibold">
+                    <span class="inline-flex items-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300 px-3 py-1 text-xs font-semibold">
                         {{ $activeFilterCount }} filter aktif
                     </span>
                 @endif
@@ -139,7 +139,7 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-medium text-gray-800 dark:text-gray-100">{{ $data->pegawai->nama ?? '-' }}</div>
                                     @if ($data->pegawai?->nip)
-                                        <div class="text-xs text-gray-400">{{ $data->pegawai->nip }}</div>
+                                        <div class="text-xs text-gray-500">{{ $data->pegawai->nip }}</div>
                                     @endif
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="text-left font-medium text-gray-800 dark:text-gray-100">{{ $data->tahun_rencana }}</div></td>

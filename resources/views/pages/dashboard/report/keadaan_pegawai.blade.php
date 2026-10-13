@@ -37,7 +37,7 @@
         </div>
 
         {{-- Filter --}}
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <form method="GET" action="{{ url('/report/keadaan_pegawai') }}"
                 class="flex flex-col sm:flex-row items-end gap-3">
                 <div class="flex flex-col gap-1 flex-1">
@@ -45,7 +45,7 @@
                         Pilih OPD / SKPD / Unit Kerja
                     </label>
                     <select name="unit_kerja_id"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                         <option value="">Pilih Unit Kerja</option>
                         @foreach ($unitKerjaList as $uk)
                             <option value="{{ $uk->id }}"
@@ -66,7 +66,7 @@
         </div>
 
         @if ($selectedUnitKerja && $stats)
-            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-6">
 
                 {{-- Kop --}}
                 <div class="text-center mb-4">
@@ -132,7 +132,7 @@
                                 <th class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center w-14">STAFF</th>
                             </tr>
                             {{-- Nomor kolom --}}
-                            <tr class="bg-gray-50 dark:bg-gray-700/50 text-gray-400 dark:text-gray-500">
+                            <tr class="bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400">
                                 @foreach (range(1, 12) as $n)
                                     <td class="border border-gray-300 dark:border-gray-600 px-2 py-1 text-center font-medium">{{ $n }}</td>
                                 @endforeach

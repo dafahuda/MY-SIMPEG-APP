@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Form master data rencana diklat pegawai</p>
 
             @if ($errors->any())

@@ -14,7 +14,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
             <div class="mb-6">
                 <a href="/kepegawaian/penghargaan/view_form_tambah_penghargaan"
-                    class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    class="btn bg-blue-500 hover:bg-blue-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path
                             d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
@@ -34,7 +34,7 @@
             </form>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left rtl:text-right text-body">
                     <thead

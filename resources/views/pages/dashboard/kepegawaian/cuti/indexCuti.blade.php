@@ -14,7 +14,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
             <div class="mb-6">
                 <a href="/kepegawaian/cuti/view_form_tambah_cuti"
-                    class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    class="btn bg-blue-500 hover:bg-blue-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path
                             d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
@@ -33,7 +33,7 @@
             </form>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left rtl:text-right text-body">
                     <thead
@@ -104,7 +104,7 @@
                                             ✓ Disetujui
                                         </span>
                                         @if ($data->approved_at)
-                                            <div class="text-[11px] text-gray-400 mt-1">{{ $data->approved_at->format('d-m-Y H:i') }}</div>
+                                            <div class="text-[11px] text-gray-500 mt-1">{{ $data->approved_at->format('d-m-Y H:i') }}</div>
                                         @endif
                                     @elseif ($data->status === 'ditolak')
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300"
@@ -112,7 +112,7 @@
                                             ✗ Ditolak
                                         </span>
                                         @if ($data->alasan_penolakan)
-                                            <div class="text-[11px] text-gray-400 mt-1 max-w-[180px] truncate" title="{{ $data->alasan_penolakan }}">
+                                            <div class="text-[11px] text-gray-500 mt-1 max-w-[180px] truncate" title="{{ $data->alasan_penolakan }}">
                                                 {{ $data->alasan_penolakan }}
                                             </div>
                                         @endif
@@ -152,7 +152,7 @@
                                                 @csrf
                                                 <input type="hidden" name="alasan_penolakan" value="">
                                                 <button type="submit"
-                                                        class="inline-block py-2 px-3 text-white bg-orange-500 hover:bg-orange-700 rounded-lg shadow-lg"
+                                                        class="inline-block py-2 px-3 text-white bg-red-500 hover:bg-red-700 rounded-lg shadow-lg"
                                                         title="Tolak pengajuan cuti">
                                                     Tolak
                                                 </button>

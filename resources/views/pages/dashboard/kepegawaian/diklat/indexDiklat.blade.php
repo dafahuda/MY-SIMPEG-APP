@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
                 <div class="space-y-3">
                     <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -40,7 +40,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-end gap-3">
                     @if ($canMutate)
                         <a href="/kepegawaian/diklat/view_form_tambah_diklat"
-                            class="btn bg-indigo-500 hover:bg-indigo-600 text-white shrink-0">
+                            class="btn bg-blue-500 hover:bg-blue-600 text-white shrink-0">
                             <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                                 <path
                                     d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
@@ -56,7 +56,7 @@
                             <label for="cariDiklat" class="text-sm font-medium text-gray-700 dark:text-gray-300">Cari realisasi</label>
                             <input type="text" name="cariDiklat" id="cariDiklat" value="{{ request('cariDiklat') }}"
                                 aria-label="Cari Diklat" placeholder="Cari diklat, pegawai, penyelenggara, atau tahun"
-                                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:w-72 px-3 py-2.5">
+                                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-72 px-3 py-2.5">
                         </div>
                         <button type="submit"
                             class="inline-flex items-center justify-center gap-2 text-white rounded-lg shadow-lg px-4 py-2.5 bg-blue-500 hover:bg-blue-700 whitespace-nowrap">
@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left rtl:text-right text-body">
                     <thead

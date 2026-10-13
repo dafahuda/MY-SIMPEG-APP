@@ -8,13 +8,13 @@
         :aria-expanded="open" 
     >
         <span class="flex items-center">
-            <svg class="fill-current text-gray-400 dark:text-gray-500 shrink-0 mr-2" width="16" height="16" viewBox="0 0 16 16">
+            <svg class="fill-current text-gray-500 dark:text-gray-400 shrink-0 mr-2" width="16" height="16" viewBox="0 0 16 16">
                 <path d="M5 4a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5Z" />
                 <path d="M4 0a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V4a4 4 0 0 0-4-4H4ZM2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Z" />
             </svg>
             <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
         </span>
-        <svg class="shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500" width="11" height="7" viewBox="0 0 11 7">
+        <svg class="shrink-0 ml-1 fill-current text-gray-500 dark:text-gray-400" width="11" height="7" viewBox="0 0 11 7">
             <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
         </svg>
     </button>
@@ -35,12 +35,12 @@
             <button
                 tabindex="0"
                 class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                :class="selected === 0 && 'text-violet-500'"
+                :class="selected === 0 && 'text-blue-500'"
                 @click="selected = 0;open = false"
                 @focus="open = true"
                 @focusout="open = false"
             >
-                <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 0 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                <svg class="shrink-0 mr-2 fill-current text-blue-500" :class="selected !== 0 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                     <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                 </svg>
                 <span>Today</span>
@@ -48,12 +48,12 @@
             <button
                 tabindex="0"
                 class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                :class="selected === 1 && 'text-violet-500'"
+                :class="selected === 1 && 'text-blue-500'"
                 @click="selected = 1;open = false"
                 @focus="open = true"
                 @focusout="open = false"
             >
-                <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 1 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                <svg class="shrink-0 mr-2 fill-current text-blue-500" :class="selected !== 1 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                     <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                 </svg>
                 <span>Last 7 Days</span>
@@ -61,12 +61,12 @@
             <button
                 tabindex="0"
                 class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                :class="selected === 2 && 'text-violet-500'"
+                :class="selected === 2 && 'text-blue-500'"
                 @click="selected = 2;open = false"
                 @focus="open = true"
                 @focusout="open = false"                                        
             >
-                <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                <svg class="shrink-0 mr-2 fill-current text-blue-500" :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                     <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                 </svg>
                 <span>Last Month</span>
@@ -74,12 +74,12 @@
             <button
                 tabindex="0"
                 class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                :class="selected === 3 && 'text-violet-500'"
+                :class="selected === 3 && 'text-blue-500'"
                 @click="selected = 3;open = false"
                 @focus="open = true"
                 @focusout="open = false"                                        
             >
-                <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 3 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                <svg class="shrink-0 mr-2 fill-current text-blue-500" :class="selected !== 3 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                     <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                 </svg>
                 <span>Last 12 Months</span>
@@ -87,12 +87,12 @@
             <button
                 tabindex="0"
                 class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                :class="selected === 4 && 'text-violet-500'"
+                :class="selected === 4 && 'text-blue-500'"
                 @click="selected = 4;open = false"
                 @focus="open = true"
                 @focusout="open = false"                                        
             >
-                <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                <svg class="shrink-0 mr-2 fill-current text-blue-500" :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                     <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                 </svg>
                 <span>All Time</span>

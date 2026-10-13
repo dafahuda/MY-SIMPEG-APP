@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
 
             <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Form master kenaikan gaji berkala</p>
 
@@ -44,10 +44,10 @@
                     </label>
                     <div class="flex flex-1 gap-3">
                         <input type="text" name="no_kgb" value="{{ old('no_kgb') }}" placeholder="Nomor KGB"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                         <div class="relative w-full">
                             <input type="date" name="tgl_kgb" value="{{ old('tgl_kgb') }}"
-                                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     </label>
                     <div class="flex-1">
                         <input type="text" name="pejabat" value="{{ old('pejabat') }}"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                     </div>
                 </div>
 
@@ -81,10 +81,10 @@
                     <div class="flex flex-1 gap-3">
                         <input type="text" name="no_sk_terakhir" value="{{ old('no_sk_terakhir') }}"
                             placeholder="Nomor SK"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                         <div class="relative w-full">
                             <input type="date" name="tgl_sk_terakhir" value="{{ old('tgl_sk_terakhir') }}"
-                                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                         </div>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                     </label>
                     <div class="relative flex-1">
                         <input type="date" name="tgl_berlaku_gaji" value="{{ old('tgl_berlaku_gaji') }}"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                     </div>
                 </div>
 
@@ -110,10 +110,10 @@
                     <div class="flex flex-1 gap-3">
                         <input type="text" name="masa_kerja_lama_tahun" value="{{ old('masa_kerja_lama_tahun') }}"
                             placeholder="Tahun"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                         <input type="text" name="masa_kerja_lama_bulan" value="{{ old('masa_kerja_lama_bulan') }}"
                             placeholder="Bulan"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                     </div>
                 </div>
 
@@ -132,10 +132,10 @@
                     </label>
                     <div class="flex flex-1 gap-3">
                         <input type="text" name="gaji_baru" value="{{ old('gaji_baru') }}" placeholder="Nominal"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                         <input type="text" name="gaji_baru_terbilang" value="{{ old('gaji_baru_terbilang') }}"
                             placeholder="Terbilang"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                     </div>
                 </div>
 
@@ -148,10 +148,10 @@
                     <div class="flex flex-1 gap-3">
                         <input type="text" name="masa_kerja_baru_tahun"
                             value="{{ old('masa_kerja_baru_tahun') }}" placeholder="Tahun"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                         <input type="text" name="masa_kerja_baru_bulan"
                             value="{{ old('masa_kerja_baru_bulan') }}" placeholder="Bulan"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                     </div>
                 </div>
 
@@ -163,7 +163,7 @@
                     </label>
                     <div class="relative flex-1">
                         <input type="date" name="tmt_kgb" value="{{ old('tmt_kgb') }}"
-                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                     </div>
                 </div>
 
@@ -177,7 +177,7 @@
                         <template x-for="(item, index) in rows" :key="index">
                             <div class="flex items-center gap-2">
                                 <input type="text" :name="'tembusan[' + index + ']'" x-model="rows[index]"
-                                    class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5" />
+                                    class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5" />
                                 <button type="button" @click="removeRow(index)" x-show="rows.length > 1"
                                     class="text-red-500 hover:text-red-700 shrink-0">
                                     <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
@@ -187,7 +187,7 @@
                             </div>
                         </template>
                         <button type="button" @click="addRow()"
-                            class="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 mt-1">
+                            class="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 mt-1">
                             <svg class="w-3 h-3 fill-current" viewBox="0 0 16 16">
                                 <path
                                     d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />

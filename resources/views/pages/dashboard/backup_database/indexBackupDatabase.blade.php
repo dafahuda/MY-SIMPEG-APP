@@ -16,7 +16,7 @@
         </div>
 
         {{-- Card --}}
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-gray-200 dark:border-gray-700 p-8">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-sm border border-gray-200 dark:border-gray-700 p-8">
 
             <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 text-center">
                 Backup database berhasil. Download file kami hasil ...

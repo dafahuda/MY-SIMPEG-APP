@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Pegawai;
+use App\Support\ExcelSanitizer;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -10,11 +11,13 @@ class KGBExport implements FromCollection, WithHeadings
 {
     protected $periode;
     protected $tahunTarget;
+    protected $unitKerjaId;
 
-    public function __construct($periode = 'tahun_ini', $tahunTarget = null)
+    public function __construct($periode = 'tahun_ini', $tahunTarget = null, $unitKerjaId = null)
     {
         $this->periode     = $periode;
         $this->tahunTarget = $tahunTarget ?? (int) date('Y');
+        $this->unitKerjaId = $unitKerjaId;
     }
 
     /**
@@ -24,8 +27,13 @@ class KGBExport implements FromCollection, WithHeadings
     {
         $tahunTarget = $this->tahunTarget;
 
-        $pegawaiKgb = Pegawai::whereNotNull('tmt_pns')
-            ->get()
+        $query = Pegawai::whereNotNull('tmt_pns');
+
+        if ($this->unitKerjaId) {
+            $query->where('unit_kerja_id', $this->unitKerjaId);
+        }
+
+        $pegawaiKgb = $query->get()
             ->filter(function ($pegawai) use ($tahunTarget) {
                 $tmt          = \Carbon\Carbon::parse($pegawai->tmt_pns);
                 $selisihTahun = $tahunTarget - $tmt->year;
@@ -47,14 +55,14 @@ class KGBExport implements FromCollection, WithHeadings
 
             return [
                 'No'           => $no++,
-                'NIP'          => $pegawai->nip,
-                'Nama'         => $nama,
-                'Tempat Lahir' => $pegawai->tmpt_lahir,
+                'NIP'          => ExcelSanitizer::cell($pegawai->nip),
+                'Nama'         => ExcelSanitizer::cell($nama),
+                'Tempat Lahir' => ExcelSanitizer::cell($pegawai->tmpt_lahir),
                 'Tgl Lahir'    => $pegawai->tgl_lahir
                     ? \Carbon\Carbon::parse($pegawai->tgl_lahir)->format('d-m-Y')
                     : '-',
                 'Jenis Kelamin' => $pegawai->jenis_kelamin === 'laki-laki' ? 'Laki-laki' : 'Perempuan',
-                'No. Telp'     => $pegawai->no_hp,
+                'No. Telp'     => ExcelSanitizer::cell($pegawai->no_hp),
                 'TMT PNS'      => $tmt->format('d-m-Y'),
                 'Periode KGB'  => $periode,
             ];

@@ -77,7 +77,7 @@ class SeminarController extends Controller
 
             if($request->hasFile('file_piagam')) {
                 $file = $request->file('file_piagam');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_piagam'] = '/storage/' . $path;
             }
@@ -143,7 +143,7 @@ class SeminarController extends Controller
                 }
 
                 $file = $request->file('file_piagam');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('images', $fileName, 'public');
                 $validateData['file_piagam'] = '/storage/' . $path;
             }

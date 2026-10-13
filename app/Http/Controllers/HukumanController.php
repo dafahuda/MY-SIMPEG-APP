@@ -81,7 +81,7 @@ class HukumanController extends Controller
 
             if($request->hasFile('file_sk_hukuman')) {
                 $file = $request->file('file_sk_hukuman');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_sk_hukuman'] = '/storage/' . $path;
             }
@@ -151,7 +151,7 @@ class HukumanController extends Controller
                 }
 
                 $file = $request->file('file_sk_hukuman');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_sk_hukuman'] = '/storage/' . $path;
             } else {

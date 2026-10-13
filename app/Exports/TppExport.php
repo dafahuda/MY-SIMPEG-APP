@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Tpp;
+use App\Support\ExcelSanitizer;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -10,11 +11,15 @@ class TppExport implements FromCollection, WithHeadings
 {
     protected $periode;
     protected $tahun;
+    protected $unitKerjaId;
+    protected $pegawaiId;
 
-    public function __construct($periode = null, $tahun = null)
+    public function __construct($periode = null, $tahun = null, $unitKerjaId = null, $pegawaiId = null)
     {
         $this->periode = $periode;
         $this->tahun   = $tahun;
+        $this->unitKerjaId = $unitKerjaId;
+        $this->pegawaiId   = $pegawaiId;
     }
 
     /**
@@ -23,6 +28,16 @@ class TppExport implements FromCollection, WithHeadings
     public function collection()
     {
         $query = Tpp::with('pegawai');
+
+        if ($this->unitKerjaId) {
+            $query->whereHas('pegawai', function ($q) {
+                $q->where('unit_kerja_id', $this->unitKerjaId);
+            });
+        }
+
+        if ($this->pegawaiId) {
+            $query->where('pegawai_id', $this->pegawaiId);
+        }
 
         if ($this->periode) {
             $query->where('periode', $this->periode);
@@ -34,7 +49,7 @@ class TppExport implements FromCollection, WithHeadings
 
         return $query->orderBy('id')->get()->map(function ($tpp) {
             return [
-                'Nama Pegawai'              => $tpp->pegawai->nama ?? '-',
+                'Nama Pegawai'              => ExcelSanitizer::cell($tpp->pegawai->nama ?? '-'),
                 'Periode'                   => $tpp->periode,
                 'Tahun'                     => $tpp->tahun,
                 'Jml Hari Kerja'            => $tpp->jml_hari_kerja,

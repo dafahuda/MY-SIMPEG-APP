@@ -66,6 +66,7 @@ class KGBController extends Controller
     {
         $pegawaiId = $request->input('pegawai_id');
         $pegawai   = Pegawai::findOrFail($pegawaiId);
+        $this->authorizePegawaiTarget($pegawai);
 
         return view('pages.dashboard.notifikasi_kgb.buatKgb', [
             'pegawai' => $pegawai,
@@ -73,10 +74,35 @@ class KGBController extends Controller
     }
 
     /**
+     * Admin may only act on pegawai inside their own unit kerja;
+     * superadmin may act on any pegawai.
+     */
+    private function authorizePegawaiTarget(Pegawai $pegawai): void
+    {
+        $user = Auth::user();
+
+        if ($user->role === 'superadmin') {
+            return;
+        }
+
+        if ($user->role === 'admin' && $pegawai->unit_kerja_id === $user->unit_kerja_id) {
+            return;
+        }
+
+        abort(403, 'Akses ditolak');
+    }
+
+    /**
      * Simpan data KGB baru.
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+
+        if ($user->role === 'pegawai') {
+            abort(403, 'Akses ditolak');
+        }
+
         $request->validate([
             'pegawai_id'            => 'required|exists:tb_pegawai,id',
             'no_kgb'                => 'nullable|string|max:255',
@@ -95,6 +121,8 @@ class KGBController extends Controller
             'tembusan.*'            => 'nullable|string|max:255',
             'periode'               => 'nullable|string|max:4',
         ]);
+
+        $this->authorizePegawaiTarget(Pegawai::findOrFail($request->pegawai_id));
 
         try {
             DB::beginTransaction();
@@ -135,6 +163,7 @@ class KGBController extends Controller
 
     public function exportExcelKGB(Request $request)
     {
+        $user       = Auth::user();
         $periode     = $request->input('periode', 'tahun_ini');
         $tahunTarget = ($periode === 'tahun_depan')
             ? (int) date('Y') + 1
@@ -143,6 +172,9 @@ class KGBController extends Controller
         $label    = $periode === 'tahun_depan' ? 'TahunDepan' : 'TahunIni';
         $filename = "NotifikasiKGB_{$label}_{$tahunTarget}.xlsx";
 
-        return Excel::download(new KGBExport($periode, $tahunTarget), $filename);
+        // Admin only sees their own unit; superadmin sees everything.
+        $unitScope = $user->role === 'admin' ? $user->unit_kerja_id : null;
+
+        return Excel::download(new KGBExport($periode, $tahunTarget, $unitScope), $filename);
     }
 }

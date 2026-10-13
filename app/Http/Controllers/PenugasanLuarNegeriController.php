@@ -75,7 +75,7 @@ class PenugasanLuarNegeriController extends Controller
 
             if($request->hasFile('st')) {
                 $file = $request->file('st');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['st'] = '/storage/' . $path;
             }
@@ -140,7 +140,7 @@ class PenugasanLuarNegeriController extends Controller
                 }
 
                 $file = $request->file('st');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('images', $fileName, 'public');
                 $validateData['st'] = '/storage/' . $path;
             }

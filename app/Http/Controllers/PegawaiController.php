@@ -102,7 +102,7 @@ class PegawaiController extends Controller
 
             if($request->has('foto')) {
                 $file = $request->file('foto');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('images', $fileName, 'public');
                 $validateData['foto'] = '/storage/' . $path;
             }
@@ -210,7 +210,7 @@ class PegawaiController extends Controller
                 }
 
                 $file = $request->file('foto');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('images', $fileName, 'public');
                 $validateData['foto'] = '/storage/' . $path;
             }

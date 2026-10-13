@@ -85,7 +85,7 @@ class CutiController extends Controller
 
             if($request->hasFile('file_surat_cuti')) {
                 $file = $request->file('file_surat_cuti');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_surat_cuti'] = '/storage/' . $path;
             }
@@ -156,7 +156,7 @@ class CutiController extends Controller
                 }
 
                 $file = $request->file('file_surat_cuti');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_surat_cuti'] = '/storage/' . $path;
             } else {

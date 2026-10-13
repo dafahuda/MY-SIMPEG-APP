@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Support\ExcelSanitizer;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -16,13 +17,13 @@ class DiklatGapExport implements FromCollection, WithHeadings
     {
         return $this->rows->map(function (array $row): array {
             return [
-                'Pegawai' => $row['pegawai'] ?? '-',
-                'Unit' => $row['unit'] ?? '-',
+                'Pegawai' => ExcelSanitizer::cell($row['pegawai'] ?? '-'),
+                'Unit' => ExcelSanitizer::cell($row['unit'] ?? '-'),
                 'Tahun Rencana' => $row['tahun_rencana'] ?? '-',
                 'Tahun Realisasi' => $row['tahun_realisasi'] ?? '-',
-                'Nama Rencana' => $row['nama_rencana'] ?? '-',
-                'Nama Realisasi' => $row['nama_realisasi'] ?? '-',
-                'Bucket Status' => $row['bucket_label'] ?? $row['bucket_status'] ?? '-',
+                'Nama Rencana' => ExcelSanitizer::cell($row['nama_rencana'] ?? '-'),
+                'Nama Realisasi' => ExcelSanitizer::cell($row['nama_realisasi'] ?? '-'),
+                'Bucket Status' => ExcelSanitizer::cell($row['bucket_label'] ?? $row['bucket_status'] ?? '-'),
                 'Target Jam' => $row['target_jam'] ?? 0,
                 'Realisasi Jam' => $row['realisasi_jam'] ?? 0,
                 'Gap Jam' => $row['gap_jam'] ?? 0,

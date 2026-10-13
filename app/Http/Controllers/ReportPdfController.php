@@ -82,6 +82,9 @@ class ReportPdfController extends Controller
         };
 
         $pegawaiList = \App\Models\Pegawai::with(['jabatan_aktif.master_jabatan', 'unit_kerja'])
+            ->when(Auth::user()->role === 'admin', function ($query) {
+                $query->where('unit_kerja_id', Auth::user()->unit_kerja_id);
+            })
             ->whereYear('tgl_lahir', '>=', $tahunPensiun - $batasUsiaPensiun)
             ->whereYear('tgl_lahir', '<=', $tahunPensiun - $batasUsiaPensiun)
             ->orderBy('tgl_lahir')

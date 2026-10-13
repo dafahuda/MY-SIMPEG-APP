@@ -76,7 +76,7 @@ class LatihanJabatanController extends Controller
 
             if($request->hasFile('file_sertifikat')) {
                 $file = $request->file('file_sertifikat');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_sertifikat'] = '/storage/' . $path;
             }
@@ -141,7 +141,7 @@ class LatihanJabatanController extends Controller
                 }
 
                 $file = $request->file('file_sertifikat');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_sertifikat'] = '/storage/' . $path;
             }

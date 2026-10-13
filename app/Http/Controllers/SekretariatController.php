@@ -54,7 +54,7 @@ class SekretariatController extends Controller
 
             if($request->hasFile('gambar_logo')) {
                 $file = $request->file('gambar_logo');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('images', $fileName, 'public');
                 $validateData['gambar_logo'] = '/storage/' . $path;
             }
@@ -109,7 +109,7 @@ class SekretariatController extends Controller
                 }
 
                 $file = $request->file('gambar_logo');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('images', $fileName, 'public');
                 $validateData['gambar_logo'] = '/storage/' . $path;
             } else {

@@ -76,7 +76,7 @@ class PenghargaanController extends Controller
 
             if($request->hasFile('file_sertifikat_penghargaan')) {
                 $file = $request->file('file_sertifikat_penghargaan');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_sertifikat_penghargaan'] = '/storage/' . $path;
             }
@@ -141,7 +141,7 @@ class PenghargaanController extends Controller
                 }
 
                 $file = $request->file('file_sertifikat_penghargaan');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_sertifikat_penghargaan'] = '/storage/' . $path;
             }

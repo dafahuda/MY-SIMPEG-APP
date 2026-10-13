@@ -351,7 +351,7 @@ class ProfilePegawaiController extends Controller
                 }
 
                 $file = $request->file('foto');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('images', $fileName, 'public');
                 $validateData['foto'] = '/storage/' . $path;
             }
@@ -398,7 +398,7 @@ class ProfilePegawaiController extends Controller
             }
 
             $file = $request->file('foto');
-            $fileName = time() . '_' . $file->getClientOriginalName();
+            $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
             $path = $file->storeAs('images', $fileName, 'public');
 
             $pegawai->update([

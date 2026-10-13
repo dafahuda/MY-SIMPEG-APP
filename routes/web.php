@@ -392,9 +392,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::prefix('notifikasi_kgb')->group(function () {
         Route::get('/data_notifikasi_kgb', [KGBController::class, 'index']);
-        Route::get('/view_buat_kgb', [KGBController::class, 'create']);
-        Route::post('/buat_kgb', [KGBController::class, 'store']);
-        Route::get('/export_excel_kgb', [KGBController::class, 'exportExcelKGB'])->name('kgb.export_excel');
+
+        // Creating KGB letters and exporting the schedule are HR (admin) tasks.
+        Route::middleware('role:admin,superadmin')->group(function () {
+            Route::get('/view_buat_kgb', [KGBController::class, 'create']);
+            Route::post('/buat_kgb', [KGBController::class, 'store']);
+            Route::get('/export_excel_kgb', [KGBController::class, 'exportExcelKGB'])->name('kgb.export_excel');
+        });
     });
 
     // Rekapitulasi

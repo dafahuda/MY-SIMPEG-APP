@@ -75,7 +75,7 @@ class DiklatController extends Controller
 
             if ($request->hasFile('file_sertifikat_diklat')) {
                 $file = $request->file('file_sertifikat_diklat');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_sertifikat_diklat'] = '/storage/' . $path;
             }
@@ -150,7 +150,7 @@ class DiklatController extends Controller
                 }
 
                 $file = $request->file('file_sertifikat_diklat');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_sertifikat_diklat'] = '/storage/' . $path;
             } else {

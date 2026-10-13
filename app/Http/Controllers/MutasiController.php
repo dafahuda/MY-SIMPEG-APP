@@ -72,7 +72,7 @@ class MutasiController extends Controller
 
             if($request->hasFile('file_sk_mutasi')) {
                 $file = $request->file('file_sk_mutasi');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
                 $validateData['file_sk_mutasi'] = '/storage/' . $path;
             }
@@ -138,7 +138,7 @@ class MutasiController extends Controller
                 }
 
                 $file = $request->file('file_sk_mutasi');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time() . '_' . (\Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'file') . '.' . strtolower($file->getClientOriginalExtension());
                 $path = $file->storeAs('document', $fileName, 'public');
 
                 $validateData['file_sk_mutasi'] = '/storage/' . $path;

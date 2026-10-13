@@ -364,10 +364,17 @@ class TppController extends Controller
 
     public function exportExcelLaporanTpp(Request $request)
     {
+        $user     = Auth::user();
         $periode  = $request->input('periode');
         $tahun    = $request->input('tahun');
         $filename = 'LaporanTPP' . ($periode ? "_$periode" : '') . ($tahun ? "_$tahun" : '') . '.xlsx';
 
-        return Excel::download(new TppExport($periode, $tahun), $filename);
+        // Admin exports only their unit; pegawai only their own rows; superadmin all.
+        $unitScope   = $user->role === 'admin' ? $user->unit_kerja_id : null;
+        $pegawaiScope = $user->role === 'pegawai'
+            ? Pegawai::where('user_id', $user->id)->value('id')
+            : null;
+
+        return Excel::download(new TppExport($periode, $tahun, $unitScope, $pegawaiScope), $filename);
     }
 }

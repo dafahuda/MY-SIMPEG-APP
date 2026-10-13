@@ -28,6 +28,15 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
+        // Throttle heavy file-generation endpoints per authenticated user.
+        RateLimiter::for('exports', function (Request $request) {
+            return Limit::perMinute(6)->by('exports-' . ($request->user()?->id ?: $request->ip()));
+        });
+
+        RateLimiter::for('backups', function (Request $request) {
+            return Limit::perMinute(3)->by('backups-' . ($request->user()?->id ?: $request->ip()));
+        });
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

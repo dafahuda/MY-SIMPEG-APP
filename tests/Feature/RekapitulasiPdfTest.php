@@ -36,6 +36,9 @@ class RekapitulasiPdfTest extends TestCase
             $this->assertStringStartsWith('attachment; filename=', $res->headers->get('Content-Disposition'));
             // Header PDF asli selalu diawali %PDF
             $this->assertStringStartsWith('%PDF', $res->getContent(), "Jenis: {$jenis} bukan PDF valid");
+
+            // Lewati jendela throttle ekspor (6/menit) agar loop semua jenis tidak kena 429.
+            $this->travel(61)->seconds();
         }
     }
 

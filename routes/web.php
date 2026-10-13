@@ -86,7 +86,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::put('/profile_saya/update', [ProfilePegawaiController::class, 'update'])->name('profile.pegawai.update');
     Route::post('/profile_saya/upload_foto', [ProfilePegawaiController::class, 'uploadFoto'])->name('profile.pegawai.upload_foto');
     Route::get('/profile_saya/print', [ProfilePegawaiController::class, 'print'])->name('profile.pegawai.print');
-    Route::get('/profile_saya/unduh_pdf', [ProfilePegawaiController::class, 'unduhPdfSendiri'])->name('profile.pegawai.pdf');
+    Route::get('/profile_saya/unduh_pdf', [ProfilePegawaiController::class, 'unduhPdfSendiri'])->name('profile.pegawai.pdf')->middleware('throttle:exports');
 
     Route::prefix('data_pegawai')->group(function() {
         Route::get('/pegawai', [PegawaiController::class, 'index']);
@@ -96,7 +96,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         });
         Route::get('/view_form_edit_data_pegawai/{pegawai}', [PegawaiController::class, 'edit']);
         Route::get('/detail_data_pegawai/{pegawai}', [PegawaiController::class, 'show'])->name('pegawai.show');
-        Route::get('/biodata_pdf/{pegawai}', [ProfilePegawaiController::class, 'unduhPdf'])->name('pegawai.biodata.pdf');
+        Route::get('/biodata_pdf/{pegawai}', [ProfilePegawaiController::class, 'unduhPdf'])->name('pegawai.biodata.pdf')->middleware('throttle:exports');
         Route::put('/ubah_data_pegawai/{pegawai}', [PegawaiController::class, 'update']);
         Route::delete('/delete_data_pegawai/{pegawai}', [PegawaiController::class, 'destroy']);
         Route::post('/cariPegawai', [PegawaiController::class, 'cariPegawai']);
@@ -387,7 +387,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::delete('/hapus_tpp/{tpp}', [TppController::class, 'destroy'])->name('tpp.destroy');
         Route::get('/laporan_bulanan', [TppController::class, 'laporanBulanan'])->name('tpp.laporan_bulanan');
         Route::post('/cariTpp', [TppController::class, 'cariTpp'])->name('tpp.cari');
-        Route::get('/exportExcelLaporanTpp', [TppController::class, 'exportExcelLaporanTpp'])->name('tpp.export_excel_laporan_tpp');
+        Route::get('/exportExcelLaporanTpp', [TppController::class, 'exportExcelLaporanTpp'])->name('tpp.export_excel_laporan_tpp')->middleware('throttle:exports');
     });
 
     Route::prefix('notifikasi_kgb')->group(function () {
@@ -397,7 +397,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::middleware('role:admin,superadmin')->group(function () {
             Route::get('/view_buat_kgb', [KGBController::class, 'create']);
             Route::post('/buat_kgb', [KGBController::class, 'store']);
-            Route::get('/export_excel_kgb', [KGBController::class, 'exportExcelKGB'])->name('kgb.export_excel');
+            Route::get('/export_excel_kgb', [KGBController::class, 'exportExcelKGB'])->name('kgb.export_excel')->middleware('throttle:exports');
         });
     });
 
@@ -417,7 +417,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             ->whereIn('jenis', ['opd_skpd_unit_kerja', 'golongan', 'pangkat', 'jabatan', 'eselon',
                                 'status_kepegawaian', 'agama', 'jenis_kelamin', 'status_pernikahan',
                                 'pendidikan_terakhir'])
-            ->name('rekapitulasi.pdf');
+            ->name('rekapitulasi.pdf')
+            ->middleware('throttle:exports');
     });
 
     // Report
@@ -425,28 +426,29 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // Diklat gap is self-scoped: accessible to admin, superadmin and pegawai.
         Route::get('/diklat_gap', [DiklatGapReportController::class, 'index'])->name('report.diklat_gap');
         Route::get('/diklat_gap/unit', [DiklatGapReportController::class, 'unitAggregate'])->name('report.diklat_gap.unit');
-        Route::get('/diklat_gap/unit/print', [DiklatGapReportController::class, 'printUnitAggregate'])->name('report.diklat_gap.unit.print');
-        Route::get('/diklat_gap/unit/export', [DiklatGapReportController::class, 'exportUnitAggregate'])->name('report.diklat_gap.unit.export');
+        Route::get('/diklat_gap/unit/print', [DiklatGapReportController::class, 'printUnitAggregate'])->name('report.diklat_gap.unit.print')->middleware('throttle:exports');
+        Route::get('/diklat_gap/unit/export', [DiklatGapReportController::class, 'exportUnitAggregate'])->name('report.diklat_gap.unit.export')->middleware('throttle:exports');
 
         Route::middleware('role:admin,superadmin')->group(function() {
             Route::get('/nominatif', [ReportController::class, 'reportNominatif'])->name('report.nominatif');
-            Route::get('/nominatif/print', [ReportController::class, 'printNominatif'])->name('report.nominatif.print');
+            Route::get('/nominatif/print', [ReportController::class, 'printNominatif'])->name('report.nominatif.print')->middleware('throttle:exports');
             Route::get('/duk', [ReportController::class, 'reportDUK'])->name('report.duk');
-            Route::get('/duk/print', [ReportController::class, 'printDUK'])->name('report.duk.print');
+            Route::get('/duk/print', [ReportController::class, 'printDUK'])->name('report.duk.print')->middleware('throttle:exports');
             Route::get('/bezetting', [ReportController::class, 'reportBezetting'])->name('report.bezetting');
-            Route::get('/bezetting/print', [ReportController::class, 'printBezetting'])->name('report.bezetting.print');
+            Route::get('/bezetting/print', [ReportController::class, 'printBezetting'])->name('report.bezetting.print')->middleware('throttle:exports');
             Route::get('/keadaan_pegawai', [ReportController::class, 'reportKeadaanPegawai'])->name('report.keadaan_pegawai');
-            Route::get('/keadaan_pegawai/print', [ReportController::class, 'printKeadaanPegawai'])->name('report.keadaan_pegawai.print');
+            Route::get('/keadaan_pegawai/print', [ReportController::class, 'printKeadaanPegawai'])->name('report.keadaan_pegawai.print')->middleware('throttle:exports');
             Route::get('/pensiun', [ReportController::class, 'reportPensiun'])->name('report.pensiun');
             Route::get('/pdf/{jenis}', [ReportPdfController::class, 'unduh'])
                 ->whereIn('jenis', ['nominatif', 'duk', 'keadaan_pegawai', 'bezetting', 'pensiun'])
-                ->name('report.pdf');
+                ->name('report.pdf')
+                ->middleware('throttle:exports');
         });
     });
 
     Route::middleware('role:superadmin')->group(function () {
         Route::get('/backup_data', [BackupDatabaseController::class, 'BackupDatabasePages']);
-        Route::get('/backup_data/download', [BackupDatabaseController::class, 'download'])->name('backup_data.download');
+        Route::get('/backup_data/download', [BackupDatabaseController::class, 'download'])->name('backup_data.download')->middleware('throttle:backups');
     });
 
 });

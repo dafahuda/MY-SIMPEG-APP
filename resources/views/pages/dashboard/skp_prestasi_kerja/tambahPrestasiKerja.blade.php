@@ -40,15 +40,15 @@
                             Penilaian <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="date" id="periode_nilai_dari" name="periode_nilai_dari"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Dari" required />
 
                             <input type="date" id="periode_nilai_sampai" name="periode_nilai_sampai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Sampai" />
 
                             <input type="text" id="tahun_periode" name="tahun_periode"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Tahun" />
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                         <label for="nama_pejabat_nilai" class="block mb-2.5 text-sm font-medium text-heading">Nama
                             Pejabat penilai <span class="text-red-500">*</span></label>
                         <input type="text" id="nama_pejabat_nilai" name="nama_pejabat_nilai"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan nama pejabat penilai" required />
                     </div>
                     <div class="mb-5">
@@ -64,7 +64,7 @@
                             class="block mb-2.5 text-sm font-medium text-heading">Nama Atasan Pejabat penilai <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="nama_atasan_pejabat_penilai" name="nama_atasan_pejabat_penilai"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan nama atasan pejabat penilai" required />
                     </div>
                     <div class="mb-8 border-t pt-5">
@@ -75,7 +75,7 @@
                                     class="text-red-500">*</span></label>
                             <div class="md:col-span-1">
                                 <input type="number" id="skp" name="skp"
-                                    class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                    class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                     placeholder="Nilai SKP" required />
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                                     <label for="orientasi_pelayanan" class="text-xs font-medium text-body">1. Orientasi
                                         Pelayanan <span class="text-red-500">*</span></label>
                                     <input type="number" id="orientasi_pelayanan" name="orientasi_pelayanan"
-                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                         required placeholder="0" />
                                 </div>
 
@@ -97,7 +97,7 @@
                                     <label for="integritas" class="text-xs font-medium text-body">2. Integritas <span
                                             class="text-red-500">*</span></label>
                                     <input type="number" id="integritas" name="integritas"
-                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                         required placeholder="0" />
                                 </div>
 
@@ -105,7 +105,7 @@
                                     <label for="komitmen" class="text-xs font-medium text-body">3. Komitmen <span
                                             class="text-red-500">*</span></label>
                                     <input type="number" id="komitmen" name="komitmen"
-                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                         required placeholder="0" />
                                 </div>
 
@@ -113,7 +113,7 @@
                                     <label for="disiplin" class="text-xs font-medium text-body">4. Disiplin <span
                                             class="text-red-500">*</span></label>
                                     <input type="number" id="disiplin" name="disiplin"
-                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                         required placeholder="0" />
                                 </div>
 
@@ -121,7 +121,7 @@
                                     <label for="kerjasama" class="text-xs font-medium text-body">5. Kerjasama <span
                                             class="text-red-500">*</span></label>
                                     <input type="number" id="kerjasama" name="kerjasama"
-                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                         required placeholder="0" />
                                 </div>
 
@@ -129,7 +129,7 @@
                                     <label for="kepemimpinan" class="text-xs font-medium text-body">6.
                                         Kepemimpinan <span class="text-red-500">*</span></label>
                                     <input type="number" id="kepemimpinan" name="kepemimpinan"
-                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                         required placeholder="0" />
                                 </div>
                             </div>
@@ -140,7 +140,7 @@
                             Pegawai <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="date" id="tgl_keberatan_pegawai" name="tgl_keberatan_pegawai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan tanggal keberatan pegawai" required />
 
                             <textarea id="isi_keberatan" name="isi_keberatan" rows="4" cols="50" placeholder="Isi keberatan"
@@ -152,7 +152,7 @@
                             pejabat penilai <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="date" id="tgl_pejabat_penilai" name="tgl_pejabat_penilai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan tanggal tanggapan pejabat penilai" required />
 
                             <textarea id="isi_tanggapan" name="isi_tanggapan" rows="4" cols="50" placeholder="Isi tanggapan"
@@ -166,7 +166,7 @@
                         <div class="flex w-3/4 gap-4">
                             <input type="date" id="tgl_keputusan_atasan_pejabat_penilai"
                                 name="tgl_keputusan_atasan_pejabat_penilai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan tanggal keputusan atasan pejabat penilai" required />
 
                             <textarea id="isi_keputusan" name="isi_keputusan" rows="4" cols="50" placeholder="Isi keputusan"
@@ -177,25 +177,25 @@
                         <label for="rekomendasi" class="block mb-2.5 text-sm font-medium text-heading">Rekomendasi
                             <span class="text-red-500">*</span></label>
                         <input type="text" id="rekomendasi" name="rekomendasi"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan rekomendasi" required />
                     </div>
                     <div class="mb-5">
                         <label for="tgl_diterima_pegawai" class="block mb-2.5 text-sm font-medium text-heading">Tgl
                             diterima pegawai <span class="text-red-500">*</span></label>
                         <input type="date" id="tgl_diterima_pegawai" name="tgl_diterima_pegawai"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan tanggal diterima pegawai" required />
                     </div>
                     <div class="mb-5">
                         <label for="tgl_diterima_atasan" class="block mb-2.5 text-sm font-medium text-heading">Tgl
                             diterima atasan <span class="text-red-500">*</span></label>
                         <input type="date" id="tgl_diterima_atasan" name="tgl_diterima_atasan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan tanggal diterima pegawai" required />
                     </div>
                     <button type="submit"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
                 </form>
             </div>
 

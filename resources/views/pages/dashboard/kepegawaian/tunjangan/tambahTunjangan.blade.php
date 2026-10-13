@@ -39,11 +39,11 @@
                             tunjangan <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="no_tunjangan" name="no_tunjangan"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan nomor tunjangan" required />
 
                             <input type="date" id="tgl_tunjangan" name="tgl_tunjangan"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Masukan tanggal tunjangan" />
                         </div>
                     </div>
@@ -51,21 +51,21 @@
                         <label for="jenis_tunjangan_anak" class="block mb-2.5 text-sm font-medium text-heading">Jenis
                             Tunjangan <span class="text-red-500">*</span></label>
                         <input type="text" id="jenis_tunjangan_anak" name="jenis_tunjangan_anak"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan tunjangan anak" required />
                     </div>
                     <div class="mb-5">
                         <label for="terhitung_mulai" class="block mb-2.5 text-sm font-medium text-heading">Terhitung
                             mulai <span class="text-red-500">*</span></label>
                         <input type="date" id="terhitung_mulai" name="terhitung_mulai"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Terhitung dari" required />
                     </div>
                     <div class="mb-5">
                         <label for="akta_perkawinan_dari" class="block mb-2.5 text-sm font-medium text-heading">Akta
                             perkawinan dari <span class="text-red-500">*</span></label>
                         <input type="text" id="akta_perkawinan_dari" name="akta_perkawinan_dari"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Akta Perkawinan dari" required />
                     </div>
                     <div class="flex items-center mb-5">
@@ -73,11 +73,11 @@
                             akta perkawinan <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="no_akta_perkawinan" name="no_akta_perkawinan"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan nomor akta perkawinan" required />
 
                             <input type="date" id="tgl_akta_perkawinan" name="tgl_akta_perkawinan"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Masukan tanggal akta perkawinan" />
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                         <label for="akta_kelahiran_dari" class="block mb-2.5 text-sm font-medium text-heading">Akta
                             kelahiran dari <span class="text-red-500">*</span></label>
                         <input type="text" id="akta_kelahiran_dari" name="akta_kelahiran_dari"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Akta kelahiran dari" required />
                     </div>
                     <div class="flex items-center mb-5">
@@ -93,11 +93,11 @@
                             akta kelahiran <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="no_akta_kelahiran" name="no_akta_kelahiran"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan nomor akta kelahiran" required />
 
                             <input type="date" id="tgl_akta_kelahiran" name="tgl_akta_kelahiran"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Masukan tanggal akta kelahiran" />
                         </div>
                     </div>
@@ -105,11 +105,11 @@
                         <label for="tebusan" class="block mb-2.5 text-sm font-medium text-heading">Tebusan <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="tebusan" name="tebusan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan tebusan" required />
                     </div>
                     <button type="submit"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
                 </form>
             </div>
             <div class="mt-5">

@@ -30,21 +30,21 @@
                         <label for="username" class="block mb-2.5 text-sm font-medium text-heading">Username <span
                                 class="text-red-500">*</span> </label>
                         <input type="text" id="username" name="username"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan username" required value="{{ old('username', $user->username) }}" />
                     </div>
                     <div class="mb-5">
                         <label for="name" class="block mb-2.5 text-sm font-medium text-heading">Nama User <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="name" name="name"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan Nama User" required value="{{ old('name', $user->name) }}" />
                     </div>
                     <div class="mb-5">
                         <label for="email" class="block mb-2.5 text-sm font-medium text-heading">Email <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="email" name="email"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan Email User" required value="{{ old('email', $user->email) }}" />
                     </div>
                     <div class="mb-5">
@@ -61,7 +61,7 @@
                         </select>
                     </div>
                     <button type="button"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-lg text-sm px-4 py-2 focus:outline-none confirm-save"
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-lg text-sm px-4 py-2 focus:outline-none confirm-save"
                         data-title="Simpan Perubahan"
                         data-message="Apakah Anda yakin ingin menyimpan perubahan data user admin ini?">Simpan</button>
                 </form>

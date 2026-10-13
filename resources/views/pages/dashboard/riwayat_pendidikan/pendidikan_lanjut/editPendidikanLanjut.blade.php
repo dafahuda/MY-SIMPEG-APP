@@ -85,7 +85,7 @@
                         <label for="nama_sekolah_universitas" class="block mb-2.5 text-sm font-medium text-heading">Nama
                             Sekolah / Universitas <span class="text-red-500">*</span></label>
                         <input type="text" id="nama_sekolah_universitas" name="nama_sekolah_universitas"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan nama sekolah / universitas" required
                             value="{{ $riwayatPendidikanLanjut->nama_sekolah_universitas }}" />
                     </div>
@@ -93,7 +93,7 @@
                         <label for="jurusan" class="block mb-2.5 text-sm font-medium text-heading">Jurusan <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="jurusan" name="jurusan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan Jurusan atau Prodi" required
                             value="{{ $riwayatPendidikanLanjut->jurusan }}" />
                     </div>
@@ -102,11 +102,11 @@
                                 class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="thn_mulai" name="thn_mulai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Tahun Mulai" required value="{{ $riwayatPendidikanLanjut->thn_mulai }}" />
 
                             <input type="text" id="thn_selesai" name="thn_selesai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Tahun Selesai"
                                 value="{{ $riwayatPendidikanLanjut->thn_selesai }}" />
                         </div>
@@ -124,7 +124,7 @@
                         </select>
                     </div>
                     <button type="button"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none confirm-save"
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none confirm-save"
                         data-title="Simpan Perubahan"
                         data-message="Apakah Anda yakin ingin menyimpan perubahan data pendidikan lanjut ini?">Simpan</button>
                 </form>

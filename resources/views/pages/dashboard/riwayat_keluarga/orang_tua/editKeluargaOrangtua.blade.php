@@ -44,7 +44,7 @@
                                 class="text-red-500">*</span>
                         </label>
                         <input type="text" id="nik" name="nik"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan nik Orang Tua" required
                             value="{{ old('nik', $riwayatKeluargaOrangTua->nik) }}" />
                     </div>
@@ -52,7 +52,7 @@
                         <label for="nama" class="block mb-2.5 text-sm font-medium text-heading">Nama <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="nama" name="nama"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan nama orang tua" required
                             value="{{ $riwayatKeluargaOrangTua->nama }}" />
                     </div>
@@ -61,12 +61,12 @@
                             Lahir <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="tempat_lahir" name="tempat_lahir"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan tempat lahir" required
                                 value="{{ old('tempat_lahir', $riwayatKeluargaOrangTua->tempat_lahir) }}" />
 
                             <input type="date" id="tgl_lahir" name="tgl_lahir"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required value="{{ old('tgl_lahir', $riwayatKeluargaOrangTua->tgl_lahir) }}" />
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                         <label for="pekerjaan" class="block mb-2.5 text-sm font-medium text-heading">Pekerjaan <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="pekerjaan" name="pekerjaan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan Pekerjaan Orang Tua" required
                             value="{{ old('pekerjaan', $riwayatKeluargaOrangTua->pekerjaan) }}" />
                     </div>
@@ -123,7 +123,7 @@
                         </select>
                     </div>
                     <button type="button"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 text-sm px-4 py-2 focus:outline-none confirm-save"
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 text-sm px-4 py-2 focus:outline-none confirm-save"
                         data-title="Simpan Perubahan"
                         data-message="Apakah Anda yakin ingin menyimpan perubahan data orang tua ini?">Simpan</button>
                 </form>

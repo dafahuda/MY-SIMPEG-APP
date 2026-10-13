@@ -29,28 +29,28 @@
                         <label for="username" class="block mb-2.5 text-sm font-medium text-heading">Username <span
                                 class="text-red-500">*</span> </label>
                         <input type="text" id="username" name="username"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan username" required />
                     </div>
                     <div class="mb-5">
                         <label for="name" class="block mb-2.5 text-sm font-medium text-heading">Nama User <span
                                 class="text-red-500">*</span> </label>
                         <input type="text" id="name" name="name"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan Nama User" required />
                     </div>
                     <div class="mb-5">
                         <label for="email" class="block mb-2.5 text-sm font-medium text-heading">Email <span
                                 class="text-red-500">*</span> </label>
                         <input type="text" id="email" name="email"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan Email User" required />
                     </div>
                     <div class="mb-5">
                         <label for="password" class="block mb-2.5 text-sm font-medium text-heading">Password <span
                                 class="text-red-500">*</span></label>
                         <input type="password" id="password" name="password"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan Password" required />
                     </div>
                     <div class="mb-5">
@@ -65,7 +65,7 @@
                         </select>
                     </div>
                     <button type="submit"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
                 </form>
             </div>
 

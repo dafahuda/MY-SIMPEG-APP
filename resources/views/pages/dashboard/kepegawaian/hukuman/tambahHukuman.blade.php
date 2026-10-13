@@ -73,7 +73,7 @@
                             class="block mb-2.5 text-sm font-medium text-heading">Pejabat Pengesahan Hukuman <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="pejabat_pengesahan_sk_hukuman" name="pejabat_pengesahan_sk_hukuman"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan pejabat pengesahan hukuman" required />
                     </div>
                     <div class="flex items-center mb-5">
@@ -81,11 +81,11 @@
                             pengesahan SK <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="no_sk" name="no_sk"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan nomor SK" required />
 
                             <input type="date" id="tgl_pengesahan_sk" name="tgl_pengesahan_sk"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Masukan tanggal SK" />
                         </div>
                     </div>
@@ -94,11 +94,11 @@
                             Hukuman <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="date" id="tmt_hukuman_mulai" name="tmt_hukuman_mulai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Dari" required />
 
                             <input type="date" id="tmt_hukuman_pemulihan" name="tmt_hukuman_pemulihan"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Sampai" />
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                             class="block mb-2.5 text-sm font-medium text-heading">Pejabat Pemulihan Hukuman <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="pejabat_pemulihan_hukuman" name="pejabat_pemulihan_hukuman"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan pejabat pemulihan hukuman" required />
                     </div>
                     <div class="flex items-center mb-5">
@@ -115,11 +115,11 @@
                             pemulihan hukuman <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="no_pemulihan_hukuman" name="no_pemulihan_hukuman"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan nomor pemulihan hukuman" required />
 
                             <input type="date" id="tgl_pemulihan_hukuman" name="tgl_pemulihan_hukuman"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Masukan tanggal pemulihan hukuman" />
                         </div>
                     </div>
@@ -127,11 +127,11 @@
                         <label for="file_sk_hukuman" class="block mb-2.5 text-sm font-medium text-heading">File SK
                             Hukuman <span class="text-red-500">*</span></label>
                         <input type="file" id="file_sk_hukuman" name="file_sk_hukuman"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan file sk hukuman" required />
                     </div>
                     <button type="submit"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 text-sm px-4 py-2 focus:outline-none">Simpan</button>
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 text-sm px-4 py-2 focus:outline-none">Simpan</button>
                 </form>
             </div>
 

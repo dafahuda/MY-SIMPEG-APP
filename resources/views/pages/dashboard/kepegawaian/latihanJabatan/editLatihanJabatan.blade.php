@@ -45,7 +45,7 @@
                         <label for="nama_pelatih" class="block mb-2.5 text-sm font-medium text-heading">Nama
                             Pelatih <span class="text-red-500">*</span></label>
                         <input type="text" id="nama_pelatih" name="nama_pelatih"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan nama pelatih" required
                             value="{{ old('nama_pelatih', $latihanJabatan->nama_pelatih) }}" />
                     </div>
@@ -54,12 +54,12 @@
                             Latihan Jabatan <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="tempat_latihan" name="tempat_latihan"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan tempat latihan" required
                                 value="{{ old('tempat_latihan', $latihanJabatan->tempat_latihan) }}" />
 
                             <input type="date" id="waktu_latihan" name="waktu_latihan"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required value="{{ old('waktu_latihan', $latihanJabatan->waktu_latihan) }}"
                                 placeholder="Masukan tanggal latihan" />
                         </div>
@@ -68,7 +68,7 @@
                         <label for="tahun_latihan" class="block mb-2.5 text-sm font-medium text-heading">Tahun
                             Latihan <span class="text-red-500">*</span></label>
                         <input type="text" id="tahun_latihan" name="tahun_latihan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan tahun latihan" required
                             value="{{ old('tahun_latihan', $latihanJabatan->tahun_latihan) }}" />
                     </div>
@@ -76,7 +76,7 @@
                         <label for="jumlah_jam" class="block mb-2.5 text-sm font-medium text-heading">Jumlah Jam <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="jumlah_jam" name="jumlah_jam"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan jumlah jam" required
                             value="{{ old('jumlah_jam', $latihanJabatan->jumlah_jam) }}" />
                     </div>
@@ -85,12 +85,12 @@
                             Sertifikat <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="nomor_sertifikat" name="nomor_sertifikat"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan nomor sertifikat" required
                                 value="{{ old('nomor_sertifikat', $latihanJabatan->nomor_sertifikat) }}" />
 
                             <input type="date" id="tgl_sertifikat" name="tgl_sertifikat"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required value="{{ old('tgl_sertifikat', $latihanJabatan->tgl_sertifikat) }}"
                                 placeholder="Masukan tanggal sertifikat" />
                         </div>
@@ -99,11 +99,11 @@
                         <label for="file_sertifikat" class="block mb-2.5 text-sm font-medium text-heading">File
                             Piagam <span class="text-red-500">*</span></label>
                         <input type="file" id="file_sertifikat" name="file_sertifikat"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan file sertifikat" required />
                     </div>
                     <button type="button"
-                        class="confirm-save text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none"
+                        class="confirm-save text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none"
                         data-title="Konfirmasi Simpan"
                         data-message="Apakah Anda yakin ingin menyimpan perubahan data latihan jabatan ini?">Simpan</button>
                 </form>

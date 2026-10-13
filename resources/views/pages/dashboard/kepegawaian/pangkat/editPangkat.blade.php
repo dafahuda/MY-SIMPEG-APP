@@ -239,7 +239,7 @@
                         <label for="jenis_pangkat" class="block mb-2.5 text-sm font-medium text-heading">Jenis
                             Pangkat</label>
                         <input type="text" id="jenis_pangkat" name="jenis_pangkat"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan jenis pangkat" required
                             value="{{ old('jenis_pangkat', $pangkat->jenis_pangkat) }}" />
                     </div>
@@ -248,12 +248,12 @@
                             Pangkat</label>
                         <div class="flex w-3/4 gap-4">
                             <input type="date" id="tmt_pangkat_mulai" name="tmt_pangkat_mulai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Dari" required
                                 value="{{ old('tmt_pangkat_mulai', $pangkat->tmt_pangkat_mulai) }}" />
 
                             <input type="date" id="tmt_pangkat_selesai" name="tmt_pangkat_selesai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required value="{{ old('tmt_pangkat_selesai', $pangkat->tmt_pangkat_selesai) }}" />
                         </div>
                     </div>
@@ -262,12 +262,12 @@
                             SK</label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="no_sk" name="no_sk"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan nomor SK" required
                                 value="{{ old('no_sk', $pangkat->no_sk) }}" />
 
                             <input type="date" id="tgl_sk" name="tgl_sk"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required value="{{ old('tgl_sk', $pangkat->tgl_sk) }}" />
                         </div>
                     </div>
@@ -275,12 +275,12 @@
                         <label for="pejabat_pengesah_sk" class="block mb-2.5 text-sm font-medium text-heading">Pejabat
                             Pengesah SK</label>
                         <input type="text" id="pejabat_pengesah_sk" name="pejabat_pengesah_sk"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Diterbikan oleh" required
                             value="{{ old('pejabat_pengesah_sk', $pangkat->pejabat_pengesah_sk) }}" />
                     </div>
                     <button type="button"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none confirm-save"
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none confirm-save"
                         data-title="Simpan Perubahan"
                         data-message="Apakah Anda yakin ingin menyimpan perubahan data pangkat ini?">Simpan</button>
                 </form>

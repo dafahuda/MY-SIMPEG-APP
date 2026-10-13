@@ -53,11 +53,11 @@
                             Cuti <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="no_surat_cuti" name="no_surat_cuti"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan nomor surat" required />
 
                             <input type="date" id="tgl_surat_cuti" name="tgl_surat_cuti"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Masukan tanggal selesai pelaksanaan cuti" />
                         </div>
                     </div>
@@ -66,12 +66,12 @@
                             Cuti <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="date" id="pelaksanaan_cuti_mulai" name="pelaksanaan_cuti_mulai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan tanggal mulai pelaksanaan cuti"
                                 alt="tanggal mulai pelaksanaan cuti" required />
 
                             <input type="date" id="pelaksanaan_cuti_selesai" name="pelaksanaan_cuti_selesai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Masukan tanggal selesai pelaksanaan cuti"
                                 alt="tanggal selesai cuti" />
                         </div>
@@ -80,46 +80,46 @@
                         <label for="durasi_cuti" class="block mb-2.5 text-sm font-medium text-heading">Durasi
                             Cuti <span class="text-red-500">*</span></label>
                         <input type="text" id="durasi_cuti" name="durasi_cuti"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan durasi cuti" required />
                     </div>
                     <div class="mb-5">
                         <label for="ketentuan_a" class="block mb-2.5 text-sm font-medium text-heading">Ketentuan
                             A <span class="text-red-500">*</span></label>
                         <input type="text" id="ketentuan_a" name="ketentuan_a"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan ketentuan a" required />
                     </div>
                     <div class="mb-5">
                         <label for="ketentuan_b" class="block mb-2.5 text-sm font-medium text-heading">Ketentuan
                             B <span class="text-red-500">*</span></label>
                         <input type="text" id="ketentuan_b" name="ketentuan_b"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan ketentuan b" required />
                     </div>
                     <div class="mb-5">
                         <label for="ketentuan_c" class="block mb-2.5 text-sm font-medium text-heading">Ketentuan
                             C <span class="text-red-500">*</span></label>
                         <input type="text" id="ketentuan_c" name="ketentuan_c"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan ketentuan c" required />
                     </div>
                     <div class="mb-5">
                         <label for="tebusan" class="block mb-2.5 text-sm font-medium text-heading">Tebusan <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="tebusan" name="tebusan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan tebusan" required />
                     </div>
                     <div class="mb-5">
                         <label for="file_surat_cuti" class="block mb-2.5 text-sm font-medium text-heading">File Surat
                             Cuti <span class="text-red-500">*</span></label>
                         <input type="file" id="file_surat_cuti" name="file_surat_cuti"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan file surat cuti" required />
                     </div>
                     <button type="submit"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
                 </form>
             </div>
 

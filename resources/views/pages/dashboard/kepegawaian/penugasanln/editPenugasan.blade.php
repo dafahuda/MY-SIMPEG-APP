@@ -52,7 +52,7 @@
                         <label for="negara_tujuan" class="block mb-2.5 text-sm font-medium text-heading">Negara
                             Tujuan <span class="text-red-500">*</span></label>
                         <input type="text" id="negara_tujuan" name="negara_tujuan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan negara tujuan" required
                             value="{{ old('negara_tujuan', $penugasanLuarNegeri->negara_tujuan) }}" />
                     </div>
@@ -60,7 +60,7 @@
                         <label for="tahun" class="block mb-2.5 text-sm font-medium text-heading">Tahun <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="tahun" name="tahun"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan tahun penugasan" required
                             value="{{ old('tahun', $penugasanLuarNegeri->tahun) }}" />
                     </div>
@@ -68,7 +68,7 @@
                         <label for="durasi_hari" class="block mb-2.5 text-sm font-medium text-heading">Lama
                             (Hari) <span class="text-red-500">*</span></label>
                         <input type="text" id="durasi_hari" name="durasi_hari"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan durasi hari" required
                             value="{{ old('durasi_hari', $penugasanLuarNegeri->durasi_hari) }}" />
                     </div>
@@ -77,12 +77,12 @@
                             ST <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="no_st" name="no_st"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan nomor st" required
                                 value="{{ old('no_st', $penugasanLuarNegeri->no_st) }}" />
 
                             <input type="date" id="tgl_st" name="tgl_st"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Masukan tanggal st"
                                 value="{{ old('tgl_st', $penugasanLuarNegeri->tgl_st) }}" />
                         </div>
@@ -91,11 +91,11 @@
                         <label for="st" class="block mb-2.5 text-sm font-medium text-heading">Surat Tugas <span
                                 class="text-red-500">*</span></label>
                         <input type="file" id="st" name="st"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan file ST" />
                     </div>
                     <button type="button"
-                        class="confirm-save text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none"
+                        class="confirm-save text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none"
                         data-title="Konfirmasi Simpan"
                         data-message="Apakah Anda yakin ingin menyimpan perubahan data penugasan luar negeri ini?">Simpan</button>
                 </form>

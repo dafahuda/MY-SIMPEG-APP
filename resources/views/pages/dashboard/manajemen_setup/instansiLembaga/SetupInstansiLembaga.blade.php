@@ -31,7 +31,7 @@
                         <label for="nama_instansi_lembaga" class="block mb-2.5 text-sm font-medium text-heading">Nama
                             Instansi Lembaga</label>
                         <input type="text" id="nama_instansi_lembaga" name="nama_instansi_lembaga"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan nama instansi lembaga" required
                             value="{{ old('nama_instansi_lembaga', $instansiLembaga->nama_instansi_lembaga) }}" />
                     </div>
@@ -58,7 +58,7 @@
                         <label for="no_telp" class="block mb-2.5 text-sm font-medium text-heading">Nomor
                             Telepon <span class="text-red-500">*</span></label>
                         <input type="text" id="no_telp" name="no_telp"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan nomor telepon" required
                             value="{{ old('no_telp', $instansiLembaga->no_telp) }}" />
                     </div>
@@ -66,7 +66,7 @@
                         <label for="email" class="block mb-2.5 text-sm font-medium text-heading">Pejabat Pemulihan
                             Hukuman <span class="text-red-500">*</span> </label>
                         <input type="text" id="email" name="email"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan email instansi lembaga" required
                             value="{{ old('email', $instansiLembaga->email) }}" />
                     </div>
@@ -74,7 +74,7 @@
                         <label for="kepala_dinas" class="block mb-2.5 text-sm font-medium text-heading">Kepala
                             Dinas <span class="text-red-500">*</span> </label>
                         <input type="text" id="kepala_dinas" name="kepala_dinas"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan kepala dinas" required
                             value="{{ old('kepala_dinas', $instansiLembaga->kepala_dinas) }}" />
                     </div>
@@ -89,12 +89,12 @@
                             <label for="gambar_logo" class="block mb-2.5 text-sm font-medium text-heading">Logo
                                 Instansi <span class="text-red-500">*</span> </label>
                             <input type="file" id="gambar_logo" name="gambar_logo"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan logo instansi" />
                         </div>
                     </div>
                     <button type="submit"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
                 </form>
             </div>
 

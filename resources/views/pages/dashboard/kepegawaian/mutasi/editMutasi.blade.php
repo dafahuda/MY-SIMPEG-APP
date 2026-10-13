@@ -63,7 +63,7 @@
                         <label for="instansi_tujuan" class="block mb-2.5 text-sm font-medium text-heading">Instansi
                             Tujuan <span class="text-red-500">*</span></label>
                         <input type="text" id="instansi_tujuan" name="instansi_tujuan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan instansi tujuan" required
                             value="{{ old('instansi_tujuan', $mutasi->instansi_tujuan) }}" />
                     </div>
@@ -72,12 +72,12 @@
                             SK mutasi <span class="text-red-500">*</span></label>
                         <div class="flex w-3/4 gap-4">
                             <input type="text" id="no_sk_mutasi" name="no_sk_mutasi"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                                 placeholder="Masukan nomor SK" required
                                 value="{{ old('no_sk_mutasi', $mutasi->no_sk_mutasi) }}" />
 
                             <input type="date" id="tgl_sk_mutasi" name="tgl_sk_mutasi"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
                                 required placeholder="Masukan tanggal SK mutasi"
                                 value="{{ old('tgl_sk_mutasi', $mutasi->tgl_sk_mutasi) }}" />
                         </div>
@@ -86,11 +86,11 @@
                         <label for="file_sk_mutasi" class="block mb-2.5 text-sm font-medium text-heading">File SK
                             Mutasi <span class="text-red-500">*</span></label>
                         <input type="file" id="file_sk_mutasi" name="file_sk_mutasi"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan file surat keterangan mutasi" />
                     </div>
                     <button type="button"
-                        class="confirm-save text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 text-sm px-4 py-2 focus:outline-none"
+                        class="confirm-save text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 text-sm px-4 py-2 focus:outline-none"
                         data-title="Konfirmasi Simpan"
                         data-message="Apakah Anda yakin ingin menyimpan perubahan data mutasi ini?">Simpan</button>
                 </form>

@@ -44,7 +44,7 @@
                         <label for="jenis_bahasa" class="block mb-2.5 text-sm font-medium text-heading">Jenis
                             Bahasa <span class="text-red-500">*</span></label>
                         <input type="text" id="jenis_bahasa" name="jenis_bahasa"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan jenis Bahasa" required
                             value="{{ old('jenis_bahasa', $riwayatPendidikanBahasa->jenis_bahasa) }}" />
                     </div>
@@ -52,7 +52,7 @@
                         <label for="bahasa" class="block mb-2.5 text-sm font-medium text-heading">Bahasa <span
                                 class="text-red-500">*</span></label>
                         <input type="text" id="bahasa" name="bahasa"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan jBahasa" required
                             value="{{ old('bahasa', $riwayatPendidikanBahasa->bahasa) }}" />
                     </div>
@@ -69,7 +69,7 @@
                         </select>
                     </div>
                     <button type="button"
-                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-brand-medium shadow-lg font-medium leading-5 text-sm px-4 py-2 focus:outline-none confirm-save"
+                        class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 text-sm px-4 py-2 focus:outline-none confirm-save"
                         data-title="Simpan Perubahan"
                         data-message="Apakah Anda yakin ingin menyimpan perubahan data pendidikan bahasa ini?">Simpan</button>
                 </form>

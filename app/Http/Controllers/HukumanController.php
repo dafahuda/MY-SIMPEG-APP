@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Hukuman;
 use App\Models\Pegawai;
 use App\Models\InstansiLembaga;
+use App\Services\DiklatScopeService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Auth;
 
 class HukumanController extends Controller
 {
+    public function __construct(private readonly DiklatScopeService $scopeService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -21,15 +26,10 @@ class HukumanController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
-            $hukuman = Hukuman::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } else {
-            $hukuman = Hukuman::with('pegawai')->paginate(simpeg_per_page());
-        }
+        $hukuman = $this->scopeService->scopeRelatedToPegawai(
+            Hukuman::with('pegawai'),
+            $user
+        )->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.hukuman.indexHukuman", [
             'hukuman' => $hukuman
@@ -206,14 +206,10 @@ class HukumanController extends Controller
     {
         $user = Auth::user();
 
-        $query = Hukuman::with("pegawai");
-
-        // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        }
+        $query = $this->scopeService->scopeRelatedToPegawai(
+            Hukuman::with('pegawai'),
+            $user
+        );
 
         if($request->cariHukuman) {
             $query->where(function($q) use ($request) {

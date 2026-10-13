@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RiwayatKeluargaOrangTua;
+use App\Models\RiwayatKeluargaOrangtua;
 use Illuminate\Http\Request;
 use App\Models\Pegawai;
 use Exception;
@@ -88,7 +88,7 @@ class RiwayatKeluargaOrangTuaController extends Controller
         try {
             DB::beginTransaction();
 
-            RiwayatKeluargaOrangTua::create($validateData);
+            RiwayatKeluargaOrangtua::create($validateData);
 
             DB::commit();
 
@@ -105,7 +105,7 @@ class RiwayatKeluargaOrangTuaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(RiwayatKeluargaOrangTua $riwayatKeluargaOrangTua)
+    public function edit(RiwayatKeluargaOrangtua $riwayatKeluargaOrangTua)
     {
         $user = Auth::user();
 
@@ -130,7 +130,7 @@ class RiwayatKeluargaOrangTuaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, RiwayatKeluargaOrangTua $riwayatKeluargaOrangTua)
+    public function update(Request $request, RiwayatKeluargaOrangtua $riwayatKeluargaOrangTua)
     {
         $validateData = $request->validate([
             'pegawai_id' => 'required|exists:tb_pegawai,id',
@@ -173,7 +173,7 @@ class RiwayatKeluargaOrangTuaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RiwayatKeluargaOrangTua $riwayatKeluargaOrangTua)
+    public function destroy(RiwayatKeluargaOrangtua $riwayatKeluargaOrangTua)
     {
         // Pastikan pegawai role hanya bisa hapus data miliknya sendiri
         $user = Auth::user();
@@ -193,7 +193,7 @@ class RiwayatKeluargaOrangTuaController extends Controller
     {
         $user = Auth::user();
 
-        $query = RiwayatKeluargaOrangTua::with('pegawai');
+        $query = RiwayatKeluargaOrangtua::with('pegawai');
 
         // Filter berdasarkan role admin
         if ($user->role === 'admin') {

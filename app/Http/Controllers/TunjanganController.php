@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tunjangan;
 use App\Models\Pegawai;
+use App\Services\DiklatScopeService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -12,6 +13,10 @@ use Illuminate\Support\Facades\Auth;
 
 class TunjanganController extends Controller
 {
+    public function __construct(private readonly DiklatScopeService $scopeService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -19,15 +24,10 @@ class TunjanganController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
-            $tunjangan = Tunjangan::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } else {
-            $tunjangan = Tunjangan::with('pegawai')->paginate(simpeg_per_page());
-        }
+        $tunjangan = $this->scopeService->scopeRelatedToPegawai(
+            Tunjangan::with('pegawai'),
+            $user
+        )->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.tunjangan.indexTunjangan", [
             'tunjangan' => $tunjangan
@@ -166,14 +166,10 @@ class TunjanganController extends Controller
     {
         $user = Auth::user();
 
-        $query = Tunjangan::with('pegawai');
-
-        // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        }
+        $query = $this->scopeService->scopeRelatedToPegawai(
+            Tunjangan::with('pegawai'),
+            $user
+        );
 
         $query->where(function($q) use ($request) {
 

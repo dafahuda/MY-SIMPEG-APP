@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LatihanJabatan;
 use App\Models\Pegawai;
+use App\Services\DiklatScopeService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Auth;
 
 class LatihanJabatanController extends Controller
 {
+    public function __construct(private readonly DiklatScopeService $scopeService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -21,15 +26,10 @@ class LatihanJabatanController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
-            $latihaJabatan = LatihanJabatan::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } else {
-            $latihaJabatan = LatihanJabatan::with('pegawai')->paginate(simpeg_per_page());
-        }
+        $latihaJabatan = $this->scopeService->scopeRelatedToPegawai(
+            LatihanJabatan::with('pegawai'),
+            $user
+        )->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.latihanJabatan.indexLatihanJabatan", [
             'latihanJabatan' => $latihaJabatan
@@ -185,14 +185,10 @@ class LatihanJabatanController extends Controller
     {
         $user = Auth::user();
 
-        $query = LatihanJabatan::with('pegawai');
-
-        // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        }
+        $query = $this->scopeService->scopeRelatedToPegawai(
+            LatihanJabatan::with('pegawai'),
+            $user
+        );
 
         if($request->cariLatihanJabatan) {
             $query->where(function($q) use ($request) {
@@ -212,7 +208,7 @@ class LatihanJabatanController extends Controller
 
         $latihanJabatan = $query->paginate(simpeg_per_page());
 
-        return view("pages.dashboard.kepegawaian.latihaJabatan.indexLatihanJabatan", [
+        return view("pages.dashboard.kepegawaian.latihanJabatan.indexLatihanJabatan", [
             'latihanJabatan' => $latihanJabatan
         ]);
     }

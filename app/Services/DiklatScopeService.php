@@ -27,7 +27,7 @@ class DiklatScopeService
         return $this->scopeRelatedToPegawai($query, $user);
     }
 
-    private function scopeRelatedToPegawai(Builder $query, User $user): Builder
+    public function scopeRelatedToPegawai(Builder $query, User $user): Builder
     {
         return match ($user->role) {
             'superadmin' => $query,

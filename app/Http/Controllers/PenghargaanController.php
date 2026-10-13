@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Penghargaan;
 use App\Models\Pegawai;
 use App\Models\InstansiLembaga;
+use App\Services\DiklatScopeService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Storage;
 
 class PenghargaanController extends Controller
 {
+    public function __construct(private readonly DiklatScopeService $scopeService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -21,15 +26,10 @@ class PenghargaanController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
-            $penghargaan = Penghargaan::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } else {
-            $penghargaan = Penghargaan::with('pegawai')->paginate(simpeg_per_page());
-        }
+        $penghargaan = $this->scopeService->scopeRelatedToPegawai(
+            Penghargaan::with('pegawai'),
+            $user
+        )->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.penghargaan.indexPenghargaan", [
             'penghargaan' => $penghargaan
@@ -188,14 +188,10 @@ class PenghargaanController extends Controller
     {
         $user = Auth::user();
 
-        $query = Penghargaan::with('pegawai');
-
-        // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        }
+        $query = $this->scopeService->scopeRelatedToPegawai(
+            Penghargaan::with('pegawai'),
+            $user
+        );
 
         if($request->cariPenghargaan) {
             $query->where(function($q) use ($request) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mutasi;
 use App\Models\Pegawai;
+use App\Services\DiklatScopeService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Storage;
 
 class MutasiController extends Controller
 {
+    public function __construct(private readonly DiklatScopeService $scopeService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -20,15 +25,10 @@ class MutasiController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
-            $mutasi = Mutasi::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } else {
-            $mutasi = Mutasi::with('pegawai')->paginate(simpeg_per_page());
-        }
+        $mutasi = $this->scopeService->scopeRelatedToPegawai(
+            Mutasi::with('pegawai'),
+            $user
+        )->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.mutasi.indexMutasi", [
             'mutasi' => $mutasi
@@ -183,14 +183,10 @@ class MutasiController extends Controller
     {
         $user = Auth::user();
 
-        $query = Mutasi::with('pegawai');
-
-        // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        }
+        $query = $this->scopeService->scopeRelatedToPegawai(
+            Mutasi::with('pegawai'),
+            $user
+        );
 
         if($request->cariMutasi) {
             $query->where(function($q) use ($request) {

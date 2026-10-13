@@ -6,6 +6,7 @@ use App\Models\PenugasanLuarNegeri;
 use Illuminate\Http\Request;
 use Exception;
 use App\Models\Pegawai;
+use App\Services\DiklatScopeService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Auth;
 
 class PenugasanLuarNegeriController extends Controller
 {
+    public function __construct(private readonly DiklatScopeService $scopeService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -21,15 +26,10 @@ class PenugasanLuarNegeriController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
-            $penugasaLuarNegeri = PenugasanLuarNegeri::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } else {
-            $penugasaLuarNegeri = PenugasanLuarNegeri::with('pegawai')->paginate(simpeg_per_page());
-        }
+        $penugasaLuarNegeri = $this->scopeService->scopeRelatedToPegawai(
+            PenugasanLuarNegeri::with('pegawai'),
+            $user
+        )->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.penugasanln.indexPenugasan_luar_negri", [
             'penugasanLuarNegeri' => $penugasaLuarNegeri
@@ -186,14 +186,10 @@ class PenugasanLuarNegeriController extends Controller
     {
         $user = Auth::user();
 
-        $query = PenugasanLuarNegeri::with('pegawai');
-
-        // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        }
+        $query = $this->scopeService->scopeRelatedToPegawai(
+            PenugasanLuarNegeri::with('pegawai'),
+            $user
+        );
 
         if($request->cariPenugasanLn) {
             $query->where(function($q) use ($request) {

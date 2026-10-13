@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\IzinKawin;
 use App\Models\Pegawai;
+use App\Services\DiklatScopeService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -12,6 +13,10 @@ use Illuminate\Http\Request;
 
 class IzinKawinController extends Controller
 {
+    public function __construct(private readonly DiklatScopeService $scopeService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -19,15 +24,10 @@ class IzinKawinController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
-            $izinKawin = IzinKawin::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } else {
-            $izinKawin = IzinKawin::with('pegawai')->paginate(simpeg_per_page());
-        }
+        $izinKawin = $this->scopeService->scopeRelatedToPegawai(
+            IzinKawin::with('pegawai'),
+            $user
+        )->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.izinKawin.indexIzinKawin", [
             'izinKawin' => $izinKawin
@@ -195,14 +195,10 @@ class IzinKawinController extends Controller
     {
         $user = Auth::user();
 
-        $query = IzinKawin::with('pegawai');
-
-        // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        }
+        $query = $this->scopeService->scopeRelatedToPegawai(
+            IzinKawin::with('pegawai'),
+            $user
+        );
 
         if($request->cariIzinKawin) {
             $query->where(function($q) use ($request) {

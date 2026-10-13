@@ -1,82 +1,125 @@
-# DESIGN.md — Arah Desain MY-SIMPEG-APP
+# DESIGN.md — Design Direction for MY-SIMPEG-APP
 
-> File ini adalah **arah desain** (jiwa UI). Filter anti-slop ada di `ANTISLOP.md`.
-> Bahasa antarmuka: **Bahasa Indonesia**. Semua copy UI ditulis dalam Bahasa
-> Indonesia yang sopan, ringkas, dan resmi (ini aplikasi kepegawaian pemerintah,
-> bukan landing page marketing).
+> This file is the **design direction** (the soul of the UI). The anti-slop
+> filter lives in `ANTISLOP.md`. UI language: **Bahasa Indonesia** — all UI copy
+> is written in polite, concise, official Indonesian (this is a government
+> personnel app, not a marketing landing page).
+>
+> Visual style: **Modern Enterprise SaaS Dashboard** — clean corporate UI, soft
+> flat design, light blue-gray interface, compact information density,
+> desktop-first, functional and structured, minimal decoration. Think Asana /
+> ClickUp / Monday.com density with a softer corporate blue language.
 
-## Identitas
+## Identity
 
-**MY-SIMPEG** — Sistem Informasi Kepegawaian ASN. Penggunanya adalah admin
-kepegawaian dan pegawai negeri yang membuka aplikasi ini **untuk bekerja**
-(bukan browsing). Desain harus terasa seperti **perkakas kantor pemerintah yang
-*rapi, tenang, dan efisien*** — informatif dulu, cantik kemudian.
+**MY-SIMPEG** — Sistem Informasi Kepegawaian ASN. Users are HR staff and civil
+servants who open this app **to work** (not to browse). The design must feel
+like **rapi, tenang, efisien government office tooling** — informative first,
+pretty second.
 
-## Prinsip
+## Principles
 
-1. **Padat data, tidak ramai.** Halaman seperti daftar pegawai, rekapitulasi,
-   dan laporan menampilkan tabel dan angka. Prioritas: keterbacaan baris,
-   scan-ability kolom, dan hierarki tipografi yang jelas.
-2. **Konsisten dengan yang ada.** Aplikasi ini sudah punya 100+ halaman
-   memakai pola tertentu (kartu putih `bg-white` + `shadow-sm sm:rounded-lg`,
-   tabel dengan header `bg-gray-50` uppercase, badge status berwarna,
-   tombol solid warna tunggal). **Halaman baru mengikuti pola yang sudah ada** —
-   jangan memperkenalkan gaya baru di tengah aplikasi.
-3. **Warna fungsional, bukan dekoratif.** Warna dipakai untuk berarti sesuatu:
-   hijau = sukses/disetujui, kuning = perlu perhatian/ubah, merah = bahaya/hapus,
-   biru = aksi utama/informasi. Tidak ada gradien dekoratif.
-4. **Dukungan dark mode** dipertahankan (kelas `dark:` Tailwind) di semua
-   komponen baru.
+1. **Data-dense, not busy.** List, recap, and report pages show tables and
+   numbers. Priority: row legibility, column scan-ability, clear type hierarchy.
+2. **Consistent with what exists.** The app already has 100+ pages on established
+   patterns (white cards, `bg-gray-50` uppercase table headers, colored status
+   badges, solid single-color buttons). **New pages follow existing patterns** —
+   never introduce a new style mid-application.
+3. **Color is functional, not decorative.** Green = success/approved, yellow =
+   needs attention, red = danger/delete, blue = primary action/information,
+   purple = special status only. No decorative gradients.
+4. **Dark mode stays** (Tailwind `dark:` classes) on all components — tokens
+   below define the light theme; dark theme keeps the existing gray scale.
 
-## Palet (mengikuti Tailwind yang sudah dipakai)
+## Design Tokens (light theme)
 
-- Latar aplikasi: `gray-100` (light) / `gray-900` (dark)
-- Permukaan kartu: putih / `gray-800`
-- Teks utama: `gray-800–900` / `gray-100–200`
-- Teks sekunder: `gray-500–600` / `gray-400`
-- Aksen utama (aksi/link): **biru** (`blue-600`/`blue-700`) — jangan ungu, jangan teal
-- Status: hijau (sukses), kuning (warning), merah (error/bahaya), amber (menunggu)
+| Token | Value | Usage |
+|---|---|---|
+| Primary blue | `#064A9D` | primary actions, active state, links |
+| App background | `#EEF5FC` | page background |
+| Sidebar background | `#F4F8FD` | left navigation |
+| Card surface | `#FFFFFF` | cards, tables, forms |
+| Border | `#CAD9E8` | 1px component borders (prefer over shadows) |
+| Primary text | `#0A1628` | headings, body, table cells |
+| Secondary text | `#53657A` | labels, captions, meta |
 
-## Tipografi
+Status colors (soft pastel backgrounds only, never large saturated fills —
+combine color with text or icon):
 
-- Judul halaman: `text-2xl font-semibold` (pola header yang sudah ada)
-- Label kolom: `text-xs uppercase tracking-wider text-gray-600`
-- Angka identitas (NIP, NIK, NPWP): `font-mono`
-- Bahasa Indonesia yang benar untuk semua label dan pesan
+- Blue — active
+- Green — completed / healthy
+- Yellow — review / pending
+- Red or pink — overdue / danger
+- Purple — special status
+
+**Migration note:** the codebase currently uses Tailwind `blue-600/700`
+(`#2563eb`) as the working approximation of the primary blue. When tokens are
+wired (CSS custom properties / `@theme`), map primary actions to `#064A9D`.
+
+## Typography
+
+- Inter or a similar modern sans-serif; the current system stack is an
+  acceptable approximation — avoid adding heavy font downloads
+- Small, compact type scale; medium to semi-bold headings; no oversized type
+- Page heading: `text-2xl font-semibold` (existing header pattern)
+- Column labels: `text-xs uppercase tracking-wider` in secondary text color
+- Identity numbers (NIP, NIK, NPWP): `font-mono`
+- Bahasa Indonesia, correct spelling, for every label and message
+
+## Spacing & Radius
+
+- 4px spacing system; 8px icon-to-text; 12–16px component padding;
+  16px between cards/sections; avoid excessive whitespace
+- Radius: inputs 4px, buttons 4px, cards 4–6px, badges pill, avatars circle
+- Migration note: the legacy card pattern uses `rounded-lg` (8px) — tolerable
+  on untouched pages, new/touched cards go to 4–6px (`rounded-md`)
+
+## Shadows
+
+- Minimal: **prefer 1px borders over floating shadows**; cards get a very
+  subtle shadow or none (`shadow-sm` ceiling, plus the border)
+- Stronger shadow (`shadow-lg`/`xl`) only for dropdowns, menus, dialogs, overlays
+- Buttons may keep their existing light elevation — affordance, not decoration
+
+## Components (existing patterns — follow them)
+
+| Component | Pattern |
+|---|---|
+| List page | Title + breadcrumb → flash message → white card with table |
+| Status badge | `rounded-full px-2.5 py-0.5 text-xs font-semibold` + semantic color |
+| Primary button | corporate blue, 4px radius, compact height, white text |
+| Secondary button | white or light blue surface with border, 4px radius |
+| Danger button | `text-red-600` + confirmation naming the object being deleted |
+| Inputs / dropdowns | white or light blue background, thin blue-gray border, 4px radius, compact height, clear hover **and** focus states |
+| Icons | outline style, 14–18px, consistent stroke weight, dark blue or muted gray — the existing inline outline set (Heroicons style) is the house style; do not mix icon libraries |
+| Delete confirm | `confirm()` dialog with Indonesian text naming the object |
+| Success flash | `bg-green-50 text-green-700` + green border |
 
 ## Nada Copy (Bahasa Indonesia)
 
-- Sopan dan resmi: "Dokumen berhasil diunggah.", bukan "Awesome! Your doc has landed 🎉"
-- Tidak ada buzzword marketing, tidak ada emoji dekoratif berlebihan
-  (emoji kecil sebagai penanda ikon sudah cukup, maksimal 1 per judul)
-- Pesan error menjelaskan apa yang salah dan bagaimana memperbaikinya:
-  "Ukuran file maksimal 5 MB." bukan "Oops! Something went wrong."
-
-## Komponen Berulang (pola yang sudah ada — ikuti)
-
-| Komponen | Pola |
-|---|---|
-| Halaman daftar | Judul + breadcrumb → flash message → kartu putih berisi tabel |
-| Badge status | `rounded-full px-2.5 py-0.5 text-xs font-semibold` + warna sesuai makna |
-| Tombol aksi utama | `bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg` |
-| Tombol sekunder | `bg-gray-200 dark:bg-gray-700` |
-| Tombol bahaya | teks `text-red-600` + konfirmasi sebelum hapus |
-| Konfirmasi hapus | dialog `confirm()` dengan teks Indonesia yang menyebut objek yang dihapus |
-| Flash sukses | `bg-green-50 text-green-700` + border hijau |
+- Polite and official: "Dokumen berhasil diunggah.", never
+  "Awesome! Your doc has landed"
+- No marketing buzzwords, no decorative emoji (one small marker max per heading)
+- Error messages say what went wrong and how to fix it:
+  "Ukuran file maksimal 5 MB.", never "Oops! Something went wrong."
 
 ## Dial (target liveliness)
 
 Dial: **ENERGY 1 / RHYTHM 2 / MOTION 1**
 
-Aplikasi kerja pemerintah: tenang dan stabil. Animasi hanya transisi hover/
-focus yang halus; tidak ada animasi masuk yang mencolok, tidak ada paralaks,
-tidada confetti. "Hidup" datang dari data yang akurat dan status yang jelas,
-bukan dari gerakan.
+Government work app: calm and stable. Animation is only smooth hover/focus
+transitions; no entrance animations, no parallax, no confetti. "Life" comes
+from accurate data and clear status, not movement.
 
-## Yang Tidak Boleh Terjadi
+## Yang Tidak Boleh Terjadi (Avoid)
 
-- Gradien biru-ungu, glassmorphism, blob dekoratif, ilustrasi AI generik
-- Emoji berjamaah di tombol/judul (1 penanda kecil cukup)
-- Copy bahasa Inggris di UI ("Submit", "Success!", "Oops")
-- Layout dashboard penuh kartu statistik yang tidak dipakai siapa pun
-- Font display mewah yang tidak perlu — pakai font default Tailwind
+- Glassmorphism, neumorphism, blob decorations, generic AI illustrations
+- Heavy gradients (blue-purple gradients especially), strong card shadows
+- Oversized rounded cards, pill-shaped buttons (badges may be pill)
+- Large marketing typography, excessive whitespace, highly saturated colors
+- Generic AI dashboard styling: eyebrow badges over headlines, bento grids,
+  sparkle icons, glowing borders, monospace display headings
+- Emoji crowds on buttons/headings (one small marker is enough)
+- English copy in the UI ("Submit", "Success!", "Oops")
+- Dashboard layouts full of stat cards nobody uses
+- Ornate display fonts — use the default sans stack

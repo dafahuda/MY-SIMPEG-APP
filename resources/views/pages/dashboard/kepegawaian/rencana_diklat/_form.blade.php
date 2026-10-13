@@ -22,7 +22,7 @@
         <div class="flex-1">
             <select name="pegawai_id" id="pegawai_id"
                 class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('pegawai_id') border-red-500 @enderror">
-                <option value="">-- Pilih Pegawai --</option>
+                <option value="">Pilih Pegawai</option>
                 @foreach ($pegawaiList as $pegawai)
                     <option value="{{ $pegawai->id }}" {{ old('pegawai_id', $rencanaDiklat->pegawai_id ?? '') == $pegawai->id ? 'selected' : '' }}>
                         {{ $pegawai->nama }}
@@ -39,7 +39,7 @@
         <div class="flex-1">
             <select name="tahun_rencana" id="tahun_rencana"
                 class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('tahun_rencana') border-red-500 @enderror">
-                <option value="">-- Pilih Tahun --</option>
+                <option value="">Pilih Tahun</option>
                 @foreach ($daftarTahun as $tahun)
                     <option value="{{ $tahun }}" {{ old('tahun_rencana', $rencanaDiklat->tahun_rencana ?? date('Y')) == $tahun ? 'selected' : '' }}>
                         {{ $tahun }}
@@ -78,7 +78,7 @@
         <div class="flex-1">
             <select name="kategori_diklat" id="kategori_diklat"
                 class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('kategori_diklat') border-red-500 @enderror">
-                <option value="">-- Pilih Kategori --</option>
+                <option value="">Pilih Kategori</option>
                 @foreach ($kategoriOptions as $kategori)
                     <option value="{{ $kategori }}" {{ old('kategori_diklat', $rencanaDiklat->kategori_diklat ?? '') == $kategori ? 'selected' : '' }}>
                         {{ $kategori }}
@@ -95,7 +95,7 @@
         <div class="flex-1">
             <select name="prioritas" id="prioritas"
                 class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('prioritas') border-red-500 @enderror">
-                <option value="">-- Pilih Prioritas --</option>
+                <option value="">Pilih Prioritas</option>
                 @foreach ($prioritasOptions as $prioritas)
                     <option value="{{ $prioritas }}" {{ old('prioritas', $rencanaDiklat->prioritas ?? '') == $prioritas ? 'selected' : '' }}>
                         {{ $prioritas }}

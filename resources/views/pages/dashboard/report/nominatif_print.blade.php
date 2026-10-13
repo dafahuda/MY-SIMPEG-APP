@@ -52,7 +52,7 @@
         <div class="no-print" style="margin-bottom:12px; display:flex; gap:8px;">
             <button onclick="window.print()"
                 style="padding:6px 16px; background:#16a34a; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:12px;">
-                🖨 Print
+                Cetak
             </button>
             <button onclick="window.history.back()"
                 style="padding:6px 16px; background:#6b7280; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:12px;">

@@ -46,7 +46,7 @@
                     </label>
                     <select name="unit_kerja_id"
                         class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
-                        <option value="">-- Pilih Unit Kerja --</option>
+                        <option value="">Pilih Unit Kerja</option>
                         @foreach ($unitKerjaList as $uk)
                             <option value="{{ $uk->id }}"
                                 {{ request('unit_kerja_id') == $uk->id ? 'selected' : '' }}>

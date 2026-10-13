@@ -41,7 +41,7 @@
     <div class="judul-laporan">
         <h2>Daftar Pegawai yang Akan Pensiun</h2>
     </div>
-    <div class="subjudul">Periode: {{ $periodeLabel }} ({{ $tahun }}) — Batas Usia Pensiun 58 Tahun</div>
+    <div class="subjudul">Periode: {{ $periodeLabel }} ({{ $tahun }}): Batas Usia Pensiun 58 Tahun</div>
 
     <table class="data">
         <thead>

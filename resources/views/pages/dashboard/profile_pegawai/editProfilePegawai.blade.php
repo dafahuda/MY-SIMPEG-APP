@@ -95,7 +95,7 @@
                             </label>
                             <select name="unit_kerja_id" required
                                 class="form-select w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
-                                <option value="">-- Pilih Unit Kerja --</option>
+                                <option value="">Pilih Unit Kerja</option>
                                 @foreach ($unitKerja as $uk)
                                     <option value="{{ $uk->id }}" {{ old('unit_kerja_id', $pegawai->unit_kerja_id) == $uk->id ? 'selected' : '' }}>
                                         {{ $uk->nama_unit }}
@@ -138,7 +138,7 @@
                             </label>
                             <select name="jenis_kelamin" required
                                 class="form-select w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
-                                <option value="">-- Pilih --</option>
+                                <option value="">Pilih</option>
                                 <option value="laki-laki" {{ old('jenis_kelamin', $pegawai->jenis_kelamin) == 'laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                                 <option value="perempuan" {{ old('jenis_kelamin', $pegawai->jenis_kelamin) == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
                             </select>
@@ -151,7 +151,7 @@
                             </label>
                             <select name="agama" required
                                 class="form-select w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
-                                <option value="">-- Pilih --</option>
+                                <option value="">Pilih</option>
                                 @foreach (['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu'] as $agama)
                                     <option value="{{ $agama }}" {{ old('agama', $pegawai->agama) == $agama ? 'selected' : '' }}>{{ $agama }}</option>
                                 @endforeach
@@ -165,7 +165,7 @@
                             </label>
                             <select name="golongan_darah" required
                                 class="form-select w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
-                                <option value="">-- Pilih --</option>
+                                <option value="">Pilih</option>
                                 @foreach (['A', 'B', 'AB', 'O'] as $gol)
                                     <option value="{{ $gol }}" {{ old('golongan_darah', $pegawai->golongan_darah) == $gol ? 'selected' : '' }}>{{ $gol }}</option>
                                 @endforeach
@@ -179,7 +179,7 @@
                             </label>
                             <select name="status_pernikahan" required
                                 class="form-select w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
-                                <option value="">-- Pilih --</option>
+                                <option value="">Pilih</option>
                                 @foreach (['Belum Menikah', 'Menikah', 'Cerai Hidup', 'Cerai Mati'] as $status)
                                     <option value="{{ $status }}" {{ old('status_pernikahan', $pegawai->status_pernikahan) == $status ? 'selected' : '' }}>{{ $status }}</option>
                                 @endforeach
@@ -247,7 +247,7 @@
                             </label>
                             <select name="status_kepegawaian" required
                                 class="form-select w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
-                                <option value="">-- Pilih --</option>
+                                <option value="">Pilih</option>
                                 @foreach (['PNS', 'PPPK', 'Honorer'] as $status)
                                     <option value="{{ $status }}" {{ old('status_kepegawaian', $pegawai->status_kepegawaian) == $status ? 'selected' : '' }}>{{ $status }}</option>
                                 @endforeach

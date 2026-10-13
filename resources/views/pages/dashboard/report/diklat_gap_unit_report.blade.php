@@ -31,7 +31,7 @@
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Tahun Rencana</label>
                     <select name="tahun_rencana" required data-testid="diklat-gap-unit-tahun-rencana-select" data-selected="{{ $selectedTahunRencana ?? '' }}"
                         class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
-                        <option value="">-- Pilih Tahun --</option>
+                        <option value="">Pilih Tahun</option>
                         @for ($year = date('Y'); $year >= 2020; $year--)
                             <option value="{{ $year }}" {{ (string) $selectedTahunRencana === (string) $year ? 'selected' : '' }}>
                                 {{ $year }}
@@ -44,7 +44,7 @@
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Tahun Realisasi</label>
                     <select name="tahun_realisasi" data-testid="diklat-gap-unit-tahun-realisasi-select" data-selected="{{ $selectedTahunRealisasi ?? '' }}"
                         class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
-                        <option value="">-- Default ke Tahun Rencana --</option>
+                        <option value="">Default ke Tahun Rencana</option>
                         @for ($year = date('Y'); $year >= 2020; $year--)
                             <option value="{{ $year }}" {{ (string) $selectedTahunRealisasi === (string) $year ? 'selected' : '' }}>
                                 {{ $year }}
@@ -58,7 +58,7 @@
                         <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Unit Kerja</label>
                         <select name="unit_kerja_id" data-testid="diklat-gap-unit-select" data-selected="{{ $selectedUnitKerjaId ?? '' }}"
                             class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
-                            <option value="">-- Semua Unit --</option>
+                            <option value="">Semua Unit</option>
                             @foreach ($unitKerjaOptions as $unitKerja)
                                 <option value="{{ $unitKerja->id }}" {{ (string) $selectedUnitKerjaId === (string) $unitKerja->id ? 'selected' : '' }}>
                                     {{ $unitKerja->nama_unit }}

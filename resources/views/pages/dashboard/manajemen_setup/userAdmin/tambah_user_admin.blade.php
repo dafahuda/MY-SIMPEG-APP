@@ -58,7 +58,7 @@
                             Unit
                             Kerja <span class="text-red-500">*</span> </label>
                         <select name="unit_kerja_id" id="unit_kerja_id" class="rounded-lg">
-                            <option value="">--Pilih Pegawai -- </option>
+                            <option value="">Pilih Pegawai</option>
                             @foreach ($unitKerja as $item)
                                 <option value="{{ $item->id }}">{{ $item->nama_unit }}</option>
                             @endforeach

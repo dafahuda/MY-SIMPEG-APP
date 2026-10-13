@@ -1,4 +1,4 @@
-{{-- Modal Konfirmasi Global — dipanggil via showConfirm({...}) dari mana saja --}}
+{{-- Global confirmation modal, called via showConfirm({...}) from anywhere --}}
 <div
     x-data="confirmModalState()"
     x-show="open"
@@ -106,7 +106,7 @@ function confirmModalState() {
     }
 }
 
-// Helper global — panggil dari atribut onclick / @click di mana saja
+// Global helper, call it from onclick / @click attributes anywhere
 function showConfirm(options) {
     window.dispatchEvent(new CustomEvent('open-confirm', { detail: options }));
 }

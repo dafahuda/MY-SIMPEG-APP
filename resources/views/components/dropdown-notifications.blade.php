@@ -58,17 +58,13 @@
 
         @if ($semuaNotifikasi->isEmpty())
             <div class="py-6 px-4 text-center text-sm text-gray-400 dark:text-gray-500">
-                🔕 Belum ada notifikasi.
+                Belum ada notifikasi.
             </div>
         @else
             <ul class="max-h-96 overflow-y-auto">
                 @foreach ($semuaNotifikasi as $notif)
                     @php
                         $data = $notif->data;
-                        $icon = match ($data['judul'] ?? '') {
-                            'KGB Jatuh Tempo' => '💰',
-                            default => '📣',
-                        };
                     @endphp
                     <li class="border-b border-gray-200 dark:border-gray-700/60 last:border-0">
                         <a class="block py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/20 {{ $notif->read_at ? 'opacity-70' : '' }}"
@@ -76,7 +72,6 @@
                            @click="open = false"
                            @focusin="open = true">
                             <span class="flex items-start gap-2">
-                                <span class="text-sm">{{ $icon }}</span>
                                 <span class="flex-1 min-w-0">
                                     @if (empty($notif->read_at))
                                         <span class="inline-block w-2 h-2 rounded-full bg-violet-500 mt-1 mr-1 shrink-0" title="Belum dibaca"></span>

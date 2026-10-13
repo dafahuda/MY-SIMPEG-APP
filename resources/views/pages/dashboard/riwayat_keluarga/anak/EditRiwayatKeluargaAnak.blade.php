@@ -29,7 +29,7 @@
                     <div class="mb-5">
                         <label for="pegawai_id" class="block mb-2.5 text-sm font-medium text-heading">Pegawai</label>
                         <select name="pegawai_id" id="pegawai_id" class="rounded-lg">
-                            <option value="">--Pilih Pegawai --</option>
+                            <option value="">Pilih Pegawai</option>
                             @foreach ($pegawai as $item)
                                 <option value="{{ $item->id }}"
                                     {{ old('pegawai_id', $riwayatKeluargaAnak->pegawai_id) == $item->id ? 'selected' : '' }}>

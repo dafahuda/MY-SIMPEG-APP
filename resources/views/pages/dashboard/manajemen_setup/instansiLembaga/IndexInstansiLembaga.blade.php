@@ -27,7 +27,7 @@
 
                     <a href="/manajemen_setup/setup_instansi_lembaga/{{ $instansiLembaga->id }}"
                         class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">
-                        ⚙️ Setup
+                        Setup
                     </a>
                 </div>
 
@@ -74,13 +74,13 @@
                     </div>
                 </div>
             @else
-                <!-- 🔥 kondisi kalau belum ada data -->
+                <!-- Empty state when there is no data -->
                 <div class="text-center py-10">
                     <p class="text-gray-500 mb-4">Data instansi belum tersedia</p>
 
                     <a href="/manajemen_setup/instansi_lembaga/setup"
                         class="bg-blue-500 text-white px-4 py-2 rounded-lg">
-                        ➕ Tambah Data Instansi
+                        Tambah Data Instansi
                     </a>
                 </div>
             @endif

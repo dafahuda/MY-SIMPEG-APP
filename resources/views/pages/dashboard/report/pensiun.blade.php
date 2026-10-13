@@ -39,7 +39,7 @@
                     </label>
                     <select name="periode" id="periodeSelect"
                         class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
-                        <option value="">-- Pilih Periode --</option>
+                        <option value="">Pilih Periode</option>
                         @foreach ($periodeOptions as $val => $label)
                             <option value="{{ $val }}" {{ $selectedPeriode === $val ? 'selected' : '' }}>
                                 {{ $label }}

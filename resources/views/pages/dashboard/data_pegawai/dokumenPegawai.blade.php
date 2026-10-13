@@ -16,9 +16,6 @@
 
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
         <div class="p-6 flex flex-col sm:flex-row items-center gap-4">
-            <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-2xl">
-                📁
-            </div>
             <div class="text-center sm:text-left">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">
                     @if($pegawai->gelar_depan) {{ $pegawai->gelar_depan }} @endif
@@ -40,7 +37,7 @@
     <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg mb-6">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700">
             <h4 class="font-semibold text-gray-800 dark:text-gray-200">Upload Dokumen Baru</h4>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Format: PDF, JPG, PNG — maksimal 5 MB</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Format: PDF, JPG, PNG. Maksimal 5 MB.</p>
         </div>
         <form action="{{ route('dokumen-pegawai.store', $pegawai->id) }}" method="POST" enctype="multipart/form-data"
               class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -49,7 +46,7 @@
                 <label for="jenis_dokumen" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jenis Dokumen *</label>
                 <select id="jenis_dokumen" name="jenis_dokumen" required
                         class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-sm @error('jenis_dokumen') border-red-500 @enderror">
-                    <option value="">— Pilih Jenis —</option>
+                    <option value="">Pilih Jenis</option>
                     @foreach (\App\Models\DokumenPegawai::JENIS_DOKUMEN as $value => $label)
                         <option value="{{ $value }}" @if(old('jenis_dokumen') === $value) selected @endif>{{ $label }}</option>
                     @endforeach
@@ -142,7 +139,7 @@
             @empty
                 <tr>
                     <td colspan="5" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                        📂 Belum ada dokumen diunggah untuk pegawai ini.
+                        Belum ada dokumen diunggah untuk pegawai ini.
                     </td>
                 </tr>
             @endforelse

@@ -33,7 +33,7 @@
 <body>
 <div class="page">
     <div class="no-print">
-        <button onclick="window.print()" style="padding:6px 16px; background:#16a34a; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:12px;">🖨 Print</button>
+        <button onclick="window.print()" style="padding:6px 16px; background:#16a34a; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:12px;">Cetak</button>
         <button onclick="window.history.back()" style="padding:6px 16px; background:#6b7280; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:12px;">← Kembali</button>
     </div>
 

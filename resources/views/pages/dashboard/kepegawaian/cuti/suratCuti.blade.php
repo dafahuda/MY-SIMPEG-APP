@@ -198,7 +198,7 @@
 <body>
 
     <div class="action-bar">
-        <button class="btn-print" onclick="window.print()">🖨 Cetak / Download</button>
+        <button class="btn-print" onclick="window.print()">Cetak / Unduh</button>
         <button class="btn-back" onclick="window.history.back()">← Kembali</button>
     </div>
 

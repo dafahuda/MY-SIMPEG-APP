@@ -31,7 +31,7 @@
                         <label for="pegawai_id" class="block mb-2.5 text-sm font-medium text-heading">Pegawai <span
                                 class="text-red-500">*</span></label>
                         <select name="pegawai_id" id="pegawai_id" class="rounded-lg">
-                            <option value="">--Pilih Pegawai -- </option>
+                            <option value="">Pilih Pegawai</option>
                             @foreach ($pegawai as $item)
                                 <option value="{{ $item->id }}">{{ $item->nama }}</option>
                             @endforeach
@@ -42,7 +42,7 @@
                             Diklat</label>
                         <select name="rencana_diklat_id" id="rencana_diklat_id" data-testid="diklat-rencana-select"
                             class="rounded-lg">
-                            <option value="">-- Tanpa Rencana --</option>
+                            <option value="">Tanpa Rencana</option>
                             @foreach ($rencanaDiklatOptions as $item)
                                 <option value="{{ $item->id }}"
                                     data-pegawai-id="{{ $item->pegawai_id }}"

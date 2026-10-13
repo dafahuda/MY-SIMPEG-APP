@@ -42,7 +42,7 @@
                     <div class="flex gap-3">
                         <select name="periode"
                             class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
-                            <option value="">-- Bulan --</option>
+                            <option value="">Bulan</option>
                             @foreach ($bulanList as $bulan)
                                 <option value="{{ $bulan }}" {{ $selectedBulan === $bulan ? 'selected' : '' }}>
                                     {{ $bulan }}
@@ -51,7 +51,7 @@
                         </select>
                         <select name="tahun"
                             class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5">
-                            <option value="">-- Tahun --</option>
+                            <option value="">Tahun</option>
                             @for ($y = date('Y'); $y >= 2020; $y--)
                                 <option value="{{ $y }}" {{ $selectedTahun == $y ? 'selected' : '' }}>
                                     {{ $y }}</option>

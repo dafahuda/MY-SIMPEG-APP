@@ -31,7 +31,7 @@
                         <select name="user_id" id="user_id"
                             class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
                             required>
-                            <option value="">-- Pilih Akun User Pegawai --</option>
+                            <option value="">Pilih Akun User Pegawai</option>
                             @foreach ($userPegawai as $u)
                                 <option value="{{ $u->id }}" {{ old('user_id') == $u->id ? 'selected' : '' }}>
                                     {{ $u->name }} ({{ $u->email }})
@@ -242,7 +242,7 @@
                         @else
                             <!-- Superadmin: bebas pilih -->
                             <select name="unit_kerja_id" id="unit_kerja_id" class="rounded-lg">
-                                <option value="">--Pilih Unit Kerja --</option>
+                                <option value="">Pilih Unit Kerja</option>
                                 @foreach ($unitKerja as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_unit }}</option>
                                 @endforeach

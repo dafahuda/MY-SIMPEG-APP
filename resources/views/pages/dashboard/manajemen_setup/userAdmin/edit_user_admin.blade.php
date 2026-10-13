@@ -51,7 +51,7 @@
                         <label for="unit_kerja_id" class="block mb-2.5 text-sm font-medium text-heading">OPD / SKPD /
                             Unit Kerja <span class="text-red-500">*</span></label>
                         <select name="unit_kerja_id" id="unit_kerja_id" class="rounded-lg">
-                            <option value="">--Pilih Unit Kerja --</option>
+                            <option value="">Pilih Unit Kerja</option>
                             @foreach ($unitKerja as $item)
                                 <option value="{{ $item->id }}"
                                     {{ old('unit_kerja_id', $user->unit_kerja_id) == $item->id ? 'selected' : '' }}>

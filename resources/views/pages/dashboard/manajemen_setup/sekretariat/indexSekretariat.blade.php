@@ -27,7 +27,7 @@
 
                     <a href="/manajemen_setup/sekretariat/setup_sekretariat/{{ $sekretariat->id }}"
                         class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">
-                        ⚙️ Setup
+                        Setup
                     </a>
                 </div>
 
@@ -74,12 +74,12 @@
                     </div>
                 </div>
             @else
-                <!-- 🔥 kondisi kalau belum ada data -->
+                <!-- Empty state when there is no data -->
                 <div class="text-center py-10">
                     <p class="text-gray-500 mb-4">Data sekretariat belum tersedia</p>
 
                     <a href="/manajemen_setup/sekretariat/create" class="bg-blue-500 text-white px-4 py-2 rounded-lg">
-                        ➕ Tambah Sekretariat
+                        Tambah Sekretariat
                     </a>
                 </div>
             @endif

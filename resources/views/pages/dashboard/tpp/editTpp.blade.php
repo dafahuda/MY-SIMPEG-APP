@@ -42,7 +42,7 @@
                     <div class="flex-1">
                         <select name="pegawai_id" id="pegawai_id"
                             class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full px-3 py-2.5 @error('pegawai_id') border-red-500 @enderror">
-                            <option value="">-- Pilih Pegawai --</option>
+                            <option value="">Pilih Pegawai</option>
                             @foreach ($pegawai as $item)
                                 <option value="{{ $item->id }}"
                                     {{ old('pegawai_id', $tpp->pegawai_id) == $item->id ? 'selected' : '' }}>

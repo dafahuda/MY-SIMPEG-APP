@@ -91,7 +91,7 @@ wired (CSS custom properties / `@theme`), map primary actions to `#064A9D`.
 | Secondary button | white or light blue surface with border, 4px radius |
 | Danger button | `text-red-600` + confirmation naming the object being deleted |
 | Inputs / dropdowns | white or light blue background, thin blue-gray border, 4px radius, compact height, clear hover **and** focus states |
-| Icons | outline style, 14–18px, consistent stroke weight, dark blue or muted gray — the existing inline outline set (Heroicons style) is the house style; do not mix icon libraries |
+| Icons | Lucide, Tabler, or Phosphor outline style (the existing inline outline set is the same family), 14–18px, consistent stroke weight, dark blue or muted gray — one library at a time, never mixed |
 | Delete confirm | `confirm()` dialog with Indonesian text naming the object |
 | Success flash | `bg-green-50 text-green-700` + green border |
 
@@ -123,3 +123,119 @@ from accurate data and clear status, not movement.
 - English copy in the UI ("Submit", "Success!", "Oops")
 - Dashboard layouts full of stat cards nobody uses
 - Ornate display fonts — use the default sans stack
+
+---
+
+## Appendix: UI Design Style (verbatim source spec)
+
+Canonical source: `products_18-08-2026_file_1786990201211_9899944.md`.
+The sections above are the working synthesis for this codebase (they add
+migration notes and existing-pattern context); this appendix is the
+authoritative original text — where the two differ in wording, this wins
+on intent, the synthesis above wins on implementation mapping.
+
+```markdown
+# UI Design Style
+
+Style: Modern Enterprise SaaS Dashboard
+
+Visual direction:
+- Clean corporate UI
+- Soft flat design
+- Light blue-gray interface
+- Card-based layout
+- Compact information density
+- Desktop-first
+- Functional and structured
+- Minimal decoration
+
+Color:
+- Primary blue: #064A9D
+- App background: #EEF5FC
+- Sidebar background: #F4F8FD
+- Card background: #FFFFFF
+- Border: #CAD9E8
+- Primary text: #0A1628
+- Secondary text: #53657A
+
+Use soft pastel colors only for status:
+- Blue for active
+- Green for completed or healthy
+- Yellow for review or pending
+- Red or pink for overdue
+- Purple for special status
+
+Typography:
+- Inter or similar modern sans-serif
+- Small and compact type scale
+- Medium to semi-bold headings
+- Avoid oversized typography
+- Prioritize readability and data density
+
+Cards:
+- White or very light blue surface
+- 1px subtle blue-gray border
+- 4px to 6px border radius
+- Very subtle shadow or no shadow
+- Consistent header structure
+- Tight and organized spacing
+
+Buttons:
+- Corporate blue for primary actions
+- White or light blue for secondary actions
+- 4px border radius
+- Compact height
+- Avoid pill-shaped buttons
+
+Inputs and dropdowns:
+- White or light blue background
+- Thin blue-gray border
+- 4px radius
+- Compact height
+- Clear hover and focus states
+
+Icons:
+- Lucide, Tabler, or Phosphor outline icons
+- 14px to 18px size
+- Consistent stroke weight
+- Mostly dark blue or muted gray
+
+Spacing:
+- Use a 4px spacing system
+- 8px between icon and text
+- 12px to 16px internal component padding
+- 16px between cards and sections
+- Avoid excessive whitespace
+
+Border radius:
+- Inputs: 4px
+- Buttons: 4px
+- Cards: 4px to 6px
+- Badges: pill
+- Avatars: circle
+
+Shadows:
+- Minimal
+- Prefer borders over floating shadows
+- Use stronger shadow only for dropdowns, menus, and overlays
+
+Status treatment:
+- Use pastel background accents
+- Keep main card surface neutral
+- Avoid filling large areas with saturated colors
+- Combine status color with text or icons
+
+Overall feel:
+Modern enterprise productivity software similar in visual density to Asana, ClickUp, Monday.com, and ERP dashboards, but with a softer corporate blue visual language.
+
+Avoid:
+- Glassmorphism
+- Neumorphism
+- Heavy gradients
+- Strong shadows
+- Oversized rounded cards
+- Large marketing typography
+- Excessive whitespace
+- Highly saturated colors
+- Generic AI dashboard styling
+```

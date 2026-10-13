@@ -33,7 +33,7 @@ class PangkatController extends Controller
                 ? Pangkat::with(['master_pangkat', 'master_golongan', 'pegawai'])
                     ->where('pegawai_id', $pegawai->id)
                     ->paginate(simpeg_per_page())
-                : collect()->paginate(simpeg_per_page());
+                : Pangkat::whereRaw('1=0')->paginate(simpeg_per_page());
         } else {
             $pangkat = Pangkat::with(['master_pangkat', 'master_golongan'])->paginate(simpeg_per_page());
         }

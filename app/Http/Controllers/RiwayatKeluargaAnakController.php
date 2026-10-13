@@ -24,12 +24,12 @@ class RiwayatKeluargaAnakController extends Controller
                 ->whereHas('pegawai', function($query) use ($user) {
                     $query->where('unit_kerja_id', $user->unit_kerja_id);
                 })
-                ->get();
+                ->paginate(simpeg_per_page());
         } elseif ($user->role === 'pegawai') {
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $riwayatKeluargaAnak = $myPegawai
                 ? RiwayatKeluargaAnak::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(simpeg_per_page())
-                : collect()->paginate(simpeg_per_page());
+                : RiwayatKeluargaAnak::whereRaw('1=0')->paginate(simpeg_per_page());
         } else {
             $riwayatKeluargaAnak = RiwayatKeluargaAnak::with('pegawai')->paginate(simpeg_per_page());
         }

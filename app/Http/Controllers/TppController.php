@@ -32,7 +32,7 @@ class TppController extends Controller
             $myPegawai = Pegawai::where('user_id', $user->id)->first();
             $tpp = $myPegawai
                 ? Tpp::with('pegawai')->where('pegawai_id', $myPegawai->id)->orderBy('created_at', 'desc')->paginate(simpeg_per_page())
-                : collect()->paginate(simpeg_per_page());
+                : Tpp::whereRaw('1=0')->paginate(simpeg_per_page());
         } else {
             $tpp = Tpp::with('pegawai')->orderBy('created_at', 'desc')->paginate(simpeg_per_page());
         }

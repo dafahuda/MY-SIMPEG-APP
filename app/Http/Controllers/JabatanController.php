@@ -33,7 +33,7 @@ class JabatanController extends Controller
                 ? Jabatan::with(['master_jabatan', 'master_eselon', 'pegawai'])
                     ->where('pegawai_id', $pegawai->id)
                     ->paginate(simpeg_per_page())
-                : collect()->paginate(simpeg_per_page());
+                : Jabatan::whereRaw('1=0')->paginate(simpeg_per_page());
         } else {
             $jabatan = Jabatan::with(['master_jabatan', 'master_eselon'])->paginate(simpeg_per_page());
         }

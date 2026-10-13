@@ -52,9 +52,11 @@ combine color with text or icon):
 - Red or pink — overdue / danger
 - Purple — special status
 
-**Migration note:** the codebase currently uses Tailwind `blue-600/700`
-(`#2563eb`) as the working approximation of the primary blue. When tokens are
-wired (CSS custom properties / `@theme`), map primary actions to `#064A9D`.
+**Status:** the token scale is wired — `@theme` in `resources/css/app.css`
+defines a custom `blue-*` scale where `blue-600` = `#064A9D` (overriding the
+default Tailwind blue). Action classes (`bg-blue-600`, `focus:ring-blue-500`,
+pastel badges `bg-blue-100 text-blue-700`) and the hardcoded accent hexes in
+`ui-feedback.css` / `landing.css` all resolve to this scale.
 
 ## Typography
 

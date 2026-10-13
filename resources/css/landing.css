@@ -1,5 +1,5 @@
-:root { color-scheme: light; --page:#f8fafc; --surface:#fff; --ink:#172334; --muted:#526174; --line:#dbe2ea; --accent:#1d4ed8; --accent-hover:#1e40af; --soft:#eef3fa; }
-:root.dark { color-scheme:dark; --page:#111827; --surface:#1f2937; --ink:#f3f4f6; --muted:#c0cada; --line:#374151; --accent:#93c5fd; --accent-hover:#bfdbfe; --soft:#182234; }
+:root { color-scheme: light; --page:#f8fafc; --surface:#fff; --ink:#172334; --muted:#526174; --line:#dbe2ea; --accent:#064A9D; --accent-hover:#044081; --soft:#eef3fa; }
+:root.dark { color-scheme:dark; --page:#111827; --surface:#1f2937; --ink:#f3f4f6; --muted:#c0cada; --line:#374151; --accent:#9dc5f1; --accent-hover:#c7ddf5; --soft:#182234; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; scroll-padding-top:2rem; }
 body { margin:0; background:var(--page); color:var(--ink); font-family:"Segoe UI",Tahoma,Arial,sans-serif; line-height:1.6; }

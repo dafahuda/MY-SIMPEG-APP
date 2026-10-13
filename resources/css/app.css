@@ -74,6 +74,19 @@
   --color-yellow-900: #4f3d0e;
   --color-yellow-950: #342809;
 
+  /* Brand primary scale per DESIGN.md (blue-600 = #064A9D) */
+  --color-blue-50: #f3f7fc;
+  --color-blue-100: #e2edf9;
+  --color-blue-200: #c7ddf5;
+  --color-blue-300: #9dc5f1;
+  --color-blue-400: #61a6ef;
+  --color-blue-500: #1e84f1;
+  --color-blue-600: #064A9D;
+  --color-blue-700: #044081;
+  --color-blue-800: #043972;
+  --color-blue-900: #032f5e;
+  --color-blue-950: #022040;
+
   --font-inter: "Inter", "sans-serif";
 
   --text-xs: 0.75rem;

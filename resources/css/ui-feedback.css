@@ -2,16 +2,16 @@
 .simpeg-toast { display: flex; align-items: start; gap: .75rem; padding: .8rem 1rem; border: 1px solid; border-radius: .5rem; box-shadow: 0 4px 16px #0001; font-size: .875rem; }
 .simpeg-toast span { flex: 1; overflow-wrap: anywhere; }
 .simpeg-toast button { flex: 0 0 44px; min-height: 44px; margin: -.5rem -.5rem -.5rem 0; font-size: 1.5rem; cursor: pointer; border-radius: .25rem; }
-.simpeg-toast button:focus-visible, .simpeg-table-scroll:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.simpeg-toast button:focus-visible, .simpeg-table-scroll:focus-visible { outline: 2px solid #064A9D; outline-offset: 2px; }
 .simpeg-toast-success { background: #f0fdf4; color: #166534; border-color: #86efac; }
 .simpeg-toast-error { background: #fef2f2; color: #991b1b; border-color: #fca5a5; }
 .simpeg-toast-warning { background: #fffbeb; color: #92400e; border-color: #fcd34d; }
-.simpeg-toast-info { background: #eff6ff; color: #1e40af; border-color: #93c5fd; }
+.simpeg-toast-info { background: #f3f7fc; color: #043972; border-color: #c7ddf5; }
 .dark .simpeg-toast { background: #1f2937; }
 .dark .simpeg-toast-success { color: #bbf7d0; border-color: #166534; }
 .dark .simpeg-toast-error { color: #fecaca; border-color: #991b1b; }
 .dark .simpeg-toast-warning { color: #fde68a; border-color: #92400e; }
-.dark .simpeg-toast-info { color: #bfdbfe; border-color: #1e40af; }
+.dark .simpeg-toast-info { color: #9dc5f1; border-color: #043972; }
 .simpeg-spinner { width: 1rem; height: 1rem; display: inline-block; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: simpeg-spin .7s linear infinite; }
 @keyframes simpeg-spin { to { transform: rotate(360deg); } }
 main [aria-busy=true] { cursor: progress; opacity: .8; }

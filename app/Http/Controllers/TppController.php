@@ -179,6 +179,15 @@ class TppController extends Controller
      */
     public function update(Request $request, Tpp $tpp)
     {
+        $user = Auth::user();
+
+        if ($user->role === 'pegawai') {
+            $myPegawai = Pegawai::where('user_id', $user->id)->first();
+            if (!$myPegawai || $tpp->pegawai_id != $myPegawai->id || (int) $request->pegawai_id !== $myPegawai->id) {
+                abort(403, 'Akses ditolak');
+            }
+        }
+
         $request->validate([
             'pegawai_id'            => 'required|exists:tb_pegawai,id',
             'periode'               => 'required|string',
@@ -279,6 +288,8 @@ class TppController extends Controller
      */
     public function laporanBulanan(Request $request)
     {
+        $user = Auth::user();
+
         $bulanList = [
             'Januari','Februari','Maret','April','Mei','Juni',
             'Juli','Agustus','September','Oktober','November','Desember',
@@ -290,11 +301,20 @@ class TppController extends Controller
         $data = collect();
 
         if ($periode && $tahun) {
-            $data = Tpp::with(['pegawai.jabatan.master_jabatan'])
+            $query = Tpp::with(['pegawai.jabatan.master_jabatan'])
                 ->where('periode', $periode)
-                ->where('tahun', $tahun)
-                ->orderBy('id')
-                ->get();
+                ->where('tahun', $tahun);
+
+            if ($user->role === 'admin') {
+                $query->whereHas('pegawai', function ($q) use ($user) {
+                    $q->where('unit_kerja_id', $user->unit_kerja_id);
+                });
+            } elseif ($user->role === 'pegawai') {
+                $myPegawai = Pegawai::where('user_id', $user->id)->first();
+                $query->where('pegawai_id', $myPegawai?->id ?? 0);
+            }
+
+            $data = $query->orderBy('id')->get();
         }
 
         return view('pages.dashboard.tpp.laporanBulananTpp', [

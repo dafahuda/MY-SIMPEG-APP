@@ -153,6 +153,15 @@ class PrestasiKerjaController extends Controller
      */
     public function update(Request $request, PrestasiKerja $prestasiKerja)
     {
+        $user = Auth::user();
+
+        if ($user->role === 'pegawai') {
+            $myPegawai = Pegawai::where('user_id', $user->id)->first();
+            if (!$myPegawai || $prestasiKerja->pegawai_id != $myPegawai->id || (int) $request->pegawai_id !== $myPegawai->id) {
+                abort(403, 'Akses ditolak');
+            }
+        }
+
         $validateData = $request->validate([
             'pegawai_id' => 'required|exists:tb_pegawai,id',
             'periode_nilai_dari' => 'required|date',

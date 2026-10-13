@@ -398,7 +398,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 
     // Rekapitulasi
-    Route::prefix('rekapitulasi')->group(function() {
+    Route::prefix('rekapitulasi')->middleware('role:admin,superadmin')->group(function() {
         Route::get('/opd_skpd_unit_kerja', [RekapitulasiController::class, 'rekapUnitKerja']);
         Route::get('/golongan', [RekapitulasiController::class, 'rekapGolongan']);
         Route::get('/pangkat', [RekapitulasiController::class, 'rekapPangkat']);
@@ -418,22 +418,26 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Report
     Route::prefix('report')->group(function() {
+        // Diklat gap is self-scoped: accessible to admin, superadmin and pegawai.
         Route::get('/diklat_gap', [DiklatGapReportController::class, 'index'])->name('report.diklat_gap');
         Route::get('/diklat_gap/unit', [DiklatGapReportController::class, 'unitAggregate'])->name('report.diklat_gap.unit');
         Route::get('/diklat_gap/unit/print', [DiklatGapReportController::class, 'printUnitAggregate'])->name('report.diklat_gap.unit.print');
         Route::get('/diklat_gap/unit/export', [DiklatGapReportController::class, 'exportUnitAggregate'])->name('report.diklat_gap.unit.export');
-        Route::get('/nominatif', [ReportController::class, 'reportNominatif'])->name('report.nominatif');
-        Route::get('/nominatif/print', [ReportController::class, 'printNominatif'])->name('report.nominatif.print');
-        Route::get('/duk', [ReportController::class, 'reportDUK'])->name('report.duk');
-        Route::get('/duk/print', [ReportController::class, 'printDUK'])->name('report.duk.print');
-        Route::get('/bezetting', [ReportController::class, 'reportBezetting'])->name('report.bezetting');
-        Route::get('/bezetting/print', [ReportController::class, 'printBezetting'])->name('report.bezetting.print');
-        Route::get('/keadaan_pegawai', [ReportController::class, 'reportKeadaanPegawai'])->name('report.keadaan_pegawai');
-        Route::get('/keadaan_pegawai/print', [ReportController::class, 'printKeadaanPegawai'])->name('report.keadaan_pegawai.print');
-        Route::get('/pensiun', [ReportController::class, 'reportPensiun'])->name('report.pensiun');
-        Route::get('/pdf/{jenis}', [ReportPdfController::class, 'unduh'])
-            ->whereIn('jenis', ['nominatif', 'duk', 'keadaan_pegawai', 'bezetting', 'pensiun'])
-            ->name('report.pdf');
+
+        Route::middleware('role:admin,superadmin')->group(function() {
+            Route::get('/nominatif', [ReportController::class, 'reportNominatif'])->name('report.nominatif');
+            Route::get('/nominatif/print', [ReportController::class, 'printNominatif'])->name('report.nominatif.print');
+            Route::get('/duk', [ReportController::class, 'reportDUK'])->name('report.duk');
+            Route::get('/duk/print', [ReportController::class, 'printDUK'])->name('report.duk.print');
+            Route::get('/bezetting', [ReportController::class, 'reportBezetting'])->name('report.bezetting');
+            Route::get('/bezetting/print', [ReportController::class, 'printBezetting'])->name('report.bezetting.print');
+            Route::get('/keadaan_pegawai', [ReportController::class, 'reportKeadaanPegawai'])->name('report.keadaan_pegawai');
+            Route::get('/keadaan_pegawai/print', [ReportController::class, 'printKeadaanPegawai'])->name('report.keadaan_pegawai.print');
+            Route::get('/pensiun', [ReportController::class, 'reportPensiun'])->name('report.pensiun');
+            Route::get('/pdf/{jenis}', [ReportPdfController::class, 'unduh'])
+                ->whereIn('jenis', ['nominatif', 'duk', 'keadaan_pegawai', 'bezetting', 'pensiun'])
+                ->name('report.pdf');
+        });
     });
 
     Route::middleware('role:superadmin')->group(function () {

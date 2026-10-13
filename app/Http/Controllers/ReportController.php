@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\UnitKerja;
 use App\Models\Pegawai;
 use App\Models\Pangkat;
@@ -12,8 +13,23 @@ use App\Models\RiwayatPendidikanLanjut;
 
 class ReportController extends Controller
 {
+    /**
+     * Restrict report queries to the authenticated admin's own unit kerja.
+     * Superadmin may query any unit; admin is pinned to its unit_kerja_id.
+     */
+    private function enforceUnitScope(Request $request): void
+    {
+        $user = Auth::user();
+
+        if ($user && $user->role === 'admin') {
+            $request->merge(['unit_kerja_id' => $user->unit_kerja_id]);
+        }
+    }
+
     public function reportNominatif(Request $request)
     {
+        $this->enforceUnitScope($request);
+
         $unitKerjaList = UnitKerja::orderBy('nama_unit')->get();
         $instansi      = InstansiLembaga::first();
 
@@ -77,6 +93,8 @@ class ReportController extends Controller
 
     public function printNominatif(Request $request)
     {
+        $this->enforceUnitScope($request);
+
         $instansi  = InstansiLembaga::first();
         $unitKerja = UnitKerja::find($request->unit_kerja_id);
 
@@ -128,6 +146,8 @@ class ReportController extends Controller
 
     public function reportDUK(Request $request)
     {
+        $this->enforceUnitScope($request);
+
         $unitKerjaList = UnitKerja::orderBy('nama_unit')->get();
         $instansi      = InstansiLembaga::first();
 
@@ -151,6 +171,8 @@ class ReportController extends Controller
 
     public function printDUK(Request $request)
     {
+        $this->enforceUnitScope($request);
+
         $instansi  = InstansiLembaga::first();
         $unitKerja = UnitKerja::find($request->unit_kerja_id);
 
@@ -226,6 +248,8 @@ class ReportController extends Controller
 
     public function reportKeadaanPegawai(Request $request)
     {
+        $this->enforceUnitScope($request);
+
         $unitKerjaList = UnitKerja::orderBy('nama_unit')->get();
         $instansi      = InstansiLembaga::first();
 
@@ -249,6 +273,8 @@ class ReportController extends Controller
 
     public function printKeadaanPegawai(Request $request)
     {
+        $this->enforceUnitScope($request);
+
         $instansi  = InstansiLembaga::first();
         $unitKerja = UnitKerja::find($request->unit_kerja_id);
 
@@ -411,6 +437,8 @@ class ReportController extends Controller
 
     public function reportBezetting(Request $request)
     {
+        $this->enforceUnitScope($request);
+
         $unitKerjaList = UnitKerja::orderBy('nama_unit')->get();
         $instansi      = InstansiLembaga::first();
 
@@ -475,6 +503,8 @@ class ReportController extends Controller
 
     public function printBezetting(Request $request)
     {
+        $this->enforceUnitScope($request);
+
         $instansi  = InstansiLembaga::first();
         $unitKerja = UnitKerja::find($request->unit_kerja_id);
 
@@ -528,6 +558,8 @@ class ReportController extends Controller
 
     public function reportPensiun(Request $request)
     {
+        $this->enforceUnitScope($request);
+
         // Opsi periode: tahun ini, 1 tahun akan datang, 2 tahun akan datang
         $periodeOptions = [
             'tahun_ini'  => 'Tahun Ini',
@@ -565,6 +597,9 @@ class ReportController extends Controller
             }
 
             $pegawaiList = Pegawai::with(['jabatan_aktif.master_jabatan', 'unit_kerja'])
+                ->when(Auth::user()?->role === 'admin', function ($query) {
+                    $query->where('unit_kerja_id', Auth::user()->unit_kerja_id);
+                })
                 ->whereYear('tgl_lahir', '>=', $tahunLahirMin)
                 ->whereYear('tgl_lahir', '<=', $tahunLahirMax)
                 ->orderBy('tgl_lahir')

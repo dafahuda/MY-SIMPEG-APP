@@ -5,31 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Hukuman;
 use App\Models\Pegawai;
 use App\Models\InstansiLembaga;
-use App\Services\DiklatScopeService;
+use App\Support\Access;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HukumanController extends Controller
 {
-    public function __construct(private readonly DiklatScopeService $scopeService)
-    {
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $user = Auth::user();
+        $query = Hukuman::with('pegawai');
 
-        $hukuman = $this->scopeService->scopeRelatedToPegawai(
-            Hukuman::with('pegawai'),
-            $user
-        )->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
+
+        $hukuman = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.hukuman.indexHukuman", [
             'hukuman' => $hukuman
@@ -41,10 +41,8 @@ class HukumanController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -104,10 +102,8 @@ class HukumanController extends Controller
      */
     public function edit(Hukuman $hukuman)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -204,12 +200,15 @@ class HukumanController extends Controller
 
     public function cariHukuman(Request $request)
     {
-        $user = Auth::user();
+        $query = Hukuman::with('pegawai');
 
-        $query = $this->scopeService->scopeRelatedToPegawai(
-            Hukuman::with('pegawai'),
-            $user
-        );
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
 
         if($request->cariHukuman) {
             $query->where(function($q) use ($request) {

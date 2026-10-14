@@ -5,31 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Penghargaan;
 use App\Models\Pegawai;
 use App\Models\InstansiLembaga;
-use App\Services\DiklatScopeService;
+use App\Support\Access;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PenghargaanController extends Controller
 {
-    public function __construct(private readonly DiklatScopeService $scopeService)
-    {
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $user = Auth::user();
+        $query = Penghargaan::with('pegawai');
 
-        $penghargaan = $this->scopeService->scopeRelatedToPegawai(
-            Penghargaan::with('pegawai'),
-            $user
-        )->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
+
+        $penghargaan = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.penghargaan.indexPenghargaan", [
             'penghargaan' => $penghargaan
@@ -41,10 +41,8 @@ class PenghargaanController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -99,10 +97,8 @@ class PenghargaanController extends Controller
      */
     public function edit(Penghargaan $penghargaan)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -186,12 +182,15 @@ class PenghargaanController extends Controller
 
     public function cariPenghargaan(Request $request)
     {
-        $user = Auth::user();
+        $query = Penghargaan::with('pegawai');
 
-        $query = $this->scopeService->scopeRelatedToPegawai(
-            Penghargaan::with('pegawai'),
-            $user
-        );
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
 
         if($request->cariPenghargaan) {
             $query->where(function($q) use ($request) {

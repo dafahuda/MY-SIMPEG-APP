@@ -4,31 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\Mutasi;
 use App\Models\Pegawai;
-use App\Services\DiklatScopeService;
+use App\Support\Access;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class MutasiController extends Controller
 {
-    public function __construct(private readonly DiklatScopeService $scopeService)
-    {
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $user = Auth::user();
+        $query = Mutasi::with('pegawai');
 
-        $mutasi = $this->scopeService->scopeRelatedToPegawai(
-            Mutasi::with('pegawai'),
-            $user
-        )->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
+
+        $mutasi = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.mutasi.indexMutasi", [
             'mutasi' => $mutasi
@@ -40,10 +40,8 @@ class MutasiController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -96,10 +94,8 @@ class MutasiController extends Controller
      */
     public function edit(Mutasi $mutasi)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -181,12 +177,15 @@ class MutasiController extends Controller
 
     public function cariMutasi(Request $request)
     {
-        $user = Auth::user();
+        $query = Mutasi::with('pegawai');
 
-        $query = $this->scopeService->scopeRelatedToPegawai(
-            Mutasi::with('pegawai'),
-            $user
-        );
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
 
         if($request->cariMutasi) {
             $query->where(function($q) use ($request) {

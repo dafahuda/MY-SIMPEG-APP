@@ -4,30 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\Tunjangan;
 use App\Models\Pegawai;
-use App\Services\DiklatScopeService;
+use App\Support\Access;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TunjanganController extends Controller
 {
-    public function __construct(private readonly DiklatScopeService $scopeService)
-    {
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $user = Auth::user();
+        $query = Tunjangan::with('pegawai');
 
-        $tunjangan = $this->scopeService->scopeRelatedToPegawai(
-            Tunjangan::with('pegawai'),
-            $user
-        )->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
+
+        $tunjangan = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.tunjangan.indexTunjangan", [
             'tunjangan' => $tunjangan
@@ -39,10 +39,8 @@ class TunjanganController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -95,10 +93,8 @@ class TunjanganController extends Controller
      */
     public function edit(Tunjangan $tunjangan)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -164,12 +160,15 @@ class TunjanganController extends Controller
 
     public function cariTunjangan(Request $request)
     {
-        $user = Auth::user();
+        $query = Tunjangan::with('pegawai');
 
-        $query = $this->scopeService->scopeRelatedToPegawai(
-            Tunjangan::with('pegawai'),
-            $user
-        );
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
 
         $query->where(function($q) use ($request) {
 

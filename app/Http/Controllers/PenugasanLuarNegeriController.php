@@ -6,30 +6,30 @@ use App\Models\PenugasanLuarNegeri;
 use Illuminate\Http\Request;
 use Exception;
 use App\Models\Pegawai;
-use App\Services\DiklatScopeService;
+use App\Support\Access;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
 
 
 class PenugasanLuarNegeriController extends Controller
 {
-    public function __construct(private readonly DiklatScopeService $scopeService)
-    {
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $user = Auth::user();
+        $query = PenugasanLuarNegeri::with('pegawai');
 
-        $penugasaLuarNegeri = $this->scopeService->scopeRelatedToPegawai(
-            PenugasanLuarNegeri::with('pegawai'),
-            $user
-        )->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
+
+        $penugasaLuarNegeri = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.penugasanln.indexPenugasan_luar_negri", [
             'penugasanLuarNegeri' => $penugasaLuarNegeri
@@ -41,10 +41,8 @@ class PenugasanLuarNegeriController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -100,10 +98,8 @@ class PenugasanLuarNegeriController extends Controller
      */
     public function edit(PenugasanLuarNegeri $penugasanLuarNegeri)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -184,12 +180,15 @@ class PenugasanLuarNegeriController extends Controller
 
     public function cariPenugasanLn(Request $request)
     {
-        $user = Auth::user();
+        $query = PenugasanLuarNegeri::with('pegawai');
 
-        $query = $this->scopeService->scopeRelatedToPegawai(
-            PenugasanLuarNegeri::with('pegawai'),
-            $user
-        );
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
 
         if($request->cariPenugasanLn) {
             $query->where(function($q) use ($request) {

@@ -4,30 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\IzinKawin;
 use App\Models\Pegawai;
-use App\Services\DiklatScopeService;
+use App\Support\Access;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class IzinKawinController extends Controller
 {
-    public function __construct(private readonly DiklatScopeService $scopeService)
-    {
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $user = Auth::user();
+        $query = IzinKawin::with('pegawai');
 
-        $izinKawin = $this->scopeService->scopeRelatedToPegawai(
-            IzinKawin::with('pegawai'),
-            $user
-        )->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
+
+        $izinKawin = $query->paginate(simpeg_per_page());
 
         return view("pages.dashboard.kepegawaian.izinKawin.indexIzinKawin", [
             'izinKawin' => $izinKawin
@@ -39,10 +39,8 @@ class IzinKawinController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -112,10 +110,8 @@ class IzinKawinController extends Controller
      */
     public function edit(IzinKawin $izinKawin)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -193,12 +189,15 @@ class IzinKawinController extends Controller
 
     public function cariIzinKawin(Request $request)
     {
-        $user = Auth::user();
+        $query = IzinKawin::with('pegawai');
 
-        $query = $this->scopeService->scopeRelatedToPegawai(
-            IzinKawin::with('pegawai'),
-            $user
-        );
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
+        } elseif (! Access::isSuperadmin()) {
+            $query->whereRaw('1 = 0');
+        }
 
         if($request->cariIzinKawin) {
             $query->where(function($q) use ($request) {

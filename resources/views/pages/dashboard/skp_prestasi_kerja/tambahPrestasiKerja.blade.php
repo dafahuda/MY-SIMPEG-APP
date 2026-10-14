@@ -35,38 +35,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="flex items-center mb-5">
-                        <label for="periode_nilai_dari" class="w-1/4 text-sm font-medium text-heading">Periode
-                            Penilaian <span class="text-red-500">*</span></label>
-                        <div class="flex w-3/4 gap-4">
-                            <input type="date" id="periode_nilai_dari" name="periode_nilai_dari"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                                placeholder="Dari" required />
-
-                            <input type="date" id="periode_nilai_sampai" name="periode_nilai_sampai"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
-                                required placeholder="Sampai" />
-
-                            <input type="text" id="tahun_periode" name="tahun_periode"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
-                                required placeholder="Tahun" />
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <label for="nama_pejabat_nilai" class="block mb-2.5 text-sm font-medium text-heading">Nama
-                            Pejabat penilai <span class="text-red-500">*</span></label>
-                        <input type="text" id="nama_pejabat_nilai" name="nama_pejabat_nilai"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nama pejabat penilai" required />
-                    </div>
-                    <div class="mb-5">
-                        <label for="nama_atasan_pejabat_penilai"
-                            class="block mb-2.5 text-sm font-medium text-heading">Nama Atasan Pejabat penilai <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="nama_atasan_pejabat_penilai" name="nama_atasan_pejabat_penilai"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nama atasan pejabat penilai" required />
-                    </div>
+                    @include('pages.dashboard.skp_prestasi_kerja._fields', ['fieldValues' => []])
                     <div class="mb-8 border-t pt-5">
                         <h3 class="text-lg font-bold text-heading mb-4 underline">UNSUR YANG DINILAI</h3>
 

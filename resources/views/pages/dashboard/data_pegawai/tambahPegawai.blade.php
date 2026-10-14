@@ -41,20 +41,7 @@
                         <p class="text-xs text-gray-500 mt-1">Hanya menampilkan akun dengan role pegawai yang belum
                             terhubung.</p>
                     </div>
-                    <div class="mb-5">
-                        <label for="nip" class="block mb-2.5 text-sm font-medium text-heading">NIP <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="nip" name="nip"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan NIP" required />
-                    </div>
-                    <div class="mb-5">
-                        <label for="nama" class="block mb-2.5 text-sm font-medium text-heading">Nama
-                            Pegawai <span class="text-red-500">*</span></label>
-                        <input type="text" id="nama" name="nama"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nama pegawai" required />
-                    </div>
+                    @include('pages.dashboard.data_pegawai._fields', ['section' => 'nip', 'values' => []])
                     <div class="flex items-center mb-5">
                         <label for="gelar_depan" class="w-1/4 text-sm font-medium text-heading">Gelar</label>
                         <div class="flex w-3/4 gap-4">
@@ -121,27 +108,7 @@
                             <option value="Cerai Hidup">Cerai Hidup</option>
                         </select>
                     </div>
-                    <div class="mb-5">
-                        <label for="nik" class="block mb-2.5 text-sm font-medium text-heading">NIK <span
-                                class="text-red-500">*</span> </label>
-                        <input type="text" id="nik" name="nik"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan NIK Pegawai" required />
-                    </div>
-                    <div class="mb-5">
-                        <label for="no_hp" class="block mb-2.5 text-sm font-medium text-heading">Nomor
-                            Telepon <span class="text-red-500">*</span></label>
-                        <input type="text" id="no_hp" name="no_hp"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Nomor Telepon" required />
-                    </div>
-                    <div class="mb-5">
-                        <label for="email" class="block mb-2.5 text-sm font-medium text-heading">Email <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="email" name="email"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Email" required />
-                    </div>
+                    @include('pages.dashboard.data_pegawai._fields', ['section' => 'nik', 'values' => []])
                     <div class="mb-5">
                         <label for="email_gov" class="block mb-2.5 text-sm font-medium text-heading">Email
                             Gov</label>
@@ -149,27 +116,7 @@
                             class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                             placeholder="Masukan Email gov" required />
                     </div>
-                    <div class="mb-5">
-                        <label for="alamat" class="block mb-2.5 text-sm font-medium text-heading">Alamat <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="alamat" name="alamat"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Alamat" required />
-                    </div>
-                    <div class="mb-5">
-                        <label for="no_npwp" class="block mb-2.5 text-sm font-medium text-heading">No.
-                            NPWP <span class="text-red-500">*</span></label>
-                        <input type="text" id="no_npwp" name="no_npwp"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan No. NPWP" required />
-                    </div>
-                    <div class="mb-5">
-                        <label for="no_bpjs" class="block mb-2.5 text-sm font-medium text-heading">No.
-                            BPJS <span class="text-red-500">*</span></label>
-                        <input type="text" id="no_bpjs" name="no_bpjs"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan No. BPJS" required />
-                    </div>
+                    @include('pages.dashboard.data_pegawai._fields', ['section' => 'alamat', 'values' => []])
                     <div class="mb-5">
                         <label for="status_kepegawaian" class="block mb-2.5 text-sm font-medium text-heading">Status
                             Kepegawaian <span class="text-red-500">*</span></label>
@@ -181,13 +128,7 @@
                             <option value="CPNS">CPNS</option>
                         </select>
                     </div>
-                    <div class="mb-5">
-                        <label for="karpeg" class="block mb-2.5 text-sm font-medium text-heading">Karpeg <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="karpeg" name="karpeg"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan karpeg" required />
-                    </div>
+                    @include('pages.dashboard.data_pegawai._fields', ['section' => 'karpeg', 'values' => []])
                     <div class="flex items-center mb-5">
                         <label for="no_sk_cpns" class="w-1/4 text-sm font-medium text-heading">No. SK & TMT
                             CPNS <span class="text-red-500">*</span></label>

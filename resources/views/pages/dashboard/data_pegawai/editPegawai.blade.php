@@ -45,20 +45,7 @@
                         <p class="text-xs text-gray-500 mt-1">Hanya menampilkan akun dengan role pegawai yang belum
                             terhubung ke pegawai lain.</p>
                     </div>
-                    <div class="mb-5">
-                        <label for="nip" class="block mb-2.5 text-sm font-medium text-heading">NIP <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="nip" name="nip"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan NIP" required value="{{ old('nip', $pegawai->nip) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="nama" class="block mb-2.5 text-sm font-medium text-heading">Nama
-                            Pegawai <span class="text-red-500">*</span></label>
-                        <input type="text" id="nama" name="nama"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nama pegawai" required value="{{ old('nama', $pegawai->nama) }}" />
-                    </div>
+                    @include('pages.dashboard.data_pegawai._fields', ['section' => 'nip', 'values' => ['nip' => old('nip', $pegawai->nip), 'nama' => old('nama', $pegawai->nama)]])
                     <div class="flex items-center mb-5">
                         <label for="gelar_depan" class="w-1/4 text-sm font-medium text-heading">Gelar</label>
                         <div class="flex w-3/4 gap-4">
@@ -141,28 +128,7 @@
                             </option>
                         </select>
                     </div>
-                    <div class="mb-5">
-                        <label for="nik" class="block mb-2.5 text-sm font-medium text-heading">NIK <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="nik" name="nik"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan NIK Pegawai" required value="{{ old('nik', $pegawai->nik) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="no_hp" class="block mb-2.5 text-sm font-medium text-heading">Nomor
-                            Telepon <span class="text-red-500">*</span></label>
-                        <input type="text" id="no_hp" name="no_hp"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Nomor Telepon" required
-                            value="{{ old('no_hp', $pegawai->no_hp) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="email" class="block mb-2.5 text-sm font-medium text-heading">Email <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="email" name="email"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Email" required value="{{ old('email', $pegawai->email) }}" />
-                    </div>
+                    @include('pages.dashboard.data_pegawai._fields', ['section' => 'nik', 'values' => ['nik' => old('nik', $pegawai->nik), 'no_hp' => old('no_hp', $pegawai->no_hp), 'email' => old('email', $pegawai->email)]])
                     <div class="mb-5">
                         <label for="email_gov" class="block mb-2.5 text-sm font-medium text-heading">Email
                             Gov <span class="text-red-500">*</span></label>
@@ -171,29 +137,7 @@
                             placeholder="Masukan Email gov" required
                             value="{{ old('email_gov', $pegawai->email_gov) }}" />
                     </div>
-                    <div class="mb-5">
-                        <label for="alamat" class="block mb-2.5 text-sm font-medium text-heading">Alamat <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="alamat" name="alamat"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Alamat" required value="{{ old('alamat', $pegawai->alamat) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="no_npwp" class="block mb-2.5 text-sm font-medium text-heading">No.
-                            NPWP <span class="text-red-500">*</span></label>
-                        <input type="text" id="no_npwp" name="no_npwp"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan No. NPWP" required
-                            value="{{ old('no_npwp', $pegawai->no_npwp) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="no_bpjs" class="block mb-2.5 text-sm font-medium text-heading">No.
-                            BPJS <span class="text-red-500">*</span></label>
-                        <input type="text" id="no_bpjs" name="no_bpjs"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan No. BPJS" required
-                            value="{{ old('no_bpjs', $pegawai->no_bpjs) }}" />
-                    </div>
+                    @include('pages.dashboard.data_pegawai._fields', ['section' => 'alamat', 'values' => ['alamat' => old('alamat', $pegawai->alamat), 'no_npwp' => old('no_npwp', $pegawai->no_npwp), 'no_bpjs' => old('no_bpjs', $pegawai->no_bpjs)]])
                     <div class="mb-5">
                         <label for="status_kepegawaian" class="block mb-2.5 text-sm font-medium text-heading">Status
                             Kepegawaian <span class="text-red-500">*</span></label>
@@ -210,13 +154,7 @@
                                 CPNS</option>
                         </select>
                     </div>
-                    <div class="mb-5">
-                        <label for="karpeg" class="block mb-2.5 text-sm font-medium text-heading">Karpeg <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="karpeg" name="karpeg"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan karpeg" required value="{{ old('karpeg', $pegawai->karpeg) }}" />
-                    </div>
+                    @include('pages.dashboard.data_pegawai._fields', ['section' => 'karpeg', 'values' => ['karpeg' => old('karpeg', $pegawai->karpeg)]])
                     <div class="flex items-center mb-5">
                         <label for="no_sk_cpns" class="w-1/4 text-sm font-medium text-heading">No. SK & TMT
                             CPNS <span class="text-red-500">*</span></label>

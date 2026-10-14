@@ -89,6 +89,12 @@
 
   --font-inter: "Inter", "sans-serif";
 
+  /* Sidebar surface. A dedicated token instead of an arbitrary `bg-[#F4F8FD]`
+     utility: an arbitrary value has the same specificity as `dark:bg-gray-800`
+     and, being emitted later, would win in dark mode. As a token it flips
+     cleanly per theme. */
+  --color-sidebar: #f4f8fd;
+
   /* Compact radius scale per DESIGN.md: inputs/buttons 4px, cards 4-6px.
      Overrides Tailwind defaults so `rounded-lg` on existing markup (buttons,
      inputs, cards) resolves to 4px instead of 8px. */

@@ -67,7 +67,12 @@ class DesignTokensTest extends TestCase
     {
         $sidebar = file_get_contents(resource_path('views/components/app/sidebar.blade.php'));
 
-        $this->assertStringContainsString('bg-[#F4F8FD] dark:bg-gray-800', $sidebar);
+        // Must use the token utility, not an arbitrary value: an arbitrary
+        // `bg-[#F4F8FD]` ties with `dark:bg-gray-800` on specificity and wins
+        // in dark mode, leaking the light surface into the dark theme.
+        $this->assertStringContainsString('bg-sidebar dark:bg-gray-800', $sidebar);
+        $this->assertStringNotContainsString('bg-[#F4F8FD]', $sidebar);
+        $this->assertStringContainsString('--color-sidebar: #f4f8fd;', $this->css);
     }
 
     public function test_inter_font_is_loaded_on_app_layout(): void

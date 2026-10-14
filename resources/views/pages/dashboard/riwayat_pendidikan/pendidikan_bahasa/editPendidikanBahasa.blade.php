@@ -27,47 +27,7 @@
                     method="POST">
                     @csrf
                     @method('PUT')
-                    <div class="mb-5">
-                        <label for="pegawai_id" class="block mb-2.5 text-sm font-medium text-heading">Pegawai <span
-                                class="text-red-500">*</span></label>
-                        <select name="pegawai_id" id="pegawai_id" class="rounded-lg">
-                            <option value="">Pilih Pegawai</option>
-                            @foreach ($pegawai as $item)
-                                <option value="{{ $item->id }}"
-                                    {{ old('pegawai_id', $riwayatPendidikanBahasa->pegawai_id) == $item->id ? 'selected' : '' }}>
-                                    {{ $item->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-5">
-                        <label for="jenis_bahasa" class="block mb-2.5 text-sm font-medium text-heading">Jenis
-                            Bahasa <span class="text-red-500">*</span></label>
-                        <input type="text" id="jenis_bahasa" name="jenis_bahasa"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan jenis Bahasa" required
-                            value="{{ old('jenis_bahasa', $riwayatPendidikanBahasa->jenis_bahasa) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="bahasa" class="block mb-2.5 text-sm font-medium text-heading">Bahasa <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="bahasa" name="bahasa"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan jBahasa" required
-                            value="{{ old('bahasa', $riwayatPendidikanBahasa->bahasa) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="kemampuan_bicara" class="block mb-2.5 text-sm font-medium text-heading">Kemampuan
-                            Bahasa <span class="text-red-500">*</span></label>
-                        <select name="kemampuan_bicara" id="kemampuan_bicara" class="rounded-lg">
-                            <option value="Aktif"
-                                {{ $riwayatPendidikanBahasa->kemampuan_bicara == 'Aktif' ? 'selected' : '' }}>Aktif
-                            </option>
-                            <option value="Pasif"
-                                {{ $riwayatPendidikanBahasa->kemampuan_bicara == 'Pasif' ? 'selected' : '' }}>Pasif
-                            </option>
-                        </select>
-                    </div>
+                    @include('pages.dashboard.riwayat_pendidikan.pendidikan_bahasa._fields', ['isEdit' => true])
                     <button type="button"
                         class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 text-sm px-4 py-2 focus:outline-none confirm-save"
                         data-title="Simpan Perubahan"

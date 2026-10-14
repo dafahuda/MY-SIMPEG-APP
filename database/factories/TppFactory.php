@@ -17,7 +17,8 @@ class TppFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'periode' => 'Januari',
+            'tahun' => 2026
         ];
     }
 }

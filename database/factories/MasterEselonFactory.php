@@ -17,7 +17,7 @@ class MasterEselonFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nama_eselon' => 'Eselon IV',
         ];
     }
 }

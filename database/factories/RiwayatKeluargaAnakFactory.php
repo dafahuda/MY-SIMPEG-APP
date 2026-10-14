@@ -17,7 +17,14 @@ class RiwayatKeluargaAnakFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nik' => '3273012501900001',
+            'nama' => 'Contoh Nama',
+            'tempat_lahir' => 'Contoh Tempat Lahir',
+            'tgl_lahir' => '2026-01-01',
+            'jenis_kelamin' => 'laki-laki',
+            'pendidikan' => 'SD',
+            'pekerjaan' => 'Contoh Pekerjaan',
+            'status_hubungan' => 'Anak Kandung',
         ];
     }
 }

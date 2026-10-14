@@ -218,8 +218,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::post('/jabatan/cariJabatan', [JabatanController::class, 'cariJabatan']);
 
         // URL untuk master data jabatan
-        // Route::get('/jabatan/master_data_jabatan', [MasterJabatanController::class, 'index']);
-        Route::get('/jabatan/master_data_jabatan/{masterJabatan}', [MasterJabatanController::class, 'index']);
 
         // url untuk ajax master jabatan dan eselon
         Route::post('/master_jabatan/store', [MasterJabatanController::class, 'store']);

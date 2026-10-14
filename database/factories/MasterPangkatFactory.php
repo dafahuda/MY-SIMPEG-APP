@@ -17,7 +17,7 @@ class MasterPangkatFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nama_pangkat' => 'Penata Muda',
         ];
     }
 }

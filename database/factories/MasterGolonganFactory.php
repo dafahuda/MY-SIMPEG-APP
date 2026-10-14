@@ -17,7 +17,7 @@ class MasterGolonganFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nama_golongan' => 'III/a',
         ];
     }
 }

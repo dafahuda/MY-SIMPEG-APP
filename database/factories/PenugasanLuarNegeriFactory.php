@@ -17,7 +17,12 @@ class PenugasanLuarNegeriFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'alasan_penugasan' => 'Diklat singkat',
+            'negara_tujuan' => 'Contoh Negara Tujuan',
+            'tahun' => 2026,
+            'durasi_hari' => 'Contoh Durasi Hari',
+            'no_st' => '3273012501900004',
+            'st' => 'Contoh St'
         ];
     }
 }

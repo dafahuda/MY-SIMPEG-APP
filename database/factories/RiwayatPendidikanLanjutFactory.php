@@ -17,7 +17,12 @@ class RiwayatPendidikanLanjutFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'jenjang_pendidikan' => 'S2',
+            'nama_sekolah_universitas' => 'Contoh Nama Sekolah Universitas',
+            'jurusan' => 'Contoh Jurusan',
+            'thn_mulai' => 'Contoh Thn Mulai',
+            'thn_selesai' => 'Contoh Thn Selesai',
+            'status' => 'Tugas Belajar'
         ];
     }
 }

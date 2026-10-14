@@ -17,7 +17,14 @@ class LatihanJabatanFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'tempat_latihan' => 'Jakarta',
+            'waktu_latihan' => '2026-01-01',
+            'nama_pelatih' => 'Contoh Nama Pelatih',
+            'tahun_latihan' => 2026,
+            'jumlah_jam' => 8,
+            'nomor_sertifikat' => 'Contoh Nomor Sertifikat',
+            'tgl_sertifikat' => '2026-01-01',
+            'file_sertifikat' => 'Contoh File Sertifikat',
         ];
     }
 }

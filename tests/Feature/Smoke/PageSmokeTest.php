@@ -2,10 +2,38 @@
 
 namespace Tests\Feature\Smoke;
 
+use App\Models\Cuti;
+use App\Models\Diklat;
+use App\Models\Hukuman;
+use App\Models\InstansiLembaga;
+use App\Models\IzinKawin;
+use App\Models\Jabatan;
+use App\Models\LatihanJabatan;
+use App\Models\MasterEselon;
+use App\Models\MasterGolongan;
+use App\Models\MasterJabatan;
+use App\Models\MasterPangkat;
+use App\Models\Mutasi;
+use App\Models\Pangkat;
 use App\Models\Pegawai;
+use App\Models\Penghargaan;
+use App\Models\PenugasanLuarNegeri;
+use App\Models\PrestasiKerja;
+use App\Models\RiwayatKeluargaAnak;
+use App\Models\RiwayatKeluargaOrangtua;
+use App\Models\RiwayatKeluargaSuamiIstri;
+use App\Models\RiwayatPendidikanBahasa;
+use App\Models\RiwayatPendidikanLanjut;
+use App\Models\RiwayatPendidikanSekolah;
+use App\Models\Sekretariat;
+use App\Models\Seminar;
+use App\Models\Tpp;
+use App\Models\Tunjangan;
 use App\Models\UnitKerja;
 use App\Models\User;
+use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -16,6 +44,12 @@ use Tests\TestCase;
  * Each case asserts HTTP 200 plus one stable marker string taken from the page's own
  * blade (heading or print-sheet title), so a broken partial or a renamed page fails
  * here instead of only in production.
+ *
+ * Record-bound routes get the same treatment one level deeper: the case builds a
+ * factory-made row first, so model binding, the per-role unit scoping inside the
+ * controller and the blade's relation reads are all exercised. Download endpoints
+ * additionally get the physical file the controller looks for, so the assertion
+ * covers a real stream instead of the "file missing" abort path.
  */
 class PageSmokeTest extends TestCase
 {
@@ -29,9 +63,16 @@ class PageSmokeTest extends TestCase
 
     private UnitKerja $unitKerja;
 
+    /** Pegawai record the bound-route cases hang their data off (admin's own unit). */
+    private Pegawai $adminPegawai;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Download controllers read Storage::disk('public'); keep their fixture
+        // files out of the real storage/app/public tree.
+        Storage::fake('public');
 
         $this->unitKerja = UnitKerja::factory()->create();
 
@@ -39,7 +80,7 @@ class PageSmokeTest extends TestCase
             'role' => 'admin',
             'unit_kerja_id' => $this->unitKerja->id,
         ]);
-        Pegawai::factory()->create([
+        $this->adminPegawai = Pegawai::factory()->create([
             'user_id' => $this->admin->id,
             'unit_kerja_id' => $this->unitKerja->id,
             'nama' => 'Pegawai Admin',
@@ -59,6 +100,13 @@ class PageSmokeTest extends TestCase
             'unit_kerja_id' => $this->unitKerja->id,
             'nama' => 'Pegawai Biasa',
         ]);
+    }
+
+    protected function tearDown(): void
+    {
+        Storage::disk('public')->deleteDirectory('smoke');
+
+        parent::tearDown();
     }
 
     #[DataProvider('superadminPages')]
@@ -221,6 +269,123 @@ class PageSmokeTest extends TestCase
         $response->assertOk()
             ->assertHeader('Content-Type', 'application/json')
             ->assertJsonStructure(['labels', 'data']);
+    }
+
+
+    /**
+     * Record-bound pages: each case builds its own factory row, so model
+     * binding, controller unit scoping and relation reads are exercised.
+     */
+    #[DataProvider('boundPages')]
+    public function test_record_bound_pages_render(Closure $fixture, string $marker, string $role): void
+    {
+        $user = $role === 'superadmin' ? $this->superadmin : $this->admin;
+        $path = $fixture($this->adminPegawai);
+
+        $response = $this->actingAs($user)->get($path);
+
+        $this->assertSame(200, $response->getStatusCode(), "GET {$path}");
+        $this->assertPageContains($response, $marker);
+    }
+
+    public static function boundPages(): array
+    {
+        return [
+            'cuti_edit' => [static fn (Pegawai $p) => '/kepegawaian/cuti/view_form_edit_cuti/' . Cuti::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit riwayat cuti Pegawai Pilih', 'admin'],
+            'diklat_edit' => [static fn (Pegawai $p) => '/kepegawaian/diklat/view_form_edit_diklat/' . Diklat::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit diklat Pegawai * Pilih', 'admin'],
+            'hukuman_edit' => [static fn (Pegawai $p) => '/kepegawaian/hukuman/view_form_edit_hukuman/' . Hukuman::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit hukuman Pegawai * Pilih', 'admin'],
+            'izinkawin_edit' => [static fn (Pegawai $p) => '/kepegawaian/izin_kawin/view_form_edit_izin_kawin/' . IzinKawin::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form tambah surat izin kawin Pegawai', 'admin'],
+            'jabatan_edit' => [static fn (Pegawai $p) => '/kepegawaian/jabatan/view_form_edit_jabatan/' . Jabatan::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit data jabatan Pegawai *', 'admin'],
+            'latihanjabatan_edit' => [static fn (Pegawai $p) => '/kepegawaian/latihan_jabatan/view_form_edit_latihan_jabatan/' . LatihanJabatan::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form tambah latihan jabatan Pegawai *', 'admin'],
+            'mastereselon_edit' => [static fn (Pegawai $p) => '/kepegawaian/master_eselon/view_form_edit_master_eselon/' . MasterEselon::factory()->create()->id,
+                'Form edit data master eselon Nama', 'admin'],
+            'mastergolongan_edit' => [static fn (Pegawai $p) => '/kepegawaian/master_golongan/view_form_edit_master_golongan/' . MasterGolongan::factory()->create()->id,
+                'Form edit data master golongan Nama', 'admin'],
+            'masterjabatan_edit' => [static fn (Pegawai $p) => '/kepegawaian/master_jabatan/view_form_edit_master_jabatan/' . MasterJabatan::factory()->create()->id,
+                'Form edit data master jabatan Nama', 'admin'],
+            'masterpangkat_edit' => [static fn (Pegawai $p) => '/kepegawaian/master_pangkat/view_form_edit_master_pangkat/' . MasterPangkat::factory()->create()->id,
+                'Form edit data master pangkat Nama', 'admin'],
+            'mutasi_edit' => [static fn (Pegawai $p) => '/kepegawaian/mutasi/view_form_edit_mutasi/' . Mutasi::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit mutasi Pegawai * Pilih', 'admin'],
+            'pangkat_edit' => [static fn (Pegawai $p) => '/kepegawaian/pangkat/view_form_edit_data_pangkat/' . Pangkat::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit data pangkat Pegawai Pilih', 'admin'],
+            'penghargaan_edit' => [static fn (Pegawai $p) => '/kepegawaian/penghargaan/view_form_edit_penghargaan/' . Penghargaan::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit penghargaan pegawai Pegawai *', 'admin'],
+            'penugasan_edit' => [static fn (Pegawai $p) => '/kepegawaian/penugasan_ln/view_form_edit_penugasan/' . PenugasanLuarNegeri::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit penugasan pegawai Pegawai *', 'admin'],
+            'seminar_edit' => [static fn (Pegawai $p) => '/kepegawaian/seminar/view_form_edit_seminar/' . Seminar::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit seminar Pegawai * Pilih', 'admin'],
+            'tunjangan_edit' => [static fn (Pegawai $p) => '/kepegawaian/tunjangan/view_form_edit_tunjangan/' . Tunjangan::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit tunjangan Pegawai * Pilih', 'admin'],
+            'anak_edit' => [static fn (Pegawai $p) => '/riwayat_keluarga/anak/view_edit_data_anak/' . RiwayatKeluargaAnak::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit data riwayat anak Pegawai', 'admin'],
+            'orangtua_edit' => [static fn (Pegawai $p) => '/riwayat_keluarga/orang_tua/view_form_edit_orang_tua/' . RiwayatKeluargaOrangtua::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form ubah data riwayat keluarga Orang', 'admin'],
+            'suamistri_edit' => [static fn (Pegawai $p) => '/riwayat_keluarga/suami_istri/view_edit_data_suami_istri/' . RiwayatKeluargaSuamiIstri::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form ubah data riwayat keluarga suami', 'admin'],
+            'bahasa_edit' => [static fn (Pegawai $p) => '/riwayat_pendidikan/pendidikan_bahasa/view_form_edit_pendidikan_bahasa/' . RiwayatPendidikanBahasa::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit data riwayat pendidikan bahasa', 'admin'],
+            'sekolah_edit' => [static fn (Pegawai $p) => '/riwayat_pendidikan/sekolah/view_form_edit_pendidikan_sekolah/' . RiwayatPendidikanSekolah::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form edit data riwayat pendidikan sekolah', 'admin'],
+            'lanjut_edit' => [static fn (Pegawai $p) => '/riwayat_pendidikan/sekolah_lanjut/view_form_edit_pendidikan_lanjut/' . RiwayatPendidikanLanjut::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form ubah data riwayat pendidikan lanjut', 'admin'],
+            'prestasi_edit' => [static fn (Pegawai $p) => '/skp_prestasi_kerja/view_form_edit_prestasi_kerja/' . PrestasiKerja::factory()->create(['pegawai_id' => $p->id])->id,
+                'Form tambah prestasi kerja Pegawai Pilih', 'admin'],
+            'tpp_edit' => [static fn (Pegawai $p) => '/tpp/edit_tpp/' . Tpp::factory()->create(['pegawai_id' => $p->id])->id,
+                'Riwayat / Tambahan Penghasilan Pegawai /', 'admin'],
+            'sekretariat_setup' => [static fn (Pegawai $p) => '/manajemen_setup/sekretariat/setup_sekretariat/' . Sekretariat::factory()->create()->id,
+                'Setup Instansi Lembaga Nama sekretariat Kabupaten', 'superadmin'],
+            'unitkerja_edit' => [static fn (Pegawai $p) => '/manajemen_setup/view_form_edit_unitkerja/' . UnitKerja::factory()->create()->id,
+                'Form edit unit kerja Nama Unit', 'superadmin'],
+            'useradmin_edit' => [static fn (Pegawai $p) => '/manajemen_setup/view_form_edit_user_admin/' . User::factory()->create(['role' => 'admin'])->id,
+                'Form edit data user admin Username', 'superadmin'],
+            'userpegawai_edit' => [static fn (Pegawai $p) => '/manajemen_setup/view_form_edit_user_pegawai/' . User::factory()->create(['role' => 'pegawai'])->id,
+                'Form edit data user pegawai Username', 'admin'],
+            'pegawai_detail' => [static fn (Pegawai $p) => '/data_pegawai/detail_data_pegawai/' . $p->id,
+                'Detail Pegawai Data Pegawai', 'admin'],
+            'pegawai_edit' => [static fn (Pegawai $p) => '/data_pegawai/view_form_edit_data_pegawai/' . $p->id,
+                'Form tambah pegawai', 'admin'],
+        ];
+    }
+
+    /**
+     * Download endpoints stream the physical file through the public disk;
+     * each case seeds the file so the assertion covers a real attachment.
+     */
+    #[DataProvider('downloadPages')]
+    public function test_download_endpoints_stream_attachment(Closure $fixture): void
+    {
+        foreach (['smoke/cuti.pdf', 'smoke/hukuman.pdf', 'smoke/diklat.pdf', 'smoke/latihan.pdf',
+                  'smoke/pg.pdf', 'smoke/pt.pdf', 'smoke/seminar.pdf', 'smoke/mutasi.pdf'] as $file) {
+            Storage::disk('public')->put($file, '%PDF-1.4 smoke fixture');
+        }
+
+        $path = $fixture($this->adminPegawai);
+        $response = $this->actingAs($this->admin)->get($path);
+
+        $response->assertOk();
+        $this->assertStringStartsWith('attachment;', (string) $response->headers->get('Content-Disposition'), "GET {$path}");
+        $this->assertStringContainsString('application/pdf', (string) $response->headers->get('Content-Type'));
+    }
+
+    public static function downloadPages(): array
+    {
+        return [
+            'cuti' => [static fn (Pegawai $p) => '/kepegawaian/cuti/download_surat_cuti/' . Cuti::factory()->create(['pegawai_id' => $p->id, 'file_surat_cuti' => 'smoke/cuti.pdf'])->id],
+            'hukuman' => [static fn (Pegawai $p) => '/kepegawaian/hukuman/download_sk/' . Hukuman::factory()->create(['pegawai_id' => $p->id, 'file_sk_hukuman' => 'smoke/hukuman.pdf'])->id],
+            'diklat' => [static fn (Pegawai $p) => '/kepegawaian/diklat/download_sertifikat_diklat/' . Diklat::factory()->create(['pegawai_id' => $p->id, 'file_sertifikat_diklat' => 'smoke/diklat.pdf'])->id],
+            'latihan_jabatan' => [static fn (Pegawai $p) => '/kepegawaian/latihan_jabatan/download_sertifikat/' . LatihanJabatan::factory()->create(['pegawai_id' => $p->id, 'file_sertifikat' => 'smoke/latihan.pdf'])->id],
+            'penghargaan' => [static fn (Pegawai $p) => '/kepegawaian/penghargaan/download_sertifikat/' . Penghargaan::factory()->create(['pegawai_id' => $p->id, 'file_sertifikat_penghargaan' => 'smoke/pg.pdf'])->id],
+            'penugasan_ln' => [static fn (Pegawai $p) => '/kepegawaian/penugasan_ln/download_surat_tugas/' . PenugasanLuarNegeri::factory()->create(['pegawai_id' => $p->id, 'st' => '/storage/smoke/pt.pdf'])->id],
+            'seminar' => [static fn (Pegawai $p) => '/kepegawaian/seminar/download_piagam/' . Seminar::factory()->create(['pegawai_id' => $p->id, 'file_piagam' => 'smoke/seminar.pdf'])->id],
+            'mutasi' => [static fn (Pegawai $p) => '/kepegawaian/mutasi/download_sk/' . Mutasi::factory()->create(['pegawai_id' => $p->id, 'file_sk_mutasi' => 'smoke/mutasi.pdf'])->id],
+        ];
     }
 
     /**

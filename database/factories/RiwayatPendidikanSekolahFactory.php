@@ -17,7 +17,13 @@ class RiwayatPendidikanSekolahFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'jenjang_pendidikan' => 'S1',
+            'nama_sekolah_universitas' => 'Contoh Nama Sekolah Universitas',
+            'lokasi' => 'Contoh Lokasi',
+            'jurusan' => 'Contoh Jurusan',
+            'no_ijazah' => '3273012501900004',
+            'tgl_ijazah' => '2026-01-01',
+            'nama_kepsek_rektor' => 'Contoh Nama Kepsek Rektor'
         ];
     }
 }

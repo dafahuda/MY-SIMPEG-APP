@@ -17,7 +17,10 @@ class MutasiFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'jenis_mutasi' => 'Masuk',
+            'instansi_tujuan' => 'Contoh Instansi Tujuan',
+            'no_sk_mutasi' => '3273012501900004',
+            'tgl_sk_mutasi' => '2026-01-01'
         ];
     }
 }

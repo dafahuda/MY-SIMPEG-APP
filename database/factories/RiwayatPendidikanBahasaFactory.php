@@ -17,7 +17,9 @@ class RiwayatPendidikanBahasaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'jenis_bahasa' => 'Inggris',
+            'bahasa' => 'Contoh Bahasa',
+            'kemampuan_bicara' => 'Aktif'
         ];
     }
 }

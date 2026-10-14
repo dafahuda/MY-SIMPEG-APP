@@ -15,6 +15,7 @@ use App\Models\RencanaDiklat;
 use App\Models\UnitKerja;
 use App\Services\DiklatGapAnalyticsService;
 use App\Services\DiklatScopeService;
+use App\Support\Access;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,7 @@ class DashboardController extends Controller
     public function index(Request $request, DiklatScopeService $scopeService, DiklatGapAnalyticsService $analyticsService)
     {
         // Role pegawai langsung diarahkan ke halaman profil
-        if (auth()->user()->role === 'pegawai') {
+        if (Access::isPegawai()) {
             return redirect()->route('profile.pegawai');
         }
 
@@ -228,8 +229,8 @@ class DashboardController extends Controller
 
     private function resolveDiklatDashboardScopeLabel($user): string
     {
-        if ($user->role === 'admin') {
-            return UnitKerja::query()->whereKey($user->unit_kerja_id)->value('nama_unit') ?? 'Unit Kerja Admin';
+        if (Access::isAdmin()) {
+            return UnitKerja::query()->whereKey(Access::unitKerjaId())->value('nama_unit') ?? 'Unit Kerja Admin';
         }
 
         return 'Semua Unit Kerja';

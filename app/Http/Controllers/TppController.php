@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TppExport;
 
@@ -19,19 +19,14 @@ class TppController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $tpp = Tpp::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
+        if (Access::isAdmin()) {
+            $tpp = Access::scopeToUnit(Tpp::with('pegawai'))
                 ->orderBy('created_at', 'desc')
                 ->paginate(simpeg_per_page());
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
+        } elseif (Access::isPegawai()) {
+            $myPegawai = Access::myPegawai();
             $tpp = $myPegawai
-                ? Tpp::with('pegawai')->where('pegawai_id', $myPegawai->id)->orderBy('created_at', 'desc')->paginate(simpeg_per_page())
+                ? Access::scopeToSelf(Tpp::with('pegawai'))->orderBy('created_at', 'desc')->paginate(simpeg_per_page())
                 : Tpp::whereRaw('1=0')->paginate(simpeg_per_page());
         } else {
             $tpp = Tpp::with('pegawai')->orderBy('created_at', 'desc')->paginate(simpeg_per_page());
@@ -47,15 +42,7 @@ class TppController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->orderBy('nama')->get();
-        } elseif ($user->role === 'pegawai') {
-            $pegawai = Pegawai::where('user_id', $user->id)->orderBy('nama')->get();
-        } else {
-            $pegawai = Pegawai::orderBy('nama')->get();
-        }
+        $pegawai = Access::pegawaiOptions();
 
         return view('pages.dashboard.tpp.tambahTpp', [
             'pegawai' => $pegawai,
@@ -154,18 +141,11 @@ class TppController extends Controller
      */
     public function edit(Tpp $tpp)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->orderBy('nama')->get();
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $tpp->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-            $pegawai = collect([$myPegawai]);
+        if (Access::isPegawai()) {
+            Access::ensureOwnRecord($tpp);
+            $pegawai = collect([Access::myPegawai()]);
         } else {
-            $pegawai = Pegawai::orderBy('nama')->get();
+            $pegawai = Access::pegawaiOptions();
         }
 
         return view('pages.dashboard.tpp.editTpp', [
@@ -179,10 +159,8 @@ class TppController extends Controller
      */
     public function update(Request $request, Tpp $tpp)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
+        if (Access::isPegawai()) {
+            $myPegawai = Access::myPegawai();
             if (!$myPegawai || $tpp->pegawai_id != $myPegawai->id || (int) $request->pegawai_id !== $myPegawai->id) {
                 abort(403, 'Akses ditolak');
             }
@@ -266,13 +244,7 @@ class TppController extends Controller
     public function destroy(Tpp $tpp)
     {
         // Pastikan pegawai role hanya bisa hapus data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $tpp->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord($tpp);
 
         try {
             $tpp->delete();
@@ -288,8 +260,6 @@ class TppController extends Controller
      */
     public function laporanBulanan(Request $request)
     {
-        $user = Auth::user();
-
         $bulanList = [
             'Januari','Februari','Maret','April','Mei','Juni',
             'Juli','Agustus','September','Oktober','November','Desember',
@@ -305,13 +275,10 @@ class TppController extends Controller
                 ->where('periode', $periode)
                 ->where('tahun', $tahun);
 
-            if ($user->role === 'admin') {
-                $query->whereHas('pegawai', function ($q) use ($user) {
-                    $q->where('unit_kerja_id', $user->unit_kerja_id);
-                });
-            } elseif ($user->role === 'pegawai') {
-                $myPegawai = Pegawai::where('user_id', $user->id)->first();
-                $query->where('pegawai_id', $myPegawai?->id ?? 0);
+            if (Access::isAdmin()) {
+                Access::scopeToUnit($query);
+            } elseif (Access::isPegawai()) {
+                $query->where('pegawai_id', Access::myPegawai()?->id ?? 0);
             }
 
             $data = $query->orderBy('id')->get();
@@ -327,22 +294,13 @@ class TppController extends Controller
 
     public function cariTpp(Request $request)
     {
-        $user = Auth::user();
-
         $query = Tpp::with('pegawai');
 
         // Filter berdasarkan role
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if ($myPegawai) {
-                $query->where('pegawai_id', $myPegawai->id);
-            } else {
-                $query->whereRaw('1=0');
-            }
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
         }
 
         if ($request->cariTpp) {
@@ -364,15 +322,14 @@ class TppController extends Controller
 
     public function exportExcelLaporanTpp(Request $request)
     {
-        $user     = Auth::user();
         $periode  = $request->input('periode');
         $tahun    = $request->input('tahun');
         $filename = 'LaporanTPP' . ($periode ? "_$periode" : '') . ($tahun ? "_$tahun" : '') . '.xlsx';
 
         // Admin exports only their unit; pegawai only their own rows; superadmin all.
-        $unitScope   = $user->role === 'admin' ? $user->unit_kerja_id : null;
-        $pegawaiScope = $user->role === 'pegawai'
-            ? Pegawai::where('user_id', $user->id)->value('id')
+        $unitScope   = Access::isAdmin() ? Access::unitKerjaId() : null;
+        $pegawaiScope = Access::isPegawai()
+            ? Access::myPegawai()?->id
             : null;
 
         return Excel::download(new TppExport($periode, $tahun, $unitScope, $pegawaiScope), $filename);

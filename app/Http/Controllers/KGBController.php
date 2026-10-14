@@ -7,7 +7,7 @@ use App\Models\KGB;
 use App\Models\Pegawai;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
@@ -27,15 +27,13 @@ class KGBController extends Controller
             ? (int) date('Y') + 1
             : (int) date('Y');
 
-        $user = Auth::user();
-
         // Ambil pegawai yang tmt_pns-nya tidak null
         $query = Pegawai::whereNotNull('tmt_pns');
 
-        if ($user->role === 'admin') {
-            $query->where('unit_kerja_id', $user->unit_kerja_id);
-        } elseif ($user->role === 'pegawai') {
-            $query->where('user_id', $user->id);
+        if (Access::isAdmin()) {
+            $query->where('unit_kerja_id', Access::unitKerjaId());
+        } elseif (Access::isPegawai()) {
+            $query->where('user_id', Access::user()->id);
         }
 
         $semuaPegawai = $query->get();
@@ -79,13 +77,12 @@ class KGBController extends Controller
      */
     private function authorizePegawaiTarget(Pegawai $pegawai): void
     {
-        $user = Auth::user();
-
-        if ($user->role === 'superadmin') {
+        if (Access::isSuperadmin()) {
             return;
         }
 
-        if ($user->role === 'admin' && $pegawai->unit_kerja_id === $user->unit_kerja_id) {
+        if (Access::isAdmin()) {
+            Access::ensureInUnit($pegawai);
             return;
         }
 
@@ -97,9 +94,7 @@ class KGBController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'pegawai') {
+        if (Access::isPegawai()) {
             abort(403, 'Akses ditolak');
         }
 
@@ -163,7 +158,6 @@ class KGBController extends Controller
 
     public function exportExcelKGB(Request $request)
     {
-        $user       = Auth::user();
         $periode     = $request->input('periode', 'tahun_ini');
         $tahunTarget = ($periode === 'tahun_depan')
             ? (int) date('Y') + 1
@@ -173,7 +167,7 @@ class KGBController extends Controller
         $filename = "NotifikasiKGB_{$label}_{$tahunTarget}.xlsx";
 
         // Admin only sees their own unit; superadmin sees everything.
-        $unitScope = $user->role === 'admin' ? $user->unit_kerja_id : null;
+        $unitScope = Access::isAdmin() ? Access::unitKerjaId() : null;
 
         return Excel::download(new KGBExport($periode, $tahunTarget, $unitScope), $filename);
     }

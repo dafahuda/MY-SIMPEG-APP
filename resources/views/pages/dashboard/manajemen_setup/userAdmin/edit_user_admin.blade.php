@@ -26,27 +26,11 @@
                             </ul>
                         </div>
                     @endif
-                    <div class="mb-5">
-                        <label for="username" class="block mb-2.5 text-sm font-medium text-heading">Username <span
-                                class="text-red-500">*</span> </label>
-                        <input type="text" id="username" name="username"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan username" required value="{{ old('username', $user->username) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="name" class="block mb-2.5 text-sm font-medium text-heading">Nama User <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="name" name="name"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Nama User" required value="{{ old('name', $user->name) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="email" class="block mb-2.5 text-sm font-medium text-heading">Email <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="email" name="email"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Email User" required value="{{ old('email', $user->email) }}" />
-                    </div>
+                    @include('pages.dashboard.manajemen_setup.userAdmin._fields', ['values' => [
+                        'username' => old('username', $user->username),
+                        'name' => old('name', $user->name),
+                        'email' => old('email', $user->email),
+                    ]])
                     <div class="mb-5">
                         <label for="unit_kerja_id" class="block mb-2.5 text-sm font-medium text-heading">OPD / SKPD /
                             Unit Kerja <span class="text-red-500">*</span></label>

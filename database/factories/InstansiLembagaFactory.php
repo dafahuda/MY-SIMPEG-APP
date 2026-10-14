@@ -17,7 +17,16 @@ class InstansiLembagaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            //,
+            'nama_instansi_lembaga' => 'Contoh Nama Instansi Lembaga',
+            'kabupaten_kota' => 'Kabupaten',
+            'nama_kota_kabupaten' => 'Contoh Nama Kota Kabupaten',
+            'alamat' => 'Contoh Alamat',
+            'no_telp' => 'Contoh No Telp',
+            'email' => 'Contoh Email',
+            'kepala_dinas' => 'Contoh Kepala Dinas',
+            'nip' => 'Contoh Nip',
+            'gambar_logo' => 'Contoh Gambar Logo',
         ];
     }
 }

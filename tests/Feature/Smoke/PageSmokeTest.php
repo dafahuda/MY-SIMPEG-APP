@@ -339,6 +339,8 @@ class PageSmokeTest extends TestCase
                 'Form tambah prestasi kerja Pegawai Pilih', 'admin'],
             'tpp_edit' => [static fn (Pegawai $p) => '/tpp/edit_tpp/' . Tpp::factory()->create(['pegawai_id' => $p->id])->id,
                 'Riwayat / Tambahan Penghasilan Pegawai /', 'admin'],
+            'instansi_setup_edit' => [static fn (Pegawai $p) => '/manajemen_setup/setup_instansi_lembaga/' . \App\Models\InstansiLembaga::factory()->create()->id,
+                'Setup Instansi Lembaga', 'superadmin'],
             'sekretariat_setup' => [static fn (Pegawai $p) => '/manajemen_setup/sekretariat/setup_sekretariat/' . Sekretariat::factory()->create()->id,
                 'Setup Instansi Lembaga Nama sekretariat Kabupaten', 'superadmin'],
             'unitkerja_edit' => [static fn (Pegawai $p) => '/manajemen_setup/view_form_edit_unitkerja/' . UnitKerja::factory()->create()->id,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AktivitasLog;
+use App\Support\Access;
 use Illuminate\Http\Request;
 
 class AktivitasLogController extends Controller
@@ -12,9 +13,7 @@ class AktivitasLogController extends Controller
      */
     public function index(Request $request)
     {
-        $user = auth()->user();
-
-        if ($user->role !== 'superadmin') {
+        if (! Access::isSuperadmin()) {
             abort(403, 'Hanya superadmin yang dapat melihat riwayat aktivitas.');
         }
 

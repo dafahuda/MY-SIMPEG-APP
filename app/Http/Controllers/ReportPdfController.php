@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\ReportController;
+use App\Support\Access;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +25,7 @@ class ReportPdfController extends Controller
 
     public function unduh(Request $request, string $jenis)
     {
-        if (Auth::user()->role === 'pegawai') {
+        if (Access::isPegawai()) {
             abort(403, 'Laporan hanya untuk admin dan superadmin.');
         }
 
@@ -82,8 +82,8 @@ class ReportPdfController extends Controller
         };
 
         $pegawaiList = \App\Models\Pegawai::with(['jabatan_aktif.master_jabatan', 'unit_kerja'])
-            ->when(Auth::user()->role === 'admin', function ($query) {
-                $query->where('unit_kerja_id', Auth::user()->unit_kerja_id);
+            ->when(Access::isAdmin(), function ($query) {
+                $query->where('unit_kerja_id', Access::unitKerjaId());
             })
             ->whereYear('tgl_lahir', '>=', $tahunPensiun - $batasUsiaPensiun)
             ->whereYear('tgl_lahir', '<=', $tahunPensiun - $batasUsiaPensiun)

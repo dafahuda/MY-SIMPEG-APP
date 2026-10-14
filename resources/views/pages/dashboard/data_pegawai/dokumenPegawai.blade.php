@@ -125,7 +125,7 @@
                            class="text-blue-600 hover:text-blue-800 dark:text-blue-400 font-medium">Lihat</a>
                         <a href="{{ route('dokumen-pegawai.download', $d->id) }}"
                            class="ml-3 text-green-600 hover:text-green-800 dark:text-green-400 font-medium">Unduh</a>
-                        @if (in_array(auth()->user()->role, ['admin', 'superadmin']))
+                        @if ((\App\Support\Access::isAdmin() || \App\Support\Access::isSuperadmin()))
                             <button type="button" x-data
                                     @click="if (confirm('Yakin ingin menghapus dokumen \'{{ addslashes($d->nama_dokumen) }}\'? Tindakan ini tidak dapat dibatalkan.')) { document.getElementById('hapus-dok-{{ $d->id }}').submit() }"
                                     class="ml-3 text-red-600 hover:text-red-800 dark:text-red-400 font-medium">Hapus</button>

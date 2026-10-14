@@ -13,7 +13,7 @@ use App\Models\RiwayatPendidikanSekolah;
 use App\Models\UnitKerja;
 use App\Services\LaporanPdfService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 
 /**
  * Unduh PDF berkop untuk laporan rekapitulasi.
@@ -29,7 +29,7 @@ class RekapitulasiPdfController extends Controller
     public function unduh(Request $request, string $jenis)
     {
         // Pegawai tidak berhak mengunduh rekapitulasi (data lintas pegawai)
-        if (Auth::user()->role === 'pegawai') {
+        if (Access::isPegawai()) {
             abort(403, 'Rekapitulasi hanya untuk admin dan superadmin.');
         }
 

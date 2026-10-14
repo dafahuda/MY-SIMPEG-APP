@@ -38,7 +38,7 @@
                         aria-hidden="true">•••</span>
                     <span class="lg:hidden lg:sidebar-expanded:block 2xl:block">Simpeg App</span>
                 </h3>
-                @if (auth()->user()->role !== 'pegawai')
+                @if (! \App\Support\Access::isPegawai())
                     <ul class="mt-3">
                         <!-- Dashboard -->
                         @include('components.app.sidebar.menu-dashboard')
@@ -71,7 +71,7 @@
                         <!-- Backup database -->
                         @include('components.app.sidebar.menu-backup-database')
 
-                        @if (auth()->user()->role === 'superadmin')
+                        @if (\App\Support\Access::isSuperadmin())
                             <!-- Audit trail -->
                             @include('components.app.sidebar.menu-audit-trail')
                         @endif
@@ -80,7 +80,7 @@
             </div>
 
             {{-- ===== MENU KHUSUS ROLE PEGAWAI ===== --}}
-            @if (auth()->user()->role === 'pegawai')
+            @if (\App\Support\Access::isPegawai())
                 <div>
                     <h3 class="text-xs uppercase text-gray-500 dark:text-gray-400 font-semibold pl-3">
                         <span class="hidden lg:block lg:sidebar-expanded:hidden 2xl:hidden text-center w-6"

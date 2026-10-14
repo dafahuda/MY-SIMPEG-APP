@@ -137,7 +137,7 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="flex items-center justify-center space-x-2">
-                                        @if (in_array(auth()->user()->role, ['admin', 'superadmin']) && ($data->status === 'pending' || !$data->status))
+                                        @if ((\App\Support\Access::isAdmin() || \App\Support\Access::isSuperadmin()) && ($data->status === 'pending' || !$data->status))
                                             <form action="/kepegawaian/cuti/approve/{{ $data->id }}" method="POST"
                                                   onsubmit="return confirm('Setujui pengajuan cuti {{ $data->pegawai->nama ?? '' }}?')">
                                                 @csrf

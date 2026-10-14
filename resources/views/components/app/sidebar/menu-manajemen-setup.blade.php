@@ -27,7 +27,7 @@
                                     x-transition:leave="transition ease-in duration-150"
                                     x-transition:leave-start="opacity-100 translate-y-0"
                                     x-transition:leave-end="opacity-0 -translate-y-2">
-                                    @if (in_array(auth()->user()->role, ['superadmin']))
+                                    @if (\App\Support\Access::isSuperadmin())
                                         <li class="mb-1 last:mb-0">
                                             <a class="flex items-center gap-2 text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('/manajemen_setup/instansi_lembaga')) {{ 'text-blue-500!' }} @endif"
                                                 href="/manajemen_setup/instansi_lembaga">

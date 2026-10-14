@@ -17,6 +17,8 @@ use App\Models\InstansiLembaga;
 
 class RekapitulasiController extends Controller
 {
+    // Rekapitulasi routes already restrict access to admin and superadmin;
+    // these aggregate queries intentionally cover all units for both roles.
     public function rekapUnitKerja()
     {
         $unitKerja = UnitKerja::withCount('pegawai')->get();

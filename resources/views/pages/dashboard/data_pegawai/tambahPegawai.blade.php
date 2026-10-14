@@ -168,7 +168,7 @@
                             OPD / SKPD / Unit Kerja <span class="text-red-500">*</span>
                         </label>
 
-                        @if (auth()->user()->role === 'admin')
+                        @if (\App\Support\Access::isAdmin())
                             <!-- Admin: dikunci -->
                             <input type="hidden" name="unit_kerja_id" value="{{ auth()->user()->unit_kerja_id }}">
 

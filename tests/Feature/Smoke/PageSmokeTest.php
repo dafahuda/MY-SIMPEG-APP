@@ -298,11 +298,11 @@ class PageSmokeTest extends TestCase
             'hukuman_edit' => [static fn (Pegawai $p) => '/kepegawaian/hukuman/view_form_edit_hukuman/' . Hukuman::factory()->create(['pegawai_id' => $p->id])->id,
                 'Form edit hukuman Pegawai * Pilih', 'admin'],
             'izinkawin_edit' => [static fn (Pegawai $p) => '/kepegawaian/izin_kawin/view_form_edit_izin_kawin/' . IzinKawin::factory()->create(['pegawai_id' => $p->id])->id,
-                'Form tambah surat izin kawin Pegawai', 'admin'],
+                'Form edit surat izin kawin Pegawai', 'admin'],
             'jabatan_edit' => [static fn (Pegawai $p) => '/kepegawaian/jabatan/view_form_edit_jabatan/' . Jabatan::factory()->create(['pegawai_id' => $p->id])->id,
                 'Form edit data jabatan Pegawai *', 'admin'],
             'latihanjabatan_edit' => [static fn (Pegawai $p) => '/kepegawaian/latihan_jabatan/view_form_edit_latihan_jabatan/' . LatihanJabatan::factory()->create(['pegawai_id' => $p->id])->id,
-                'Form tambah latihan jabatan Pegawai *', 'admin'],
+                'Form edit latihan jabatan Pegawai *', 'admin'],
             'mastereselon_edit' => [static fn (Pegawai $p) => '/kepegawaian/master_eselon/view_form_edit_master_eselon/' . MasterEselon::factory()->create()->id,
                 'Form edit data master eselon Nama', 'admin'],
             'mastergolongan_edit' => [static fn (Pegawai $p) => '/kepegawaian/master_golongan/view_form_edit_master_golongan/' . MasterGolongan::factory()->create()->id,
@@ -336,7 +336,7 @@ class PageSmokeTest extends TestCase
             'lanjut_edit' => [static fn (Pegawai $p) => '/riwayat_pendidikan/sekolah_lanjut/view_form_edit_pendidikan_lanjut/' . RiwayatPendidikanLanjut::factory()->create(['pegawai_id' => $p->id])->id,
                 'Form ubah data riwayat pendidikan lanjut', 'admin'],
             'prestasi_edit' => [static fn (Pegawai $p) => '/skp_prestasi_kerja/view_form_edit_prestasi_kerja/' . PrestasiKerja::factory()->create(['pegawai_id' => $p->id])->id,
-                'Form tambah prestasi kerja Pegawai Pilih', 'admin'],
+                'Form edit prestasi kerja Pegawai Pilih', 'admin'],
             'tpp_edit' => [static fn (Pegawai $p) => '/tpp/edit_tpp/' . Tpp::factory()->create(['pegawai_id' => $p->id])->id,
                 'Riwayat / Tambahan Penghasilan Pegawai /', 'admin'],
             'instansi_setup_edit' => [static fn (Pegawai $p) => '/manajemen_setup/setup_instansi_lembaga/' . \App\Models\InstansiLembaga::factory()->create()->id,
@@ -352,7 +352,7 @@ class PageSmokeTest extends TestCase
             'pegawai_detail' => [static fn (Pegawai $p) => '/data_pegawai/detail_data_pegawai/' . $p->id,
                 'Detail Pegawai Data Pegawai', 'admin'],
             'pegawai_edit' => [static fn (Pegawai $p) => '/data_pegawai/view_form_edit_data_pegawai/' . $p->id,
-                'Form tambah pegawai', 'admin'],
+                'Form edit pegawai', 'admin'],
         ];
     }
 

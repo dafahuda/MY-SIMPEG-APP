@@ -9,7 +9,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Expr;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 
 class RiwayatPendidikanLanjutController extends Controller
 {
@@ -18,19 +18,10 @@ class RiwayatPendidikanLanjutController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $riwayatPendidikanLanjut = RiwayatPendidikanLanjut::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            $riwayatPendidikanLanjut = $myPegawai
-                ? RiwayatPendidikanLanjut::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(simpeg_per_page())
-                : RiwayatPendidikanLanjut::whereRaw('1=0')->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            $riwayatPendidikanLanjut = Access::scopeToUnit(RiwayatPendidikanLanjut::with('pegawai'))->paginate(simpeg_per_page());
+        } elseif (Access::isPegawai()) {
+            $riwayatPendidikanLanjut = Access::scopeToSelf(RiwayatPendidikanLanjut::with('pegawai'))->paginate(simpeg_per_page());
         } else {
             $riwayatPendidikanLanjut = RiwayatPendidikanLanjut::with('pegawai')->paginate(simpeg_per_page());
         }
@@ -45,12 +36,10 @@ class RiwayatPendidikanLanjutController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
-        } elseif ($user->role === 'pegawai') {
-            $pegawai = Pegawai::where('user_id', $user->id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
+        } elseif (Access::isPegawai()) {
+            $pegawai = Pegawai::where('user_id', Access::user()->id)->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -76,13 +65,7 @@ class RiwayatPendidikanLanjutController extends Controller
         ]);
 
         // Pastikan pegawai role hanya bisa simpan data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $validateData['pegawai_id'] != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord((object) ['pegawai_id' => $validateData['pegawai_id']]);
 
         try {
             DB::beginTransaction();
@@ -106,16 +89,11 @@ class RiwayatPendidikanLanjutController extends Controller
      */
     public function edit(RiwayatPendidikanLanjut $riwayatPendidikanLanjut)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $riwayatPendidikanLanjut->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-            $pegawai = collect([$myPegawai]);
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
+        } elseif (Access::isPegawai()) {
+            Access::ensureOwnRecord($riwayatPendidikanLanjut);
+            $pegawai = collect([Access::myPegawai()]);
         } else {
             $pegawai = Pegawai::all();
         }
@@ -141,13 +119,7 @@ class RiwayatPendidikanLanjutController extends Controller
         ]);
 
         // Pastikan pegawai role hanya bisa update data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $riwayatPendidikanLanjut->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord($riwayatPendidikanLanjut);
 
         try {
             DB::beginTransaction();
@@ -172,13 +144,7 @@ class RiwayatPendidikanLanjutController extends Controller
     public function destroy(RiwayatPendidikanLanjut $riwayatPendidikanLanjut)
     {
         // Pastikan pegawai role hanya bisa hapus data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $riwayatPendidikanLanjut->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord($riwayatPendidikanLanjut);
 
         $riwayatPendidikanLanjut->delete();
 
@@ -187,22 +153,13 @@ class RiwayatPendidikanLanjutController extends Controller
 
     public function cariPendidikanLanjut(Request $request)
     {
-        $user = Auth::user();
-
         $query = RiwayatPendidikanLanjut::with('pegawai');
 
         // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if ($myPegawai) {
-                $query->where('pegawai_id', $myPegawai->id);
-            } else {
-                $query->whereRaw('1=0');
-            }
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
         }
 
         if($request->cariPendidikanLanjut) {

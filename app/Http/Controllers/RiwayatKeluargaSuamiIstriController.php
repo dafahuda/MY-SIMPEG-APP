@@ -6,7 +6,7 @@ use App\Models\RiwayatKeluargaSuamiIstri;
 use Illuminate\Http\Request;
 use App\Models\Pegawai;
 use Exception;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -17,19 +17,10 @@ class RiwayatKeluargaSuamiIstriController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $riwayatkeluargaSuamiIstri = RiwayatKeluargaSuamiIstri::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            $riwayatkeluargaSuamiIstri = $myPegawai
-                ? RiwayatKeluargaSuamiIstri::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(simpeg_per_page())
-                : RiwayatKeluargaSuamiIstri::whereRaw('1=0')->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            $riwayatkeluargaSuamiIstri = Access::scopeToUnit(RiwayatKeluargaSuamiIstri::with('pegawai'))->paginate(simpeg_per_page());
+        } elseif (Access::isPegawai()) {
+            $riwayatkeluargaSuamiIstri = Access::scopeToSelf(RiwayatKeluargaSuamiIstri::with('pegawai'))->paginate(simpeg_per_page());
         } else {
             $riwayatkeluargaSuamiIstri = RiwayatKeluargaSuamiIstri::with('pegawai')->paginate(simpeg_per_page());
         }
@@ -44,12 +35,10 @@ class RiwayatKeluargaSuamiIstriController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
-        } elseif ($user->role === 'pegawai') {
-            $pegawai = Pegawai::where('user_id', $user->id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
+        } elseif (Access::isPegawai()) {
+            $pegawai = Pegawai::where('user_id', Access::user()->id)->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -76,13 +65,7 @@ class RiwayatKeluargaSuamiIstriController extends Controller
         ]);
 
         // Pastikan pegawai role hanya bisa simpan data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $validateData['pegawai_id'] != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord((object) ['pegawai_id' => $validateData['pegawai_id']]);
 
         try {
             DB::beginTransaction();
@@ -107,16 +90,11 @@ class RiwayatKeluargaSuamiIstriController extends Controller
      */
     public function edit(RiwayatKeluargaSuamiIstri $riwayatKeluargaSuamiIstri)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $riwayatKeluargaSuamiIstri->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-            $pegawai = collect([$myPegawai]);
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
+        } elseif (Access::isPegawai()) {
+            Access::ensureOwnRecord($riwayatKeluargaSuamiIstri);
+            $pegawai = collect([Access::myPegawai()]);
         } else {
             $pegawai = Pegawai::all();
         }
@@ -144,13 +122,7 @@ class RiwayatKeluargaSuamiIstriController extends Controller
         ]);
 
         // Pastikan pegawai role hanya bisa update data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $riwayatKeluargaSuamiIstri->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord($riwayatKeluargaSuamiIstri);
 
         try {
             DB::beginTransaction();
@@ -177,13 +149,7 @@ class RiwayatKeluargaSuamiIstriController extends Controller
     public function destroy(RiwayatKeluargaSuamiIstri $riwayatKeluargaSuamiIstri)
     {
         // Pastikan pegawai role hanya bisa hapus data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $riwayatKeluargaSuamiIstri->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord($riwayatKeluargaSuamiIstri);
 
         $riwayatKeluargaSuamiIstri->delete();
 
@@ -192,22 +158,13 @@ class RiwayatKeluargaSuamiIstriController extends Controller
 
     public function cariPegawaiSuamiIstri(Request $request)
     {
-        $user = Auth::user();
-
         $query = RiwayatKeluargaSuamiIstri::with('pegawai');
 
         // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if ($myPegawai) {
-                $query->where('pegawai_id', $myPegawai->id);
-            } else {
-                $query->whereRaw('1=0');
-            }
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
         }
 
         // Filter search

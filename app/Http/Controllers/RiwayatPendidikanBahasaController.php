@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 
 class RiwayatPendidikanBahasaController extends Controller
 {
@@ -17,19 +17,10 @@ class RiwayatPendidikanBahasaController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $riwayatPendidikanBahasa = RiwayatPendidikanBahasa::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            $riwayatPendidikanBahasa = $myPegawai
-                ? RiwayatPendidikanBahasa::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(simpeg_per_page())
-                : RiwayatPendidikanBahasa::whereRaw('1=0')->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            $riwayatPendidikanBahasa = Access::scopeToUnit(RiwayatPendidikanBahasa::with('pegawai'))->paginate(simpeg_per_page());
+        } elseif (Access::isPegawai()) {
+            $riwayatPendidikanBahasa = Access::scopeToSelf(RiwayatPendidikanBahasa::with('pegawai'))->paginate(simpeg_per_page());
         } else {
             $riwayatPendidikanBahasa = RiwayatPendidikanBahasa::with('pegawai')->paginate(simpeg_per_page());
         }
@@ -44,12 +35,10 @@ class RiwayatPendidikanBahasaController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
-        } elseif ($user->role === 'pegawai') {
-            $pegawai = Pegawai::where('user_id', $user->id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
+        } elseif (Access::isPegawai()) {
+            $pegawai = Pegawai::where('user_id', Access::user()->id)->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -72,13 +61,7 @@ class RiwayatPendidikanBahasaController extends Controller
         ]);
 
         // Pastikan pegawai role hanya bisa simpan data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $validateData['pegawai_id'] != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord((object) ['pegawai_id' => $validateData['pegawai_id']]);
 
         try {
             DB::beginTransaction();
@@ -101,16 +84,11 @@ class RiwayatPendidikanBahasaController extends Controller
      */
     public function edit(RiwayatPendidikanBahasa $riwayatPendidikanBahasa)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $riwayatPendidikanBahasa->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-            $pegawai = collect([$myPegawai]);
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
+        } elseif (Access::isPegawai()) {
+            Access::ensureOwnRecord($riwayatPendidikanBahasa);
+            $pegawai = collect([Access::myPegawai()]);
         } else {
             $pegawai = Pegawai::all();
         }
@@ -134,13 +112,7 @@ class RiwayatPendidikanBahasaController extends Controller
         ]);
 
         // Pastikan pegawai role hanya bisa update data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $riwayatPendidikanBahasa->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord($riwayatPendidikanBahasa);
 
         try {
             DB::beginTransaction();
@@ -166,13 +138,7 @@ class RiwayatPendidikanBahasaController extends Controller
     {
         try {
             // Pastikan pegawai role hanya bisa hapus data miliknya sendiri
-            $user = Auth::user();
-            if ($user->role === 'pegawai') {
-                $myPegawai = Pegawai::where('user_id', $user->id)->first();
-                if (!$myPegawai || $riwayatPendidikanBahasa->pegawai_id != $myPegawai->id) {
-                    abort(403, 'Akses ditolak');
-                }
-            }
+            Access::ensureOwnRecord($riwayatPendidikanBahasa);
 
             $riwayatPendidikanBahasa->delete();
 
@@ -188,22 +154,13 @@ class RiwayatPendidikanBahasaController extends Controller
 
     public function cariPendidikanBahasa(Request $request)
     {
-        $user = Auth::user();
-
         $query = RiwayatPendidikanBahasa::with('pegawai');
 
         // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if ($myPegawai) {
-                $query->where('pegawai_id', $myPegawai->id);
-            } else {
-                $query->whereRaw('1=0');
-            }
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
         }
 
         if($request->cariPendidikanBahasa) {

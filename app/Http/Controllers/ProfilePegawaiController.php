@@ -32,13 +32,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Exception;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 
 class ProfilePegawaiController extends Controller
 {
     public function index(DiklatGapAnalyticsService $diklatGapAnalyticsService)
     {
-        $user    = Auth::user();
+        $user    = Access::user();
         $pegawai = Pegawai::with(['unit_kerja'])
             ->where('user_id', $user->id)
             ->first();
@@ -120,7 +120,7 @@ class ProfilePegawaiController extends Controller
      */
     public function print(DiklatGapAnalyticsService $diklatGapAnalyticsService)
     {
-        $user    = Auth::user();
+        $user    = Access::user();
         $pegawai = Pegawai::with(['unit_kerja'])
             ->where('user_id', $user->id)
             ->first();
@@ -139,7 +139,7 @@ class ProfilePegawaiController extends Controller
      */
     public function unduhPdfSendiri(DiklatGapAnalyticsService $diklatGapAnalyticsService)
     {
-        $user = Auth::user();
+        $user = Access::user();
         $pegawai = Pegawai::where('user_id', $user->id)->first();
 
         if (! $pegawai) {
@@ -156,9 +156,9 @@ class ProfilePegawaiController extends Controller
      */
     public function unduhPdf(DiklatGapAnalyticsService $diklatGapAnalyticsService, Pegawai $pegawai)
     {
-        $user = Auth::user();
+        $user = Access::user();
 
-        if ($user->role === 'pegawai') {
+        if (Access::isPegawai()) {
             $pegawaiSendiri = Pegawai::where('user_id', $user->id)->first();
             if (! $pegawaiSendiri || $pegawaiSendiri->id !== $pegawai->id) {
                 abort(403, 'Anda hanya bisa mengunduh biodata Anda sendiri.');
@@ -279,7 +279,7 @@ class ProfilePegawaiController extends Controller
      */
     public function edit()
     {
-        $user    = Auth::user();
+        $user    = Access::user();
         $pegawai = Pegawai::with(['unit_kerja'])
             ->where('user_id', $user->id)
             ->first();
@@ -301,7 +301,7 @@ class ProfilePegawaiController extends Controller
      */
     public function update(Request $request)
     {
-        $user    = Auth::user();
+        $user    = Access::user();
         $pegawai = Pegawai::where('user_id', $user->id)->first();
 
         if (!$pegawai) {
@@ -375,7 +375,7 @@ class ProfilePegawaiController extends Controller
      */
     public function uploadFoto(Request $request)
     {
-        $user    = Auth::user();
+        $user    = Access::user();
         $pegawai = Pegawai::where('user_id', $user->id)->first();
 
         if (!$pegawai) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Support\Access;
 use Illuminate\Http\Request;
 use App\Models\UnitKerja;
 use Exception;
@@ -16,6 +17,8 @@ class UserAdminController extends Controller
      */
     public function index()
     {
+        Access::abortUnlessRole('superadmin');
+
         $user = User::where('role', 'admin')->with("unit_kerja")->get();
 
         return view('pages.dashboard.manajemen_setup.userAdmin.data_user_admin', [
@@ -28,6 +31,8 @@ class UserAdminController extends Controller
      */
     public function create()
     {
+        Access::abortUnlessRole('superadmin');
+
         $unitKerja = UnitKerja::all();
         return view('pages.dashboard.manajemen_setup.userAdmin.tambah_user_admin', [
             'unitKerja' => $unitKerja
@@ -39,6 +44,8 @@ class UserAdminController extends Controller
      */
     public function store(Request $request)
     {
+        Access::abortUnlessRole('superadmin');
+
         $validateData = $request->validate([
             'username' => 'required|string',
             'name' => 'required|string',
@@ -75,6 +82,8 @@ class UserAdminController extends Controller
      */
     public function edit(User $user)
     {
+        Access::abortUnlessRole('superadmin');
+
         $unitKerja = UnitKerja::all();
         return view("pages.dashboard.manajemen_setup.userAdmin.edit_user_admin", [
             'user' => $user,
@@ -87,6 +96,8 @@ class UserAdminController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        Access::abortUnlessRole('superadmin');
+
         $validateData = $request->validate([
             'username' => 'required|string',
             'name' => 'required|string',
@@ -119,6 +130,8 @@ class UserAdminController extends Controller
      */
     public function destroy(User $user)
     {
+        Access::abortUnlessRole('superadmin');
+
         try {
             $user->delete();
 
@@ -132,6 +145,8 @@ class UserAdminController extends Controller
 
     public function cariUserAdmin(Request $request)
     {
+        Access::abortUnlessRole('superadmin');
+
         $cariUserAdmin = $request->input('cariUserAdmin');
         $user = User::where('role', 'admin')
                    ->where(function($q) use ($cariUserAdmin) {

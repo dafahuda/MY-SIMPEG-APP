@@ -6,9 +6,9 @@ use App\Models\Pegawai;
 use App\Models\RencanaDiklat;
 use App\Models\User;
 use App\Services\DiklatScopeService;
+use App\Support\Access;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -21,7 +21,7 @@ class RencanaDiklatController extends Controller
 
     public function index(Request $request)
     {
-        $user = Auth::user();
+        $user = Access::user();
 
         $rencanaDiklat = $this->filteredQuery($request, $user)
             ->paginate(simpeg_per_page())
@@ -29,7 +29,7 @@ class RencanaDiklatController extends Controller
 
         return view('pages.dashboard.kepegawaian.rencana_diklat.indexRencanaDiklat', [
             'rencanaDiklat' => $rencanaDiklat,
-            'canMutate' => in_array($user->role, ['admin', 'superadmin'], true),
+            'canMutate' => (Access::isAdmin() || Access::isSuperadmin()),
             'pegawaiFilterOptions' => $this->pegawaiListFor($user),
             'tahunFilterOptions' => $this->tahunFilterOptionsFor($user),
             'filters' => $this->resolvedFilters($request),
@@ -38,7 +38,7 @@ class RencanaDiklatController extends Controller
 
     public function create()
     {
-        $user = Auth::user();
+        $user = Access::user();
         $this->ensureCanMutate($user);
 
         return view('pages.dashboard.kepegawaian.rencana_diklat.tambahRencanaDiklat', [
@@ -48,7 +48,7 @@ class RencanaDiklatController extends Controller
 
     public function store(Request $request)
     {
-        $user = Auth::user();
+        $user = Access::user();
         $this->ensureCanMutate($user);
 
         $validated = $this->validatePayload($request, $user);
@@ -73,7 +73,7 @@ class RencanaDiklatController extends Controller
 
     public function edit(RencanaDiklat $rencanaDiklat)
     {
-        $user = Auth::user();
+        $user = Access::user();
         $this->ensureCanMutate($user);
         $this->ensureAccessible($rencanaDiklat, $user);
 
@@ -85,7 +85,7 @@ class RencanaDiklatController extends Controller
 
     public function update(Request $request, RencanaDiklat $rencanaDiklat)
     {
-        $user = Auth::user();
+        $user = Access::user();
         $this->ensureCanMutate($user);
         $this->ensureAccessible($rencanaDiklat, $user);
 
@@ -119,7 +119,7 @@ class RencanaDiklatController extends Controller
 
     public function destroy(RencanaDiklat $rencanaDiklat)
     {
-        $user = Auth::user();
+        $user = Access::user();
         $this->ensureCanMutate($user);
         $this->ensureAccessible($rencanaDiklat, $user);
 
@@ -147,7 +147,7 @@ class RencanaDiklatController extends Controller
     {
         $filters = $this->resolvedFilters($request);
 
-        $query = $this->scopeService->scopeRencanaDiklatQuery(
+        $query = $this->scopeRelatedQuery(
             RencanaDiklat::with('pegawai')->orderByDesc('created_at'),
             $user
         );
@@ -186,13 +186,13 @@ class RencanaDiklatController extends Controller
 
     private function validatePayload(Request $request, User $user): array
     {
-        abort_unless(in_array($user->role, ['admin', 'superadmin'], true), 403);
+        Access::abortUnlessAdminOrSuperadmin();
 
         $pegawaiRule = Rule::exists('tb_pegawai', 'id');
 
-        if ($user->role === 'admin') {
-            $pegawaiRule = $pegawaiRule->where(function ($query) use ($user): void {
-                $query->where('unit_kerja_id', $user->unit_kerja_id);
+        if (Access::isAdmin()) {
+            $pegawaiRule = $pegawaiRule->where(function ($query): void {
+                $query->where('unit_kerja_id', Access::unitKerjaId());
             });
         }
 
@@ -213,17 +213,17 @@ class RencanaDiklatController extends Controller
 
     private function ensureCanMutate(User $user): void
     {
-        abort_unless(in_array($user->role, ['admin', 'superadmin'], true), 403);
+        Access::abortUnlessAdminOrSuperadmin();
     }
 
     private function ensureAccessible(RencanaDiklat $rencanaDiklat, User $user): void
     {
-        $accessible = $this->scopeService->scopeRencanaDiklatQuery(
+        $accessible = $this->scopeRelatedQuery(
             RencanaDiklat::query()->whereKey($rencanaDiklat->getKey()),
             $user
         )->exists();
 
-        abort_unless($accessible, 403);
+        abort_unless($accessible, 403, 'Akses ditolak');
     }
 
     private function pegawaiListFor(User $user)
@@ -236,7 +236,7 @@ class RencanaDiklatController extends Controller
 
     private function tahunFilterOptionsFor(User $user)
     {
-        return $this->scopeService->scopeRencanaDiklatQuery(
+        return $this->scopeRelatedQuery(
             RencanaDiklat::query()->select('tahun_rencana')->distinct(),
             $user
         )
@@ -263,5 +263,18 @@ class RencanaDiklatController extends Controller
         return $request->input('save_mode', $fallbackStatus) === 'draft'
             ? 'draft'
             : 'planned';
+    }
+
+    private function scopeRelatedQuery(\Illuminate\Database\Eloquent\Builder $query, User $user): \Illuminate\Database\Eloquent\Builder
+    {
+        if (Access::isAdmin()) {
+            return Access::scopeToUnit($query);
+        }
+
+        if (Access::isPegawai()) {
+            return Access::scopeToSelf($query);
+        }
+
+        return Access::isSuperadmin() ? $query : $query->whereRaw('1 = 0');
     }
 }

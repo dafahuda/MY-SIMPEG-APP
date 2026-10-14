@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Support\Access;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,8 @@ class UserPegawaiController extends Controller
      */
     public function index()
     {
+        Access::abortUnlessAdminOrSuperadmin();
+
         $user = User::where("role", "pegawai")->get();
 
         return view("pages.dashboard.manajemen_setup.userPegawai.data_user_pegawai", [
@@ -28,6 +31,8 @@ class UserPegawaiController extends Controller
      */
     public function create()
     {
+        Access::abortUnlessAdminOrSuperadmin();
+
         return view("pages.dashboard.manajemen_setup.userPegawai.tambah_user_pegawai");
     }
 
@@ -36,6 +41,8 @@ class UserPegawaiController extends Controller
      */
     public function store(Request $request)
     {
+        Access::abortUnlessAdminOrSuperadmin();
+
         $validateData = $request->validate([
             'username' => 'required|string',
             'name' => 'required|string',
@@ -69,6 +76,8 @@ class UserPegawaiController extends Controller
      */
     public function edit(User $user)
     {
+        Access::abortUnlessAdminOrSuperadmin();
+
         $unitKerja = UnitKerja::all();
         return view("pages.dashboard.manajemen_setup.userPegawai.edit_user_pegawai", [
             'unitKerja' => $unitKerja,
@@ -81,6 +90,8 @@ class UserPegawaiController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        Access::abortUnlessAdminOrSuperadmin();
+
         $validateData = $request->validate([
             'username' => 'required|string',
             'name' => 'required|string',
@@ -110,6 +121,8 @@ class UserPegawaiController extends Controller
      */
     public function destroy(User $user)
     {
+        Access::abortUnlessAdminOrSuperadmin();
+
         try {
             $user->delete();
 
@@ -125,6 +138,8 @@ class UserPegawaiController extends Controller
 
     public function cariUserPegawai(Request $request)
     {
+        Access::abortUnlessAdminOrSuperadmin();
+
         $cariUserPegawai = $request->input('cariUserPegawai');
         $user = User::where('role', 'pegawai')
                    ->where(function($q) use ($cariUserPegawai) {

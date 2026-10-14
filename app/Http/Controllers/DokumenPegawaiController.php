@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\DokumenPegawai;
 use App\Models\Pegawai;
+use App\Support\Access;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File;
 
@@ -51,7 +51,7 @@ class DokumenPegawaiController extends Controller
             'file_name' => $file->getClientOriginalName(),
             'mime_type' => $file->getMimeType(),
             'size' => $file->getSize(),
-            'uploaded_by' => Auth::id(),
+            'uploaded_by' => Access::user()->id,
             'keterangan' => $validated['keterangan'] ?? null,
         ]);
 
@@ -85,7 +85,7 @@ class DokumenPegawaiController extends Controller
         $this->authorizeAkses($dokumen->pegawai, tulis: true);
 
         // Hanya admin/superadmin yang boleh menghapus dokumen
-        if (! in_array(Auth::user()->role, ['admin', 'superadmin'])) {
+        if (! (Access::isAdmin() || Access::isSuperadmin())) {
             abort(403, 'Hanya admin yang dapat menghapus dokumen.');
         }
 
@@ -101,17 +101,18 @@ class DokumenPegawaiController extends Controller
      */
     private function authorizeAkses(Pegawai $pegawai, bool $tulis = false): void
     {
-        $user = Auth::user();
+        $user = Access::user();
 
-        if ($user->role === 'superadmin') {
+        if (Access::isSuperadmin()) {
             return;
         }
 
-        if ($user->role === 'admin' && $pegawai->unit_kerja_id === $user->unit_kerja_id) {
+        if (Access::isAdmin()) {
+            Access::ensureInUnit($pegawai);
             return;
         }
 
-        if ($user->role === 'pegawai' && $user->pegawai?->id === $pegawai->id) {
+        if (Access::isPegawai() && $user->pegawai?->id === $pegawai->id) {
             return;
         }
 

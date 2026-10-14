@@ -108,6 +108,23 @@ class AccessFacadeTest extends TestCase
         $this->assertForbidden(fn () => Access::abortUnlessRole('admin', 'superadmin'));
     }
 
+    public function test_role_middleware_allows_listed_roles_and_blocks_others(): void
+    {
+        $unit = UnitKerja::factory()->create();
+
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'unit_kerja_id' => $unit->id]));
+        $this->get('/rekapitulasi/agama')->assertOk();
+
+        $this->actingAs(User::factory()->create(['role' => 'pegawai', 'unit_kerja_id' => $unit->id]));
+        $this->get('/rekapitulasi/agama')->assertForbidden();
+
+        $this->actingAs(User::factory()->create(['role' => 'superadmin']));
+        $this->get('/manajemen_setup/data_user_admin')->assertOk();
+
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'unit_kerja_id' => $unit->id]));
+        $this->get('/manajemen_setup/data_user_admin')->assertForbidden();
+    }
+
     private function assertForbidden(callable $callback): void
     {
         try {

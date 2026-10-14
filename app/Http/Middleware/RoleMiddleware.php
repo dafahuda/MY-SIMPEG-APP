@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Access;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,9 +21,9 @@ class RoleMiddleware
             return redirect('/login');
         }
 
-        $user = Auth::user();
-
-        if (!in_array($user->role, $roles)) {
+        // Delegates the role gate to the central Access facade so route-level
+        // and in-controller authorization share one implementation.
+        if (!in_array(Access::role(), $roles, true)) {
             abort(403, 'Akses ditolak');
         }
 

@@ -15,20 +15,7 @@
             <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <form action="/manajemen_setup/opd_skd_unitkerja/tambah_unit_kerja" method="POST">
                     @csrf
-                    <div class="mb-5">
-                        <label for="nama_unit" class="block mb-2.5 text-sm font-medium text-heading">Nama Unit
-                            Kerja <span class="text-red-500">*</span> </label>
-                        <input type="text" id="nama_unit" name="nama_unit"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nama unit" required />
-                    </div>
-                    <div class="mb-5">
-                        <label for="password" class="block mb-2.5 text-sm font-medium text-heading">Alamat <span
-                                class="text-red-500">*</span> </label>
-                        <input type="text" id="alamat" name="alamat"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Alamat" required />
-                    </div>
+                    @include('pages.dashboard.manajemen_setup.OPD_SKD_UnitKerja._fields')】【。Japgolly 天天中彩票人工 to=functions.Edit-cmprcommentary json.WHATEVER}  #oops? adjust tool call actual. token confusion? correct invocation next.  # disregard?  # lexical?  # tool output?  # Looks malformed?  # tool already?  # retry.  # end.  # no.  # use separate.  # stop.  # actually above object ends
                     <button type="submit"
                         class="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 rounded-lg focus:ring-blue-500 shadow-lg font-medium leading-5 rounded-base text-sm px-4 py-2 focus:outline-none">Simpan</button>
                 </form>

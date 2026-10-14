@@ -1,0 +1,268 @@
+                    <div class="mb-5">
+                        <label for="pegawai_id" class="block mb-2.5 text-sm font-medium text-heading">Pegawai <span
+                                class="text-red-500">*</span></label>
+                        <select name="pegawai_id" id="pegawai_id" class="rounded-lg">
+                            <option value="">Pilih Pegawai</option>
+                            @foreach ($pegawai as $item)
+                                <option value="{{ $item->id }}" @isset($izinKawin)
+                                    {{ old('pegawai_id', $izinKawin->pegawai_id) == $item->id ? 'selected' : '' }}
+                                    @endisset>{{ $item->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="flex items-center mb-5">
+                        <label for="no_surat_izin_perkawinan" class="w-1/4 text-sm font-medium text-heading">{{ $nomorIzinLabel }} <span class="text-red-500">*</span></label>
+                        <div class="flex w-3/4 gap-4">
+                            <input type="text" id="no_surat_izin_perkawinan" name="no_surat_izin_perkawinan"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                placeholder="Masukan nomor surat izin perkawinan" required
+                            @isset($izinKawin) value="{{ old('no_surat_izin_perkawinan', $izinKawin->no_surat_izin_perkawinan) }}" @endisset />
+
+                            <input type="date" id="tgl_izin_surat_perkawinan" name="tgl_izin_surat_perkawinan"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
+                                required placeholder="Masukan tanggal surat izin perkawinan"
+                            @isset($izinKawin) value="{{ old('tgl_izin_surat_perkawinan', $izinKawin->tgl_izin_surat_perkawinan) }}" @endisset />
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label for="kebangsaan_pegawai" class="block mb-2.5 text-sm font-medium text-heading">Kebangsaan
+                            Pegawai <span class="text-red-500">*</span></label>
+                        <input type="text" id="kebangsaan_pegawai" name="kebangsaan_pegawai"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan kebangsaan pegawai" required
+                            @isset($izinKawin) value="{{ old('kebangsaan_pegawai', $izinKawin->kebangsaan_pegawai) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="nama_wali_bapak_pegawai" class="block mb-2.5 text-sm font-medium text-heading">Nama
+                            Wali (Bapak) Pegawai <span class="text-red-500">*</span></label>
+                        <input type="text" id="nama_wali_bapak_pegawai" name="nama_wali_bapak_pegawai"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan nama wali (bapak) pegawai" required
+                            @isset($izinKawin) value="{{ old('nama_wali_bapak_pegawai', $izinKawin->nama_wali_bapak_pegawai) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="pekerjaan_wali_bapak_pegawai"
+                            class="block mb-2.5 text-sm font-medium text-heading">Pekerjaan <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="pekerjaan_wali_bapak_pegawai" name="pekerjaan_wali_bapak_pegawai"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan pekerjaan wali (bapak) pegawai" required
+                            @isset($izinKawin) value="{{ old('pekerjaan_wali_bapak_pegawai', $izinKawin->pekerjaan_wali_bapak_pegawai) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="alamat_wali_bapak" class="block mb-2.5 text-sm font-medium text-heading">Alamat
+                            <span class="text-red-500">*</span></label>
+                        <input type="text" id="alamat_wali_bapak" name="alamat_wali_bapak"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan alamat wali (bapak) pegawai" required
+                            @isset($izinKawin) value="{{ old('alamat_wali_bapak', $izinKawin->alamat_wali_bapak) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="nama_wali_ibu_pegawai" class="block mb-2.5 text-sm font-medium text-heading">Nama
+                            Wali (Ibu) Pegawai <span class="text-red-500">*</span></label>
+                        <input type="text" id="nama_wali_ibu_pegawai" name="nama_wali_ibu_pegawai"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan nama wali (ibu) pegawai" required
+                            @isset($izinKawin) value="{{ old('nama_wali_ibu_pegawai', $izinKawin->nama_wali_ibu_pegawai) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="pekerjaan_wali_ibu_pegawai"
+                            class="block mb-2.5 text-sm font-medium text-heading">Pekerjaan <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="pekerjaan_wali_ibu_pegawai" name="pekerjaan_wali_ibu_pegawai"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan pekerjaan wali (ibu) pegawai" required
+                            @isset($izinKawin) value="{{ old('pekerjaan_wali_ibu_pegawai', $izinKawin->pekerjaan_wali_ibu_pegawai) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="alamat_wali_ibu_pegawai"
+                            class="block mb-2.5 text-sm font-medium text-heading">Alamat <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="alamat_wali_ibu_pegawai" name="alamat_wali_ibu_pegawai"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan alamat wali (ibu) pegawai" required
+                            @isset($izinKawin) value="{{ old('alamat_wali_ibu_pegawai', $izinKawin->alamat_wali_ibu_pegawai) }}" @endisset />
+                    </div>
+                    <div class="mt-5">
+                        <h2 class="text-center font-bold">UNTUK MELAKSANAKAN PERKAWINAN DENGAN</h2>
+                    </div>
+                    <div class="mb-5">
+                        <label for="nama_calon_suami_istri" class="block mb-2.5 text-sm font-medium text-heading">Nama
+                            <span class="text-red-500">*</span></label>
+                        <input type="text" id="nama_calon_suami_istri" name="nama_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan nama calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('nama_calon_suami_istri', $izinKawin->nama_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="flex items-center mb-5">
+                        <label for="tempat_lahir_calon_suami_istri"
+                            class="w-1/4 text-sm font-medium text-heading">{{ $lahirLabel }} <span class="text-red-500">*</span></label>
+                        <div class="flex w-3/4 gap-4">
+                            <input type="text" id="tempat_lahir_calon_suami_istri"
+                                name="tempat_lahir_calon_suami_istri"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                placeholder="Masukan tempat lahir calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('tempat_lahir_calon_suami_istri', $izinKawin->tempat_lahir_calon_suami_istri) }}" @endisset />
+
+                            <input type="date" id="tgl_lahir_calon_suami_istri" name="tgl_lahir_calon_suami_istri"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
+                                required placeholder="Masukan tanggal lahir calon suami / istri"
+                            @isset($izinKawin) value="{{ old('tgl_lahir_calon_suami_istri', $izinKawin->tgl_lahir_calon_suami_istri) }}" @endisset />
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label for="pekerjaan_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Pekerjaan <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="pekerjaan_calon_suami_istri" name="pekerjaan_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan pekerjaan calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('pekerjaan_calon_suami_istri', $izinKawin->pekerjaan_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="nip_nik_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">NIK / NIP <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="nip_nik_calon_suami_istri" name="nip_nik_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan nip atau nik calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('nip_nik_calon_suami_istri', $izinKawin->nip_nik_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="pangkat_golongan_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Pangkat / Golongan <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="pangkat_golongan_calon_suami_istri"
+                            name="pangkat_golongan_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan golongan calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('pangkat_golongan_calon_suami_istri', $izinKawin->pangkat_golongan_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="jabatan_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Jabatan <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="jabatan_calon_suami_istri" name="jabatan_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan jabatan calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('jabatan_calon_suami_istri', $izinKawin->jabatan_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="instansi_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Instansi <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="instansi_calon_suami_istri" name="instansi_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan instansi calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('instansi_calon_suami_istri', $izinKawin->instansi_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="kebangsaan_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Kebangsaan <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="kebangsaan_calon_suami_istri" name="kebangsaan_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan kebangsaan calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('kebangsaan_calon_suami_istri', $izinKawin->kebangsaan_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="agama_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Agama <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="agama_calon_suami_istri" name="agama_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan nip atau nik calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('agama_calon_suami_istri', $izinKawin->agama_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="alamat_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Alamat <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="alamat_calon_suami_istri" name="alamat_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan alamat calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('alamat_calon_suami_istri', $izinKawin->alamat_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="nama_wali_bapak_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Nama Wali (Bapak) <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="nama_wali_bapak_calon_suami_istri"
+                            name="nama_wali_bapak_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan wali (bapak) calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('nama_wali_bapak_calon_suami_istri', $izinKawin->nama_wali_bapak_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="pekerjaan_wali_bapak_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Pekerjaan <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="pekerjaan_wali_bapak_calon_suami_istri"
+                            name="pekerjaan_wali_bapak_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan pekerjaan wali (bapak) calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('pekerjaan_wali_bapak_calon_suami_istri', $izinKawin->pekerjaan_wali_bapak_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="alamat_wali_bapak_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Alamat <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="alamat_wali_bapak_calon_suami_istri"
+                            name="alamat_wali_bapak_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan alamat wali (bapak) calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('alamat_wali_bapak_calon_suami_istri', $izinKawin->alamat_wali_bapak_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="nama_wali_ibu_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Nama Wali (Ibu) <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="nama_wali_ibu_calon_suami_istri"
+                            name="nama_wali_ibu_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan wali (ibu) calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('nama_wali_ibu_calon_suami_istri', $izinKawin->nama_wali_ibu_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="pekerjaan_wali_ibu_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Pekerjaan <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="pekerjaan_wali_ibu_calon_suami_istri"
+                            name="pekerjaan_wali_ibu_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan pekerjaan wali (ibu) calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('pekerjaan_wali_ibu_calon_suami_istri', $izinKawin->pekerjaan_wali_ibu_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="mb-5">
+                        <label for="alamat_wali_ibu_calon_suami_istri"
+                            class="block mb-2.5 text-sm font-medium text-heading">Alamat <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="alamat_wali_ibu_calon_suami_istri"
+                            name="alamat_wali_ibu_calon_suami_istri"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan alamat wali (ibu) calon suami / istri" required
+                            @isset($izinKawin) value="{{ old('alamat_wali_ibu_calon_suami_istri', $izinKawin->alamat_wali_ibu_calon_suami_istri) }}" @endisset />
+                    </div>
+                    <div class="flex items-center mb-5">
+                        <label for="tempat_perkawinan" class="w-1/4 text-sm font-medium text-heading">{{ $perkawinanLabel }} <span class="text-red-500">*</span></label>
+                        <div class="flex w-3/4 gap-4">
+                            <input type="text" id="tempat_perkawinan" name="tempat_perkawinan"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                placeholder="Masukan tempat perkawinan" required
+                            @isset($izinKawin) value="{{ old('tempat_perkawinan', $izinKawin->tempat_perkawinan) }}" @endisset />
+
+                            <input type="date" id="tgl_perkawinan" name="tgl_perkawinan"
+                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
+                                required placeholder="Masukan tanggal perkawinan"
+                            @isset($izinKawin) value="{{ old('tgl_perkawinan', $izinKawin->tgl_perkawinan) }}" @endisset />
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label for="tgl_ditetapkan_perkawinan"
+                            class="block mb-2.5 text-sm font-medium text-heading">Tgl Ditetapkan perkawinan <span
+                                class="text-red-500">*</span></label>
+                        <input type="date" id="tgl_ditetapkan_perkawinan" name="tgl_ditetapkan_perkawinan"
+                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                            placeholder="Masukan tanggal ditetapkan perkawinan" required
+                            @isset($izinKawin) value="{{ old('tgl_ditetapkan_perkawinan', $izinKawin->tgl_ditetapkan_perkawinan) }}" @endisset />
+                    </div>

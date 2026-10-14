@@ -7,8 +7,10 @@ use App\Models\Diklat;
 use App\Models\Pegawai;
 use App\Models\RencanaDiklat;
 use App\Models\UnitKerja;
+use App\Support\Access;
 use App\Services\DiklatGapAnalyticsService;
 use App\Services\DiklatScopeService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,7 +19,7 @@ class DiklatGapReportController extends Controller
 {
     public function index(Request $request, DiklatScopeService $scopeService, DiklatGapAnalyticsService $analyticsService)
     {
-        $user = $request->user();
+        $user = Access::user();
 
         $selectedTahunRencana = $this->normalizeYear($request->input('tahun_rencana'));
         $selectedTahunRealisasi = $this->normalizeYear($request->input('tahun_realisasi')) ?? $selectedTahunRencana;
@@ -40,7 +42,7 @@ class DiklatGapReportController extends Controller
         $selectedUnitKerja = null;
 
         if ($reportReady) {
-            $pegawaiQuery = $scopeService->scopePegawaiQuery(Pegawai::query()->with('unit_kerja'), $user);
+            $pegawaiQuery = $this->scopePegawai(Pegawai::query()->with('unit_kerja'), $scopeService, $user);
 
             if ($selectedUnitKerjaId) {
                 $pegawaiQuery->where('unit_kerja_id', $selectedUnitKerjaId);
@@ -52,18 +54,18 @@ class DiklatGapReportController extends Controller
 
             $pegawaiIds = $pegawaiQuery->pluck('id')->all();
 
-            $rencanaQuery = $scopeService->scopeRencanaDiklatQuery(
+            $rencanaQuery = $this->scopeRelated(
                 RencanaDiklat::with(['pegawai.unit_kerja', 'diklat.pegawai.unit_kerja']),
-                $user
+                $scopeService, $user
             )
                 ->where('tahun_rencana', $selectedTahunRencana)
                 ->whereIn('pegawai_id', $pegawaiIds)
                 ->orderBy('pegawai_id')
                 ->orderBy('nama_diklat_rencana');
 
-            $diklatQuery = $scopeService->scopeDiklatQuery(
+            $diklatQuery = $this->scopeRelated(
                 Diklat::with(['pegawai.unit_kerja', 'rencanaDiklat.pegawai.unit_kerja']),
-                $user
+                $scopeService, $user
             )
                 ->where('tahun', $selectedTahunRealisasi)
                 ->whereIn('pegawai_id', $pegawaiIds)
@@ -134,6 +136,36 @@ class DiklatGapReportController extends Controller
         return Excel::download(new DiklatGapExport($data['exportRows']), $filename);
     }
 
+    /** Pegawai queries have no pegawai relation, so scope their own columns. */
+    private function scopePegawai(Builder $query, DiklatScopeService $scopeService, $user): Builder
+    {
+        if (Access::isAdmin()) {
+            return $query->where('unit_kerja_id', Access::unitKerjaId());
+        }
+
+        if (Access::isPegawai()) {
+            return $query->where('user_id', Access::user()->id);
+        }
+
+        return $scopeService->scopePegawaiQuery($query, $user);
+    }
+
+    private function scopeRelated(Builder $query, DiklatScopeService $scopeService, $user): Builder
+    {
+        if (Access::isAdmin()) {
+            return Access::scopeToUnit($query);
+        }
+
+        if (Access::isPegawai()) {
+            // Preserve all linked rows when a user has more than one Pegawai row.
+            return $query->whereHas('pegawai', function (Builder $pegawaiQuery) {
+                $pegawaiQuery->where('user_id', Access::user()->id);
+            });
+        }
+
+        return $scopeService->scopeRelatedToPegawai($query, $user);
+    }
+
     private function normalizeYear(mixed $value): ?string
     {
         if ($value === null) {
@@ -147,18 +179,18 @@ class DiklatGapReportController extends Controller
 
     private function resolvePegawaiId(Request $request, $user): ?int
     {
-        if ($user->role === 'pegawai') {
-            return Pegawai::query()->where('user_id', $user->id)->value('id');
+        if (Access::isPegawai()) {
+            return Access::myPegawai()?->id;
         }
 
-        if ($user->role === 'admin') {
+        if (Access::isAdmin()) {
             if (! $request->filled('pegawai_id')) {
                 return null;
             }
 
             return Pegawai::query()
                 ->whereKey($request->input('pegawai_id'))
-                ->where('unit_kerja_id', $user->unit_kerja_id)
+                ->where('unit_kerja_id', Access::unitKerjaId())
                 ->value('id');
         }
 
@@ -167,16 +199,16 @@ class DiklatGapReportController extends Controller
 
     private function resolveUnitKerjaId(Request $request, $user, ?int $selectedPegawaiId): ?int
     {
-        if ($user->role === 'pegawai') {
+        if (Access::isPegawai()) {
             if ($selectedPegawaiId) {
                 return Pegawai::query()->whereKey($selectedPegawaiId)->value('unit_kerja_id');
             }
 
-            return Pegawai::query()->where('user_id', $user->id)->value('unit_kerja_id');
+            return Access::myPegawai()?->unit_kerja_id;
         }
 
-        if ($user->role === 'admin') {
-            return $user->unit_kerja_id ? (int) $user->unit_kerja_id : null;
+        if (Access::isAdmin()) {
+            return Access::unitKerjaId() ? (int) Access::unitKerjaId() : null;
         }
 
         if ($selectedPegawaiId) {
@@ -192,14 +224,14 @@ class DiklatGapReportController extends Controller
 
     private function buildUnitKerjaOptions($user, ?int $selectedUnitKerjaId)
     {
-        if ($user->role === 'pegawai') {
+        if (Access::isPegawai()) {
             return collect();
         }
 
         $query = UnitKerja::query()->orderBy('nama_unit');
 
-        if ($user->role === 'admin' && $user->unit_kerja_id) {
-            $query->whereKey($user->unit_kerja_id);
+        if (Access::isAdmin() && Access::unitKerjaId()) {
+            $query->whereKey(Access::unitKerjaId());
         }
 
         $options = $query->get();
@@ -213,15 +245,12 @@ class DiklatGapReportController extends Controller
 
     private function buildPegawaiOptions(DiklatScopeService $scopeService, $user, ?int $selectedUnitKerjaId)
     {
-        if ($user->role === 'pegawai') {
-            return Pegawai::query()
-                ->with('unit_kerja')
-                ->where('user_id', $user->id)
-                ->orderBy('nama')
-                ->get();
+        if (Access::isPegawai()) {
+            return $this->scopePegawai(Pegawai::query()->with('unit_kerja'), $scopeService, $user)
+                ->orderBy('nama')->get();
         }
 
-        $query = $scopeService->scopePegawaiQuery(Pegawai::query()->with('unit_kerja'), $user)
+        $query = $this->scopePegawai(Pegawai::query()->with('unit_kerja'), $scopeService, $user)
             ->orderBy('nama');
 
         if ($selectedUnitKerjaId) {
@@ -233,7 +262,7 @@ class DiklatGapReportController extends Controller
 
     private function buildUnitAggregateData(Request $request, DiklatScopeService $scopeService, DiklatGapAnalyticsService $analyticsService): array
     {
-        $user = $request->user();
+        $user = Access::user();
 
         $selectedTahunRencana = $this->normalizeYear($request->input('tahun_rencana'));
         $selectedTahunRealisasi = $this->normalizeYear($request->input('tahun_realisasi')) ?? $selectedTahunRencana;
@@ -249,7 +278,7 @@ class DiklatGapReportController extends Controller
         $exportRows = collect();
 
         if ($reportReady) {
-            $pegawaiQuery = $scopeService->scopePegawaiQuery(Pegawai::query()->with('unit_kerja'), $user);
+            $pegawaiQuery = $this->scopePegawai(Pegawai::query()->with('unit_kerja'), $scopeService, $user);
 
             if ($selectedUnitKerjaId) {
                 $pegawaiQuery->where('unit_kerja_id', $selectedUnitKerjaId);
@@ -257,9 +286,9 @@ class DiklatGapReportController extends Controller
 
             $pegawaiIds = $pegawaiQuery->pluck('id')->all();
 
-            $rencanaDiklat = $scopeService->scopeRencanaDiklatQuery(
+            $rencanaDiklat = $this->scopeRelated(
                 RencanaDiklat::with(['pegawai.unit_kerja', 'diklat.pegawai.unit_kerja']),
-                $user
+                $scopeService, $user
             )
                 ->where('tahun_rencana', $selectedTahunRencana)
                 ->whereIn('pegawai_id', $pegawaiIds)
@@ -267,9 +296,9 @@ class DiklatGapReportController extends Controller
                 ->orderBy('nama_diklat_rencana')
                 ->get();
 
-            $diklat = $scopeService->scopeDiklatQuery(
+            $diklat = $this->scopeRelated(
                 Diklat::with(['pegawai.unit_kerja', 'rencanaDiklat.pegawai.unit_kerja']),
-                $user
+                $scopeService, $user
             )
                 ->where('tahun', $selectedTahunRealisasi)
                 ->whereIn('pegawai_id', $pegawaiIds)

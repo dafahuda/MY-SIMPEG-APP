@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\LatihanJabatan;
 use App\Models\Pegawai;
+use App\Support\Access;
 use App\Services\DiklatScopeService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
 
 
 class LatihanJabatanController extends Controller
@@ -24,7 +24,7 @@ class LatihanJabatanController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        $user = Access::user();
 
         $latihaJabatan = $this->scopeService->scopeRelatedToPegawai(
             LatihanJabatan::with('pegawai'),
@@ -41,10 +41,8 @@ class LatihanJabatanController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -100,10 +98,8 @@ class LatihanJabatanController extends Controller
      */
     public function edit(LatihanJabatan $latihanJabatan)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -183,7 +179,7 @@ class LatihanJabatanController extends Controller
 
     public function cariLatihanJabatan(Request $request)
     {
-        $user = Auth::user();
+        $user = Access::user();
 
         $query = $this->scopeService->scopeRelatedToPegawai(
             LatihanJabatan::with('pegawai'),

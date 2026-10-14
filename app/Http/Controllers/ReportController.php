@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 use App\Models\UnitKerja;
 use App\Models\Pegawai;
 use App\Models\Pangkat;
@@ -19,10 +19,8 @@ class ReportController extends Controller
      */
     private function enforceUnitScope(Request $request): void
     {
-        $user = Auth::user();
-
-        if ($user && $user->role === 'admin') {
-            $request->merge(['unit_kerja_id' => $user->unit_kerja_id]);
+        if (Access::isAdmin()) {
+            $request->merge(['unit_kerja_id' => Access::unitKerjaId()]);
         }
     }
 
@@ -597,8 +595,8 @@ class ReportController extends Controller
             }
 
             $pegawaiList = Pegawai::with(['jabatan_aktif.master_jabatan', 'unit_kerja'])
-                ->when(Auth::user()?->role === 'admin', function ($query) {
-                    $query->where('unit_kerja_id', Auth::user()->unit_kerja_id);
+                ->when(Access::isAdmin(), function ($query) {
+                    $query->where('unit_kerja_id', Access::unitKerjaId());
                 })
                 ->whereYear('tgl_lahir', '>=', $tahunLahirMin)
                 ->whereYear('tgl_lahir', '<=', $tahunLahirMax)

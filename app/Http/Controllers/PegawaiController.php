@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pegawai;
+use App\Support\Access;
 use App\Models\UnitKerja;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -19,16 +19,16 @@ class PegawaiController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        $user = Access::user();
 
-        if ($user->role === 'pegawai') {
+        if (Access::isPegawai()) {
             // Pegawai hanya boleh melihat data dirinya sendiri
             $pegawai = Pegawai::with('unit_kerja')
                 ->where('user_id', $user->id)
                 ->paginate(simpeg_per_page());
-        } elseif ($user->role === 'admin') {
+        } elseif (Access::isAdmin()) {
             $pegawai = Pegawai::with('unit_kerja')
-                ->where('unit_kerja_id', $user->unit_kerja_id)
+                ->where('unit_kerja_id', Access::unitKerjaId())
                 ->paginate(simpeg_per_page());
         } else {
             // superadmin bisa lihat semua
@@ -246,39 +246,37 @@ class PegawaiController extends Controller
 
     private function authorizePegawaiAccess(Pegawai $pegawai): void
     {
-        $user = Auth::user();
+        $user = Access::user();
 
-        if ($user->role === 'pegawai') {
-            abort_unless($pegawai->user_id === $user->id, 403);
-        } elseif ($user->role === 'admin') {
-            abort_unless($pegawai->unit_kerja_id === $user->unit_kerja_id, 403);
+        if (Access::isPegawai()) {
+            abort_unless($pegawai->user_id === $user->id, 403, 'Akses ditolak');
+        } else {
+            Access::ensureInUnit($pegawai);
         }
     }
 
     private function authorizePegawaiManagement(?Pegawai $pegawai = null): void
     {
-        $user = Auth::user();
+        Access::abortUnlessAdminOrSuperadmin();
 
-        abort_if($user->role === 'pegawai', 403);
-
-        if ($pegawai !== null && $user->role === 'admin') {
-            abort_unless($pegawai->unit_kerja_id === $user->unit_kerja_id, 403);
+        if ($pegawai !== null) {
+            Access::ensureInUnit($pegawai);
         }
     }
 
     public function cariPegawai(Request $request)
     {
-        $user = Auth::user();
+        $user = Access::user();
         $cariPegawai = $request->input('cariPegawai');
 
         $query = Pegawai::with('unit_kerja')
                     ->where('nama', 'like', '%' . $cariPegawai . '%');
 
-        if ($user->role === 'pegawai') {
+        if (Access::isPegawai()) {
             // Pegawai hanya boleh mencari data dirinya sendiri
             $query->where('user_id', $user->id);
-        } elseif ($user->role === 'admin') {
-            $query->where('unit_kerja_id', $user->unit_kerja_id);
+        } elseif (Access::isAdmin()) {
+            $query->where('unit_kerja_id', Access::unitKerjaId());
         }
 
         $pegawai = $query->paginate(simpeg_per_page());

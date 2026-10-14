@@ -40,37 +40,15 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-5">
-                        <label for="no_ktp_nik" class="block mb-2.5 text-sm font-medium text-heading">No KTP / NIK <span
-                                class="text-red-500">*</span>
-                        </label>
-                        <input type="text" id="no_ktp_nik" name="no_ktp_nik"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nik suami / istri" required
-                            value="{{ old('no_ktp_nik', $riwayatKeluargaSuamiIstri->no_ktp_nik) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="nama" class="block mb-2.5 text-sm font-medium text-heading">Nama Suami
-                            Istri <span class="text-red-500">*</span></label>
-                        <input type="text" id="nama" name="nama"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nama suami / istri" required
-                            value="{{ old('nama', $riwayatKeluargaSuamiIstri->nama) }}" />
-                    </div>
-                    <div class="flex items-center mb-5">
-                        <label for="tempat_lahir" class="w-1/4 text-sm font-medium text-heading">Tempat, Tanggal
-                            Lahir <span class="text-red-500">*</span></label>
-                        <div class="flex w-3/4 gap-4">
-                            <input type="text" id="tempat_lahir" name="tempat_lahir"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                                placeholder="Masukan tempat lahir" required
-                                value="{{ old('tempat_lahir', $riwayatKeluargaSuamiIstri->tempat_lahir) }}" />
-
-                            <input type="date" id="tgl_lahir" name="tgl_lahir"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
-                                required value="{{ old('tgl_lahir', $riwayatKeluargaSuamiIstri->tgl_lahir) }}" />
-                        </div>
-                    </div>
+                    @include('pages.dashboard.riwayat_keluarga.suami_istri._fields', [
+                        'section' => 'identity',
+                        'fieldValues' => [
+                            'no_ktp_nik' => old('no_ktp_nik', $riwayatKeluargaSuamiIstri->no_ktp_nik),
+                            'nama' => old('nama', $riwayatKeluargaSuamiIstri->nama),
+                            'tempat_lahir' => old('tempat_lahir', $riwayatKeluargaSuamiIstri->tempat_lahir),
+                            'tgl_lahir' => old('tgl_lahir', $riwayatKeluargaSuamiIstri->tgl_lahir),
+                        ],
+                    ])
                     <div class="mb-5">
                         <label for="pendidikan" class="block mb-2.5 text-sm font-medium text-heading">Pendidikan <span
                                 class="text-red-500">*</span></label>
@@ -79,14 +57,10 @@
                             placeholder="Masukan Pendidikan terakhir Suami / Istri" required
                             value="{{ old('pendidikan', $riwayatKeluargaSuamiIstri->pendidikan) }}" />
                     </div>
-                    <div class="mb-5">
-                        <label for="pekerjaan" class="block mb-2.5 text-sm font-medium text-heading">Pekerjaan <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="pekerjaan" name="pekerjaan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Pekerjaan Suami / Istri" required
-                            value="{{ old('pekerjaan', $riwayatKeluargaSuamiIstri->pekerjaan) }}" />
-                    </div>
+                    @include('pages.dashboard.riwayat_keluarga.suami_istri._fields', [
+                        'section' => 'pekerjaan',
+                        'fieldValues' => ['pekerjaan' => old('pekerjaan', $riwayatKeluargaSuamiIstri->pekerjaan)],
+                    ])
                     <div class="mb-5">
                         <label for="status_hubungan" class="block mb-2.5 text-sm font-medium text-heading">Status
                             Hubungan <span class="text-red-500">*</span></label>

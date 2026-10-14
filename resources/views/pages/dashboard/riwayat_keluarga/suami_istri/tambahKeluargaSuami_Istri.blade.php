@@ -35,34 +35,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-5">
-                        <label for="no_ktp_nik" class="block mb-2.5 text-sm font-medium text-heading">No KTP / NIK <span
-                                class="text-red-500">*</span>
-                        </label>
-                        <input type="text" id="no_ktp_nik" name="no_ktp_nik"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nik suami / istri" required />
-                    </div>
-                    <div class="mb-5">
-                        <label for="nama" class="block mb-2.5 text-sm font-medium text-heading">Nama Suami
-                            Istri <span class="text-red-500">*</span></label>
-                        <input type="text" id="nama" name="nama"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nama suami / istri" required />
-                    </div>
-                    <div class="flex items-center mb-5">
-                        <label for="tempat_lahir" class="w-1/4 text-sm font-medium text-heading">Tempat, Tanggal
-                            Lahir <span class="text-red-500">*</span></label>
-                        <div class="flex w-3/4 gap-4">
-                            <input type="text" id="tempat_lahir" name="tempat_lahir"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                                placeholder="Masukan tempat lahir" required />
-
-                            <input type="date" id="tgl_lahir" name="tgl_lahir"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
-                                required />
-                        </div>
-                    </div>
+                    @include('pages.dashboard.riwayat_keluarga.suami_istri._fields', ['section' => 'identity'])
                     <div class="mb-5">
                         <label for="pendidikan" class="block mb-2.5 text-sm font-medium text-heading">Pendidikan <span
                                 class="text-red-500">*</span></label>
@@ -76,13 +49,7 @@
                             <option value="S3">S3</option>
                         </select>
                     </div>
-                    <div class="mb-5">
-                        <label for="pekerjaan" class="block mb-2.5 text-sm font-medium text-heading">Pekerjaan <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="pekerjaan" name="pekerjaan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan Pekerjaan Suami / Istri" required />
-                    </div>
+                    @include('pages.dashboard.riwayat_keluarga.suami_istri._fields', ['section' => 'pekerjaan'])
                     <div class="mb-5">
                         <label for="status_hubungan" class="block mb-2.5 text-sm font-medium text-heading">Status
                             Hubungan <span class="text-red-500">*</span></label>

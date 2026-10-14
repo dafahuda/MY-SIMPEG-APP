@@ -26,63 +26,7 @@
                 <form action="/kepegawaian/latihan_jabatan/tambah_latihan_jabatan" method="POST"
                     enctype="multipart/form-data">
                     @csrf
-                    <div class="mb-5">
-                        <label for="pegawai_id" class="block mb-2.5 text-sm font-medium text-heading">Pegawai <span
-                                class="text-red-500">*</span></label>
-                        <select name="pegawai_id" id="pegawai_id" class="rounded-lg">
-                            <option value="">Pilih Pegawai</option>
-                            @foreach ($pegawai as $item)
-                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-5">
-                        <label for="nama_pelatih" class="block mb-2.5 text-sm font-medium text-heading">Nama
-                            Pelatih <span class="text-red-500">*</span></label>
-                        <input type="text" id="nama_pelatih" name="nama_pelatih"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nama pelatih" required />
-                    </div>
-                    <div class="flex items-center mb-5">
-                        <label for="tempat_latihan" class="w-1/4 text-sm font-medium text-heading">Tempat dan Waktu
-                            Latihan Jabatan <span class="text-red-500">*</span></label>
-                        <div class="flex w-3/4 gap-4">
-                            <input type="text" id="tempat_latihan" name="tempat_latihan"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                                placeholder="Masukan tempat latihan" required />
-
-                            <input type="date" id="waktu_latihan" name="waktu_latihan"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
-                                required placeholder="Masukan tanggal latihan" />
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <label for="tahun_latihan" class="block mb-2.5 text-sm font-medium text-heading">Tahun
-                            Latihan <span class="text-red-500">*</span></label>
-                        <input type="text" id="tahun_latihan" name="tahun_latihan"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan tahun latihan" required />
-                    </div>
-                    <div class="mb-5">
-                        <label for="jumlah_jam" class="block mb-2.5 text-sm font-medium text-heading">Jumlah Jam <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="jumlah_jam" name="jumlah_jam"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan jumlah jam" required />
-                    </div>
-                    <div class="flex items-center mb-5">
-                        <label for="nomor_sertifikat" class="w-1/4 text-sm font-medium text-heading">Nomor dan Tgl
-                            Sertifikat <span class="text-red-500">*</span></label>
-                        <div class="flex w-3/4 gap-4">
-                            <input type="text" id="nomor_sertifikat" name="nomor_sertifikat"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                                placeholder="Masukan nomor sertifikat" required />
-
-                            <input type="date" id="tgl_sertifikat" name="tgl_sertifikat"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
-                                required placeholder="Masukan tanggal sertifikat" />
-                        </div>
-                    </div>
+                    @include('pages.dashboard.kepegawaian.latihanJabatan._fields', ['latihanJabatan' => null])
                     <div class="mb-5">
                         <label for="file_sertifikat" class="block mb-2.5 text-sm font-medium text-heading">File
                             Piagam <span class="text-red-500">*</span></label>

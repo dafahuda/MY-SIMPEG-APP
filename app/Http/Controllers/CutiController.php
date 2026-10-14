@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 
 use Illuminate\Http\Request;
 
@@ -19,20 +19,14 @@ class CutiController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'pegawai') {
+        if (Access::isPegawai()) {
             // Pegawai hanya melihat cuti miliknya sendiri
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
+            $myPegawai = Access::myPegawai();
             $cuti = Cuti::with('pegawai')
                 ->when($myPegawai, fn($q) => $q->where('pegawai_id', $myPegawai->id))
                 ->paginate(simpeg_per_page());
-        } elseif ($user->role === 'admin') {
-            $cuti = Cuti::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
+        } elseif (Access::isAdmin()) {
+            $cuti = Access::scopeToUnit(Cuti::with('pegawai'))->paginate(simpeg_per_page());
         } else {
             $cuti = Cuti::with('pegawai')->paginate(simpeg_per_page());
         }
@@ -47,10 +41,8 @@ class CutiController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -111,10 +103,8 @@ class CutiController extends Controller
      */
     public function edit(Cuti $cuti)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -192,18 +182,16 @@ class CutiController extends Controller
      */
     public function approve(Request $request, Cuti $cuti)
     {
-        $user = Auth::user();
-        abort_unless(in_array($user->role, ['admin', 'superadmin']), 403);
+        Access::abortUnlessAdminOrSuperadmin();
 
         // Admin hanya boleh menyetujui cuti pegawai di unit kerjanya
-        if ($user->role === 'admin') {
-            $pegawai = $cuti->pegawai;
-            abort_unless($pegawai && $pegawai->unit_kerja_id === $user->unit_kerja_id, 403);
+        if (Access::isAdmin()) {
+            Access::ensureInUnit($cuti->pegawai);
         }
 
         $cuti->update([
             'status' => 'disetujui',
-            'approved_by' => $user->id,
+            'approved_by' => Access::user()->id,
             'approved_at' => now(),
             'alasan_penolakan' => null,
         ]);
@@ -216,8 +204,7 @@ class CutiController extends Controller
      */
     public function reject(Request $request, Cuti $cuti)
     {
-        $user = Auth::user();
-        abort_unless(in_array($user->role, ['admin', 'superadmin']), 403);
+        Access::abortUnlessAdminOrSuperadmin();
 
         $request->validate([
             'alasan_penolakan' => 'required|string|min:5|max:500',
@@ -226,15 +213,14 @@ class CutiController extends Controller
             'alasan_penolakan.min' => 'Alasan penolakan minimal 5 karakter.',
         ]);
 
-        if ($user->role === 'admin') {
-            $pegawai = $cuti->pegawai;
-            abort_unless($pegawai && $pegawai->unit_kerja_id === $user->unit_kerja_id, 403);
+        if (Access::isAdmin()) {
+            Access::ensureInUnit($cuti->pegawai);
         }
 
         $cuti->update([
             'status' => 'ditolak',
             'alasan_penolakan' => $request->alasan_penolakan,
-            'approved_by' => $user->id,
+            'approved_by' => Access::user()->id,
             'approved_at' => now(),
         ]);
 
@@ -257,15 +243,11 @@ class CutiController extends Controller
 
     public function cariCuti(Request $request)
     {
-        $user = Auth::user();
-
         $query = Cuti::with('pegawai');
 
         // Filter berdasarkan role admin
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
         }
 
         if($request->cariCuti) {

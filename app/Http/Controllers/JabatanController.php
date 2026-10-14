@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 
 class JabatanController extends Controller
 {
@@ -19,21 +19,10 @@ class JabatanController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $jabatan = Jabatan::with(['master_jabatan', 'master_eselon', 'pegawai'])
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } elseif ($user->role === 'pegawai') {
-            $pegawai = Pegawai::where('user_id', $user->id)->first();
-            $jabatan = $pegawai
-                ? Jabatan::with(['master_jabatan', 'master_eselon', 'pegawai'])
-                    ->where('pegawai_id', $pegawai->id)
-                    ->paginate(simpeg_per_page())
-                : Jabatan::whereRaw('1=0')->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            $jabatan = Access::scopeToUnit(Jabatan::with(['master_jabatan', 'master_eselon', 'pegawai']))->paginate(simpeg_per_page());
+        } elseif (Access::isPegawai()) {
+            $jabatan = Access::scopeToSelf(Jabatan::with(['master_jabatan', 'master_eselon', 'pegawai']))->paginate(simpeg_per_page());
         } else {
             $jabatan = Jabatan::with(['master_jabatan', 'master_eselon'])->paginate(simpeg_per_page());
         }
@@ -48,12 +37,10 @@ class JabatanController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
-        } elseif ($user->role === 'pegawai') {
-            $pegawai = Pegawai::where('user_id', $user->id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
+        } elseif (Access::isPegawai()) {
+            $pegawai = Pegawai::where('user_id', Access::user()->id)->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -87,13 +74,7 @@ class JabatanController extends Controller
         ]);
 
         // Pastikan pegawai role hanya bisa simpan data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $validateData['pegawai_id'] != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord((object) ['pegawai_id' => $validateData['pegawai_id']]);
 
         try {
             DB::beginTransaction();
@@ -118,16 +99,11 @@ class JabatanController extends Controller
      */
     public function edit(Jabatan $jabatan)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $jabatan->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-            $pegawai = collect([$myPegawai]);
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
+        } elseif (Access::isPegawai()) {
+            Access::ensureOwnRecord($jabatan);
+            $pegawai = collect([Access::myPegawai()]);
         } else {
             $pegawai = Pegawai::all();
         }
@@ -163,13 +139,7 @@ class JabatanController extends Controller
         ]);
 
         // Pastikan pegawai role hanya bisa update data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $jabatan->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord($jabatan);
 
         try {
             DB::beginTransaction();
@@ -194,13 +164,7 @@ class JabatanController extends Controller
     public function destroy(Jabatan $jabatan)
     {
         // Pastikan pegawai role hanya bisa hapus data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $jabatan->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord($jabatan);
 
         try {
             $jabatan->delete();
@@ -215,22 +179,13 @@ class JabatanController extends Controller
 
     public function cariJabatan(Request $request)
     {
-        $user = Auth::user();
-
         $query = Jabatan::with(['pegawai', 'master_jabatan', 'master_eselon']);
 
         // Filter berdasarkan role
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if ($myPegawai) {
-                $query->where('pegawai_id', $myPegawai->id);
-            } else {
-                $query->whereRaw('1=0');
-            }
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
         }
 
         if ($request->cariJabatan) {

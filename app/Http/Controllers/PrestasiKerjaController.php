@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Support\Access;
 
 class PrestasiKerjaController extends Controller
 {
@@ -17,19 +17,10 @@ class PrestasiKerjaController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $prestasiKerja = PrestasiKerja::with('pegawai')
-                ->whereHas('pegawai', function($query) use ($user) {
-                    $query->where('unit_kerja_id', $user->unit_kerja_id);
-                })
-                ->paginate(simpeg_per_page());
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            $prestasiKerja = $myPegawai
-                ? PrestasiKerja::with('pegawai')->where('pegawai_id', $myPegawai->id)->paginate(simpeg_per_page())
-                : PrestasiKerja::whereRaw('1=0')->paginate(simpeg_per_page());
+        if (Access::isAdmin()) {
+            $prestasiKerja = Access::scopeToUnit(PrestasiKerja::with('pegawai'))->paginate(simpeg_per_page());
+        } elseif (Access::isPegawai()) {
+            $prestasiKerja = Access::scopeToSelf(PrestasiKerja::with('pegawai'))->paginate(simpeg_per_page());
         } else {
             $prestasiKerja = PrestasiKerja::with('pegawai')->paginate(simpeg_per_page());
         }
@@ -44,12 +35,10 @@ class PrestasiKerjaController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
-        } elseif ($user->role === 'pegawai') {
-            $pegawai = Pegawai::where('user_id', $user->id)->get();
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
+        } elseif (Access::isPegawai()) {
+            $pegawai = Pegawai::where('user_id', Access::user()->id)->get();
         } else {
             $pegawai = Pegawai::all();
         }
@@ -128,16 +117,11 @@ class PrestasiKerjaController extends Controller
      */
     public function edit(PrestasiKerja $prestasiKerja)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $pegawai = Pegawai::where('unit_kerja_id', $user->unit_kerja_id)->get();
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $prestasiKerja->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-            $pegawai = collect([$myPegawai]);
+        if (Access::isAdmin()) {
+            $pegawai = Pegawai::where('unit_kerja_id', Access::unitKerjaId())->get();
+        } elseif (Access::isPegawai()) {
+            Access::ensureOwnRecord($prestasiKerja);
+            $pegawai = collect([Access::myPegawai()]);
         } else {
             $pegawai = Pegawai::all();
         }
@@ -153,13 +137,9 @@ class PrestasiKerjaController extends Controller
      */
     public function update(Request $request, PrestasiKerja $prestasiKerja)
     {
-        $user = Auth::user();
-
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $prestasiKerja->pegawai_id != $myPegawai->id || (int) $request->pegawai_id !== $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
+        Access::ensureOwnRecord($prestasiKerja);
+        if (Access::isPegawai() && (int) $request->pegawai_id !== Access::myPegawai()->id) {
+            abort(403, 'Akses ditolak');
         }
 
         $validateData = $request->validate([
@@ -227,13 +207,7 @@ class PrestasiKerjaController extends Controller
     public function destroy(PrestasiKerja $prestasiKerja)
     {
         // Pastikan pegawai role hanya bisa hapus data miliknya sendiri
-        $user = Auth::user();
-        if ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if (!$myPegawai || $prestasiKerja->pegawai_id != $myPegawai->id) {
-                abort(403, 'Akses ditolak');
-            }
-        }
+        Access::ensureOwnRecord($prestasiKerja);
 
         $prestasiKerja->delete();
 
@@ -242,22 +216,13 @@ class PrestasiKerjaController extends Controller
 
     public function cariPrestasiKerja(Request $request)
     {
-        $user = Auth::user();
-
         $query = PrestasiKerja::with('pegawai');
 
         // Filter berdasarkan role
-        if ($user->role === 'admin') {
-            $query->whereHas('pegawai', function($q) use ($user) {
-                $q->where('unit_kerja_id', $user->unit_kerja_id);
-            });
-        } elseif ($user->role === 'pegawai') {
-            $myPegawai = Pegawai::where('user_id', $user->id)->first();
-            if ($myPegawai) {
-                $query->where('pegawai_id', $myPegawai->id);
-            } else {
-                $query->whereRaw('1=0');
-            }
+        if (Access::isAdmin()) {
+            Access::scopeToUnit($query);
+        } elseif (Access::isPegawai()) {
+            Access::scopeToSelf($query);
         }
 
         if($request->cariPrestasiKerja) {

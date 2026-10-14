@@ -39,37 +39,12 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-5">
-                        <label for="nik" class="block mb-2.5 text-sm font-medium text-heading">No KTP / NIK <span
-                                class="text-red-500">*</span>
-                        </label>
-                        <input type="text" id="nik" name="nik"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nik Orang Tua" required
-                            value="{{ old('nik', $riwayatKeluargaOrangTua->nik) }}" />
-                    </div>
-                    <div class="mb-5">
-                        <label for="nama" class="block mb-2.5 text-sm font-medium text-heading">Nama <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="nama" name="nama"
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                            placeholder="Masukan nama orang tua" required
-                            value="{{ $riwayatKeluargaOrangTua->nama }}" />
-                    </div>
-                    <div class="flex items-center mb-5">
-                        <label for="tempat_lahir" class="w-1/4 text-sm font-medium text-heading">Tempat, Tanggal
-                            Lahir <span class="text-red-500">*</span></label>
-                        <div class="flex w-3/4 gap-4">
-                            <input type="text" id="tempat_lahir" name="tempat_lahir"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                                placeholder="Masukan tempat lahir" required
-                                value="{{ old('tempat_lahir', $riwayatKeluargaOrangTua->tempat_lahir) }}" />
-
-                            <input type="date" id="tgl_lahir" name="tgl_lahir"
-                                class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5 shadow-xs"
-                                required value="{{ old('tgl_lahir', $riwayatKeluargaOrangTua->tgl_lahir) }}" />
-                        </div>
-                    </div>
+                    @include('pages.dashboard.riwayat_keluarga.orang_tua._fields', ['fieldValues' => [
+                        'nik' => old('nik', $riwayatKeluargaOrangTua->nik),
+                        'nama' => $riwayatKeluargaOrangTua->nama,
+                        'tempat_lahir' => old('tempat_lahir', $riwayatKeluargaOrangTua->tempat_lahir),
+                        'tgl_lahir' => old('tgl_lahir', $riwayatKeluargaOrangTua->tgl_lahir),
+                    ]])
                     <div class="mb-5">
                         <label for="jenis_kelamin" class="block mb-2.5 text-sm font-medium text-heading">Jenis
                             kelamin <span class="text-red-500">*</span></label>
